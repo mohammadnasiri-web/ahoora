@@ -1,0 +1,94 @@
+{
+  "faqs": [
+    {
+      "id": "faq1",
+      "question": "تعویض باتری در محل چقدر طول می‌کشد؟",
+      "answer": "معمولاً بین ۳۰ تا ۶۰ دقیقه، بسته به مدل گوشی.",
+      "active": true,
+      "order": 1
+    },
+    {
+      "id": "faq2",
+      "question": "آیا قطعات گارانتی دارند؟",
+      "answer": "بله، باتری و قطعات اصلی با گارانتی کتبی ارائه می‌شوند.",
+      "active": true,
+      "order": 2
+    },
+    {
+      "id": "faq3",
+      "question": "چطور ظرفیت رزرو روزانه کار می‌کند؟",
+      "answer": "هر خدمت ظرفیت مستقل روزانه دارد. پس از تکمیل ظرفیت، زمان‌ها غیرفعال می‌شوند.",
+      "active": true,
+      "order": 3
+    },
+    {
+      "id": "faq4",
+      "question": "پرداخت چگونه انجام می‌شود؟",
+      "answer": "پرداخت آنلاین از طریق درگاه (بله‌پی) برای خدمات و محصولات امکان‌پذیر است.",
+      "active": true,
+      "order": 4
+    },
+    {
+      "id": "faq5",
+      "question": "آیا می‌توانم سفارش را پیگیری کنم؟",
+      "answer": "بله، از حساب کاربری یا با کد پیگیری وضعیت سفارش را مشاهده کنید.",
+      "active": true,
+      "order": 5
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "t1",
+      "name": "مریم احمدی",
+      "rating": 5,
+      "text": "باتری آیفونم را در محل عوض کردند؛ سریع و حرفه‌ای.",
+      "active": true,
+      "approved": true
+    },
+    {
+      "id": "t2",
+      "name": "رضا کریمی",
+      "rating": 5,
+      "text": "رزرو آنلاین راحت بود و پیامک تأیید بلافاصله آمد.",
+      "active": true,
+      "approved": true
+    },
+    {
+      "id": "t3",
+      "name": "سارا موسوی",
+      "rating": 4,
+      "text": "گلس و قاب خریدم؛ ارسال سریع و بسته‌بندی عالی.",
+      "active": true,
+      "approved": true
+    }
+  ],
+  "reviews": [],
+  "coupons": [
+    {
+      "id": "c1",
+      "code": "AHOORA10",
+      "type": "percent",
+      "value": 10,
+      "minAmount": 500000,
+      "appliesTo": "all",
+      "startDate": "2026-01-01",
+      "endDate": "2026-12-31",
+      "usageLimit": 1000,
+      "usedCount": 12,
+      "active": true
+    },
+    {
+      "id": "c2",
+      "code": "BATTERY50",
+      "type": "fixed",
+      "value": 50000,
+      "minAmount": 1000000,
+      "appliesTo": "services",
+      "startDate": "2026-01-01",
+      "endDate": "2026-12-31",
+      "usageLimit": 200,
+      "usedCount": 5,
+      "active": true
+    }
+  ]
+}

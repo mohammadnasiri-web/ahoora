@@ -1,0 +1,10 @@
+{
+  "name": "ahoora-tel-front",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ahoora Tel — mobile repair & shop frontend",
+  "scripts": {
+    "start": "npx --yes serve -l 5500 .",
+    "dev": "npx --yes live-server --port=5500 --open=index.html"
+  }
+}

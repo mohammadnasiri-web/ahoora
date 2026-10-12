@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>خدمات | اهورا تل</title>
+  <meta name="description" content="تعویض باتری در محل و تعمیرات تخصصی غیرحضوری اهورا تل">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="../assets/css/main.css" rel="stylesheet">
+</head>
+<body>
+  <div id="ah-header"></div>
+  <div id="ah-promo"></div>
+  <header class="ah-page-hero">
+    <div class="container-ah">
+      <h1>خدمات اهورا تل</h1>
+      <p>تعمیر در محل و خدمات غیرحضوری — قابل مدیریت از پنل</p>
+    </div>
+  </header>
+  <main class="container-ah py-4">
+    <div class="d-flex gap-2 mb-4 flex-wrap">
+      <a class="ah-btn ah-btn-sm filter-type" data-type="" href="services.html">همه</a>
+      <a class="ah-btn ah-btn-sm filter-type" data-type="onsite" href="services.html?type=onsite">در محل</a>
+      <a class="ah-btn ah-btn-sm filter-type" data-type="workshop" href="services.html?type=workshop">غیرحضوری</a>
+    </div>
+    <div class="ah-grid" id="svcGrid"></div>
+  </main>
+  <div id="ah-footer"></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/seed.js"></script>
+  <script src="../assets/js/store.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/chatbot.js"></script>
+  <script src="../assets/js/layout.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      await AhooraLayout.boot({ seo: { title: "خدمات | اهورا تل", description: "لیست خدمات تعمیرات اهورا تل" } });
+      const type = AhooraUtils.qs("type") || "";
+      document.querySelectorAll(".filter-type").forEach((a) => {
+        a.classList.add(a.dataset.type === type ? "ah-btn-primary" : "ah-btn-dark");
+      });
+      const items = AhooraStore.services.list(type || null);
+      document.getElementById("svcGrid").innerHTML = items.map((s) => `
+        <article class="ah-card-product">
+          <div class="body">
+            <span class="badge ${s.type === "onsite" ? "text-bg-dark" : "text-bg-secondary"} mb-2">${s.type === "onsite" ? "در محل" : "غیرحضوری"}</span>
+            <h3>${s.title}</h3>
+            <p class="small text-secondary">${s.description || ""}</p>
+            <div class="ah-price">${AhooraUtils.formatPrice(s.basePrice)}</div>
+            <div class="small text-secondary mt-1">مدت تقریبی: ${s.durationMinutes} دقیقه · ظرفیت روزانه: ${s.dailyCapacity}</div>
+            <a class="ah-btn ah-btn-primary ah-btn-sm mt-3" href="booking.html?service=${s.id}">رزرو / ثبت سفارش</a>
+          </div>
+        </article>`).join("");
+      AhooraUtils.injectSchema({
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: "خدمات اهورا تل",
+        itemListElement: items.map((s, i) => ({
+          "@type": "Service",
+          position: i + 1,
+          name: s.title,
+          description: s.description,
+          offers: { "@type": "Offer", price: s.basePrice, priceCurrency: "IRR" }
+        }))
+      });
+    });
+  </script>
+</body>
+</html>
