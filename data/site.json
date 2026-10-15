@@ -3,7 +3,8 @@
     "name": "اهورا تل",
     "nameEn": "Ahoora Tel",
     "tagline": "تعمیرات تخصصی و فروش تجهیزات موبایل",
-    "logo": "assets/img/logo.svg",
+    "logo": "assets/img/logo-ahoora.jpg",
+    "logoMark": "assets/img/logo-mark.svg",
     "favicon": "assets/img/favicon.svg",
     "phone": "02191000000",
     "whatsapp": "989121234567",
@@ -92,10 +93,11 @@
         "active": true,
         "title": "تعویض باتری در محل",
         "subtitle": "سریع‌تر. مطمئن‌تر.",
-        "text": "از آیفون ۷ تا ۱۸ و سایر برندها — رزرو آنلاین، پرداخت امن، پیگیری لحظه‌ای",
-        "ctaPrimary": { "text": "رزرو نوبت", "url": "pages/booking.html" },
-        "ctaSecondary": { "text": "مشاهده خدمات", "url": "pages/services.html" },
-        "bg": "dark",
+        "text": "از آیفون ۷ تا ۱۸ — رزرو آنلاین و پیگیری لحظه‌ای",
+        "ctaPrimary": { "text": "بیشتر بدانید", "url": "pages/services.html" },
+        "ctaSecondary": { "text": "رزرو نوبت", "url": "pages/booking.html" },
+        "bg": "light",
+        "bgImage": "assets/img/hero-bg-light.svg",
         "image": "assets/img/hero-battery.svg"
       },
       {
@@ -104,11 +106,12 @@
         "order": 2,
         "active": true,
         "title": "فروشگاه اهورا",
-        "subtitle": "گوشی و لوازم اصل",
-        "text": "گوشی، ایرپاد، گلس، قاب و قطعات — با گارانتی و ارسال سریع",
-        "ctaPrimary": { "text": "ورود به فروشگاه", "url": "pages/shop.html" },
-        "ctaSecondary": { "text": "پرفروش‌ها", "url": "pages/shop.html?featured=1" },
+        "subtitle": "گوشی و لوازم اصل.",
+        "text": "با گارانتی معتبر و ارسال سریع",
+        "ctaPrimary": { "text": "بیشتر بدانید", "url": "pages/shop.html" },
+        "ctaSecondary": { "text": "خرید", "url": "pages/shop.html?featured=1" },
         "bg": "light",
+        "bgImage": "assets/img/hero-bg-light.svg",
         "image": "assets/img/hero-shop.svg"
       },
       {
@@ -182,7 +185,7 @@
       "id": "promo-1",
       "title": "تخفیف ویژه تعویض باتری",
       "text": "۱۰٪ تخفیف با کد AHOORA10",
-      "active": true,
+      "active": false,
       "url": "pages/booking.html"
     }
   ],

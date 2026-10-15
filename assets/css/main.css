@@ -6,11 +6,14 @@
   --ah-blue: #0071e3;
   --ah-blue-hover: #0077ed;
   --ah-border: rgba(0, 0, 0, 0.08);
-  --ah-nav: rgba(22, 22, 23, 0.88);
+  --ah-nav: rgba(255, 255, 255, 0.72);
+  --ah-nav-text: #1d1d1f;
+  --ah-nav-muted: #6e6e73;
+  --ah-techno-accent: #00a0a8;
   --ah-radius: 22px;
   --ah-font: "Vazirmatn", "SF Pro Display", "Segoe UI", Tahoma, sans-serif;
   --ah-transition: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
-  --ah-nav-h: 52px;
+  --ah-nav-h: 44px;
   --ah-bottom-h: 64px;
   --ah-safe-b: env(safe-area-inset-bottom, 0px);
 }
@@ -56,116 +59,205 @@ img {
   margin-inline: auto;
 }
 
-/* ---- Nav ---- */
-.ah-nav {
+/* ---- Header shell ---- */
+.ah-site-header {
+  position: relative;
+  z-index: 1000;
+}
+
+.ah-logo-drawer {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.35rem 0.55rem;
+}
+
+.ah-logo-drawer img {
+  height: 40px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  display: block;
+}
+
+.ah-footer-logo {
+  display: inline-block;
+  margin-bottom: 0.85rem;
+}
+
+.ah-footer-logo img {
+  height: 72px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
+  display: block;
+}
+
+.ah-burger-lines,
+.ah-burger-lines::before,
+.ah-burger-lines::after {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: transform 0.25s ease, opacity 0.2s;
+}
+
+.ah-burger-lines {
+  position: relative;
+}
+
+.ah-burger-lines::before,
+.ah-burger-lines::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+}
+
+.ah-burger-lines::before {
+  top: -5px;
+}
+
+.ah-burger-lines::after {
+  top: 5px;
+}
+
+.ah-techno-burger.is-open .ah-burger-lines {
+  background: transparent;
+}
+
+.ah-techno-burger.is-open .ah-burger-lines::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.ah-techno-burger.is-open .ah-burger-lines::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* ---- Technolife category / shop bar ---- */
+.ah-techno {
   position: sticky;
   top: 0;
-  z-index: 1000;
-  background: var(--ah-nav);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  color: #f5f5f7;
-  font-size: 13px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  z-index: 1100;
+  background: #fff;
+  border-bottom: 1px solid #eef0f2;
 }
 
-.ah-nav-inner {
-  display: flex;
+.ah-techno-burger {
+  display: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: none;
+  color: #2f363d;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.ah-techno-top {
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.ah-techno-top-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  min-height: var(--ah-nav-h);
+  gap: 1rem;
   width: min(1200px, calc(100% - 1.5rem));
   margin-inline: auto;
-  position: relative;
+  padding: 0.75rem 0;
 }
 
-.ah-logo {
-  font-weight: 700;
-  font-size: 15px;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-  z-index: 2;
-}
-
-.ah-logo span {
-  color: #a1a1a6;
-  font-weight: 400;
-  margin-inline-start: 0.3rem;
-}
-
-.ah-menu {
-  display: flex;
-  align-items: center;
-  gap: 0.1rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.ah-menu > li {
-  position: relative;
-}
-
-.ah-menu > li > a,
-.ah-menu-btn {
-  display: block;
-  padding: 0.7rem 0.75rem;
-  color: #f5f5f7;
-  opacity: 0.9;
-  transition: opacity var(--ah-transition);
-  background: none;
-  border: 0;
-  font: inherit;
-  cursor: pointer;
-}
-
-.ah-menu > li > a:hover,
-.ah-menu-btn:hover {
-  opacity: 1;
-}
-
-.ah-submenu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  min-width: 190px;
-  background: #161617;
-  border-radius: 14px;
-  padding: 0.5rem;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-}
-
-.ah-menu > li:hover > .ah-submenu,
-.ah-menu > li:focus-within > .ah-submenu {
-  display: block;
-}
-
-.ah-submenu a {
-  display: block;
-  padding: 0.65rem 0.85rem;
-  border-radius: 10px;
-  color: #f5f5f7;
-}
-
-.ah-submenu a:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.ah-nav-actions {
+.ah-techno-brand {
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  z-index: 2;
 }
 
-.ah-nav-phone {
-  color: #a1a1a6;
-  direction: ltr;
-  unicode-bidi: plaintext;
-  margin-inline-end: 0.35rem;
-  font-size: 12px;
+.ah-techno-logo img {
+  height: 44px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+  display: block;
+}
+
+.ah-techno-search {
+  display: flex;
+  align-items: center;
+  background: #f4f6f8;
+  border: 1px solid #e6e9ee;
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 46px;
+}
+
+.ah-techno-search input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  padding: 0.7rem 1rem;
+  font: inherit;
+  font-size: 13.5px;
+  outline: none;
+  color: var(--ah-black);
+}
+
+.ah-techno-search input::placeholder {
+  color: #98a0aa;
+}
+
+.ah-techno-search button {
+  border: 0;
+  background: transparent;
+  color: #5c6670;
+  width: 48px;
+  height: 46px;
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+
+.ah-techno-user {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.ah-techno-cart {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 42px;
+  border: 1px solid #dfe3e8;
+  border-radius: 10px;
+  color: #3a4149;
+  font-size: 1.2rem;
+  transition: border-color 0.2s;
+}
+
+.ah-techno-cart:hover {
+  border-color: #b8c0c9;
+}
+
+.ah-techno-cart-count {
+  position: absolute;
+  top: -6px;
+  inset-inline-start: -6px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--ah-techno-accent);
+  color: #fff;
+  font-size: 10px;
+  display: grid;
+  place-items: center;
+  padding: 0 4px;
+  font-weight: 700;
 }
 
 .ah-btn {
@@ -211,6 +303,57 @@ img {
   text-decoration: underline;
 }
 
+/* Apple.com CTA pills */
+.ah-btn-apple {
+  min-height: 44px;
+  padding: 0.7rem 1.45rem;
+  border-radius: 980px;
+  border: 0;
+  background: #0071e3;
+  color: #fff !important;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.ah-btn-apple:hover {
+  background: #0077ed;
+  color: #fff !important;
+}
+
+.ah-btn-apple-outline {
+  min-height: 44px;
+  padding: 0.65rem 1.4rem;
+  border-radius: 980px;
+  border: 1px solid #0071e3;
+  background: #fff;
+  color: #0071e3 !important;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.ah-btn-apple-outline:hover {
+  background: #0071e3;
+  border-color: #0071e3;
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.ah-hero-dark .ah-btn-apple-outline {
+  background: transparent;
+  border-color: #2997ff;
+  color: #2997ff !important;
+}
+
+.ah-hero-dark .ah-btn-apple-outline:hover {
+  background: #2997ff;
+  border-color: #2997ff;
+  color: #fff !important;
+}
+
 .ah-btn-light {
   background: #fff;
   color: var(--ah-black);
@@ -230,7 +373,7 @@ img {
 .ah-icon-btn {
   background: none;
   border: 0;
-  color: #f5f5f7;
+  color: var(--ah-nav-text);
   font-size: 1.2rem;
   width: 40px;
   height: 40px;
@@ -243,30 +386,18 @@ img {
 
 .ah-badge {
   position: absolute;
-  top: 2px;
-  left: 2px;
-  min-width: 16px;
-  height: 16px;
+  top: 4px;
+  inset-inline-start: 2px;
+  min-width: 15px;
+  height: 15px;
   border-radius: 999px;
   background: var(--ah-blue);
   color: #fff;
-  font-size: 10px;
+  font-size: 9px;
   display: grid;
   place-items: center;
   padding: 0 4px;
-}
-
-.ah-burger {
-  display: none;
-  background: none;
-  border: 0;
-  color: #fff;
-  width: 40px;
-  height: 40px;
-  font-size: 1.4rem;
-  place-items: center;
-  cursor: pointer;
-  z-index: 2;
+  font-weight: 700;
 }
 
 .ah-nav-overlay {
@@ -485,31 +616,53 @@ img {
   white-space: nowrap;
 }
 
-/* ---- Hero ---- */
+/* ---- Hero (Apple.com style) ---- */
 .ah-hero {
-  min-height: min(82vh, 760px);
+  min-height: min(86vh, 820px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   text-align: center;
-  padding: 3.75rem 1.25rem 2.5rem;
+  padding: 4.25rem 1.25rem 0;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
+}
+
+.ah-hero-apple {
+  background-color: #f5f5f7;
+}
+
+.ah-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.ah-hero-content {
+  position: relative;
+  z-index: 1;
+  width: min(720px, 100%);
+  padding-inline: 0.5rem;
 }
 
 .ah-hero-dark {
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(0, 113, 227, 0.22), transparent 60%),
-    #000;
+  background-color: #000;
   color: #f5f5f7;
 }
 
 .ah-hero-light {
-  background:
-    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(0, 113, 227, 0.08), transparent 55%),
-    var(--ah-bg);
+  background-color: #f5f5f7;
   color: var(--ah-black);
+}
+
+.ah-hero-light.ah-hero-apple {
+  background-color: #f5f5f7;
 }
 
 .ah-hero-dark,
@@ -531,58 +684,70 @@ img {
 .ah-hero-light .ah-hero-eyebrow,
 .ah-hero-light .ah-hero-title,
 .ah-hero-light .ah-hero-text {
-  color: var(--ah-black) !important;
+  color: #1d1d1f !important;
 }
 
 .ah-hero-eyebrow {
-  font-size: clamp(1.85rem, 5.5vw, 3.1rem);
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.15;
-  margin: 0 0 0.4rem;
-  animation: ah-fade-up 0.7s ease both;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  margin: 0 0 0.35rem;
+  animation: ah-fade-up 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 
 .ah-hero-title {
-  font-size: clamp(1.15rem, 2.6vw, 1.65rem);
-  font-weight: 600;
-  margin: 0 0 0.7rem;
-  opacity: 0.95;
-  animation: ah-fade-up 0.7s ease 0.08s both;
+  font-size: clamp(1.2rem, 2.8vw, 1.75rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 0 0 0.55rem;
+  animation: ah-fade-up 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) 0.06s both;
 }
 
 .ah-hero-text {
-  max-width: 34rem;
-  margin: 0 auto 1.4rem;
-  opacity: 0.7;
-  font-size: clamp(0.95rem, 2.2vw, 1.08rem);
-  animation: ah-fade-up 0.7s ease 0.14s both;
+  max-width: 28rem;
+  margin: 0 auto 1.35rem;
+  color: #86868b !important;
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  font-weight: 400;
+  line-height: 1.4;
+  animation: ah-fade-up 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) 0.12s both;
+}
+
+.ah-hero-dark .ah-hero-text {
+  color: #a1a1a6 !important;
 }
 
 .ah-hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 1.1rem;
+  gap: 0.85rem 1rem;
   justify-content: center;
-  margin-bottom: 1.75rem;
-  animation: ah-fade-up 0.7s ease 0.2s both;
-}
-
-.ah-hero-dark .ah-btn-ghost {
-  color: #2997ff !important;
+  margin-bottom: 2rem;
+  animation: ah-fade-up 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) 0.18s both;
 }
 
 .ah-hero-media {
-  width: min(820px, 100%);
+  position: relative;
+  z-index: 1;
+  width: min(920px, 100%);
   margin-top: auto;
-  animation: ah-fade-up 0.9s ease 0.28s both;
+  padding-bottom: 0;
+  animation: ah-fade-up 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0.24s both;
 }
 
 .ah-hero-media img,
 .ah-hero-media svg {
   width: 100%;
   margin-inline: auto;
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.35));
+  display: block;
+  filter: drop-shadow(0 28px 56px rgba(0, 0, 0, 0.45));
+}
+
+.ah-hero-light .ah-hero-media img,
+.ah-hero-light .ah-hero-media svg {
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.12));
 }
 
 @keyframes ah-fade-up {
@@ -630,74 +795,210 @@ img {
   font-size: 1rem;
 }
 
-/* ---- Tiles ---- */
+/* ---- Tiles (Apple promo grid) ---- */
 .ah-tiles {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 20px 14px 28px;
+  max-width: 1200px;
+  margin-inline: auto;
   background: #fff;
+  width: 100%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .ah-tiles {
+    gap: 12px;
+    padding: 16px 12px 24px;
+  }
+
+  .ah-tile {
+    min-height: 340px;
+    padding: 2.25rem 1.5rem 1.75rem;
+  }
 }
 
 .ah-tile {
-  min-height: 280px;
-  border-radius: var(--ah-radius);
-  padding: 2rem 1.5rem 1.5rem;
+  position: relative;
+  min-height: 420px;
+  border-radius: 28px;
+  padding: 2.75rem 1.75rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: transform var(--ah-transition);
-  position: relative;
   overflow: hidden;
-}
-
-.ah-tile::after {
-  content: "";
-  position: absolute;
-  inset: auto -20% -40% -20%;
-  height: 55%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
-  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
 }
 
 .ah-tile:hover {
-  transform: scale(1.012);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+}
+
+.ah-tile-body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 22rem;
+  flex: 1;
+}
+
+.ah-tile-glow {
+  position: absolute;
+  inset-inline: -10%;
+  bottom: -35%;
+  height: 70%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.9;
 }
 
 .ah-tile-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 1.45rem;
-  margin-bottom: 1rem;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.ah-tile[style*="#f5f5f7"] .ah-tile-icon,
-.ah-tile.light .ah-tile-icon {
-  background: rgba(0, 0, 0, 0.06);
-  color: var(--ah-blue);
+  font-size: 1.55rem;
+  margin-bottom: 1.35rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .ah-tile h3 {
-  font-size: clamp(1.35rem, 2.5vw, 1.9rem);
-  margin: 0 0 0.45rem;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
+  font-size: clamp(1.55rem, 3vw, 2.35rem);
+  font-weight: 600;
+  margin: 0 0 0.55rem;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
 }
 
 .ah-tile p {
-  margin: 0 0 1rem;
-  opacity: 0.78;
-  font-size: 0.95rem;
-  max-width: 16rem;
+  margin: 0 0 1.35rem;
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  line-height: 1.45;
+  max-width: 18rem;
+  font-weight: 400;
 }
 
-.ah-tile .ah-btn-ghost {
+.ah-tile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
   margin-top: auto;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: #2997ff;
+  transition: opacity 0.2s;
+}
+
+.ah-tile:hover .ah-tile-link {
+  opacity: 0.85;
+}
+
+.ah-tile-link i {
+  font-size: 0.85rem;
+  margin-top: 0.1rem;
+}
+
+/* Themes */
+.ah-tile--dark {
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 100%, rgba(41, 151, 255, 0.28), transparent 60%),
+    #000;
+  color: #f5f5f7;
+}
+
+.ah-tile--dark .ah-tile-icon {
+  background: rgba(255, 255, 255, 0.1);
+  color: #64d2ff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.ah-tile--dark p {
+  color: #a1a1a6;
+}
+
+.ah-tile--dark .ah-tile-glow {
+  background: radial-gradient(circle, rgba(0, 113, 227, 0.45), transparent 68%);
+}
+
+.ah-tile--light {
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 0%, rgba(0, 113, 227, 0.08), transparent 55%),
+    #f5f5f7;
+  color: #1d1d1f;
+}
+
+.ah-tile--light .ah-tile-icon {
+  background: #fff;
+  color: #0071e3;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.ah-tile--light p {
+  color: #6e6e73;
+}
+
+.ah-tile--light .ah-tile-link {
+  color: #0066cc;
+}
+
+.ah-tile--light .ah-tile-glow {
+  background: radial-gradient(circle, rgba(0, 113, 227, 0.12), transparent 68%);
+}
+
+.ah-tile--blue {
+  background:
+    radial-gradient(ellipse 75% 50% at 20% 110%, rgba(255, 255, 255, 0.22), transparent 55%),
+    linear-gradient(165deg, #147ce5 0%, #0071e3 45%, #0058b0 100%);
+  color: #fff;
+}
+
+.ah-tile--blue .ah-tile-icon {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.ah-tile--blue p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.ah-tile--blue .ah-tile-link {
+  color: #fff;
+}
+
+.ah-tile--blue .ah-tile-glow {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.22), transparent 68%);
+}
+
+.ah-tile--graphite {
+  background:
+    radial-gradient(ellipse 70% 45% at 70% 100%, rgba(191, 90, 242, 0.22), transparent 55%),
+    #1d1d1f;
+  color: #f5f5f7;
+}
+
+.ah-tile--graphite .ah-tile-icon {
+  background: rgba(255, 255, 255, 0.1);
+  color: #bf5af2;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.ah-tile--graphite p {
+  color: #a1a1a6;
+}
+
+.ah-tile--graphite .ah-tile-glow {
+  background: radial-gradient(circle, rgba(191, 90, 242, 0.28), transparent 68%);
 }
 
 /* ---- Sections ---- */
@@ -1216,41 +1517,6 @@ img {
 
 /* ---- Tablet / Mobile ---- */
 @media (max-width: 991px) {
-  .ah-burger {
-    display: grid;
-    justify-self: start;
-  }
-
-  .ah-logo {
-    position: static;
-    transform: none;
-    justify-self: center;
-    font-size: 15px;
-    grid-column: 2;
-  }
-
-  .ah-logo span {
-    display: none;
-  }
-
-  .ah-nav-inner {
-    display: grid;
-    grid-template-columns: 44px 1fr auto;
-    align-items: center;
-    gap: 0.35rem;
-    width: calc(100% - 1rem);
-  }
-
-  .ah-nav-actions {
-    justify-self: end;
-    grid-column: 3;
-  }
-
-  /* Desktop horizontal menu hidden on mobile — drawer is used instead */
-  .ah-menu {
-    display: none !important;
-  }
-
   .ah-drawer {
     display: flex;
   }
@@ -1259,12 +1525,34 @@ img {
     pointer-events: none;
   }
 
-  .ah-nav-phone {
-    display: none;
+  .ah-techno-burger {
+    display: grid;
   }
 
-  .ah-nav-actions .ah-btn {
-    display: none;
+  .ah-techno-top-inner {
+    grid-template-columns: auto 1fr auto;
+    gap: 0.5rem;
+  }
+
+  .ah-techno-brand {
+    display: flex;
+    order: 1;
+  }
+
+  .ah-techno-logo img {
+    height: 36px;
+    max-width: 110px;
+  }
+
+  .ah-techno-search {
+    grid-column: 1 / -1;
+    order: 3;
+    min-height: 42px;
+  }
+
+  .ah-techno-user {
+    order: 2;
+    justify-self: end;
   }
 
   .ah-bottom-nav {
@@ -1289,38 +1577,65 @@ img {
   }
 
   .ah-hero {
-    min-height: auto;
-    padding: 2.75rem 1.1rem 2rem;
+    min-height: min(78vh, 680px);
+    padding: 2.5rem 1.1rem 0;
   }
 
-  .ah-hero-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  .ah-hero-eyebrow {
+    font-size: clamp(1.75rem, 8vw, 2.4rem);
+  }
+
+  .ah-btn-apple,
+  .ah-btn-apple-outline {
+    font-size: 15px;
+    min-height: 40px;
+    padding: 0.55rem 1.15rem;
+  }
+
+  .ah-hero-actions {
+    gap: 0.65rem 0.75rem;
+    margin-bottom: 1.5rem;
   }
 
   .ah-tiles {
     grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 10px;
+    gap: 12px;
+    padding: 12px;
   }
 
   .ah-tile {
-    min-height: 200px;
-    padding: 1.75rem 1.35rem;
-    align-items: flex-start;
-    text-align: right;
+    min-height: 280px;
+    padding: 2.25rem 1.5rem 1.75rem;
+    border-radius: 22px;
   }
 
-  .ah-tile::after {
-    inset: -30% -20% auto auto;
-    width: 55%;
-    height: 70%;
+  .ah-tile:hover {
+    transform: none;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .ah-tile:active {
+    transform: scale(0.985);
+  }
+
+  .ah-tile-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.35rem;
+    margin-bottom: 1.1rem;
   }
 
   .ah-tile h3 {
-    font-size: 1.45rem;
+    font-size: 1.65rem;
+  }
+
+  .ah-tile p {
+    font-size: 1rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .ah-tile-link {
+    font-size: 1rem;
   }
 
   .ah-benefits {
@@ -1396,18 +1711,14 @@ img {
   }
 
   .ah-hero-actions {
-    width: 100%;
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
   }
 
-  .ah-hero-actions .ah-btn {
-    width: 100%;
-  }
-
-  .ah-hero-actions .ah-btn-ghost {
+  .ah-hero-actions .ah-btn-apple,
+  .ah-hero-actions .ah-btn-apple-outline {
     width: auto;
-    align-self: center;
   }
 
   .ah-table {

@@ -63,6 +63,48 @@ const AhooraStore = (() => {
       if (!get(KEYS.products)) set(KEYS.products, await loadSeed("products", "products.json"));
       if (!get(KEYS.services)) set(KEYS.services, await loadSeed("services", "services.json"));
       if (!get(KEYS.content)) set(KEYS.content, await loadSeed("content", "content.json"));
+      // migrate logo paths + Apple-style hero fields for older localStorage
+      const siteData = get(KEYS.site);
+      if (siteData?.site) {
+        let changed = false;
+        if (!siteData.site.logo || String(siteData.site.logo).includes("logo.svg")) {
+          siteData.site.logo = "assets/img/logo-ahoora.jpg";
+          changed = true;
+        }
+        if (!siteData.site.logoMark) {
+          siteData.site.logoMark = "assets/img/logo-mark.svg";
+          changed = true;
+        }
+        (siteData.banners || []).forEach((b) => {
+          if (b.id === "promo-1" && b.active) {
+            b.active = false;
+            changed = true;
+          }
+        });
+        const heroes = siteData.homepage?.sections || [];
+        heroes.forEach((sec) => {
+          if (sec.type !== "hero") return;
+          if (sec.id === "hero-battery") {
+            if (sec.bg !== "light" || sec.bgImage !== "assets/img/hero-bg-light.svg") {
+              sec.bg = "light";
+              sec.bgImage = "assets/img/hero-bg-light.svg";
+              sec.image = "assets/img/hero-battery.svg";
+              sec.ctaPrimary = { text: "بیشتر بدانید", url: "pages/services.html" };
+              sec.ctaSecondary = { text: "رزرو نوبت", url: "pages/booking.html" };
+              sec.text = "از آیفون ۷ تا ۱۸ — رزرو آنلاین و پیگیری لحظه‌ای";
+              changed = true;
+            }
+          }
+          if (sec.id === "hero-shop" && !sec.bgImage) {
+            sec.bg = "light";
+            sec.bgImage = "assets/img/hero-bg-light.svg";
+            sec.ctaPrimary = { text: "بیشتر بدانید", url: "pages/shop.html" };
+            sec.ctaSecondary = { text: "خرید", url: "pages/shop.html?featured=1" };
+            changed = true;
+          }
+        });
+        if (changed) set(KEYS.site, siteData);
+      }
     } catch (err) {
       // Surface a visible error instead of a blank white page
       const box = document.createElement("div");

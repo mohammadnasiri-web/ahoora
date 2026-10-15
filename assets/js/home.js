@@ -8,21 +8,41 @@ document.addEventListener("DOMContentLoaded", async () => {
   const html = sections
     .map((sec) => {
       if (sec.type === "hero") {
-        return `<section class="ah-hero ah-hero-${sec.bg || "dark"}">
-          <h1 class="ah-hero-eyebrow">${sec.title}</h1>
-          <p class="ah-hero-title">${sec.subtitle || ""}</p>
-          <p class="ah-hero-text">${sec.text || ""}</p>
-          <div class="ah-hero-actions">
-            ${sec.ctaPrimary ? `<a class="ah-btn ah-btn-primary" href="${AhooraLayout.resolveUrl(sec.ctaPrimary.url)}">${sec.ctaPrimary.text}</a>` : ""}
-            ${sec.ctaSecondary ? `<a class="ah-btn ah-btn-ghost" href="${AhooraLayout.resolveUrl(sec.ctaSecondary.url)}">${sec.ctaSecondary.text} ›</a>` : ""}
+        const theme = sec.bg || "dark";
+        const bgImg = AhooraLayout.resolveUrl(
+          sec.bgImage || (theme === "dark" ? "assets/img/hero-bg-dark.svg" : "assets/img/hero-bg-light.svg")
+        );
+        return `<section class="ah-hero ah-hero-${theme} ah-hero-apple">
+          <div class="ah-hero-bg" style="background-image:url('${bgImg}')" aria-hidden="true"></div>
+          <div class="ah-hero-content">
+            <h2 class="ah-hero-eyebrow">${sec.title}</h2>
+            <p class="ah-hero-title">${sec.subtitle || ""}</p>
+            ${sec.text ? `<p class="ah-hero-text">${sec.text}</p>` : ""}
+            <div class="ah-hero-actions">
+              ${
+                sec.ctaPrimary
+                  ? `<a class="ah-btn ah-btn-apple" href="${AhooraLayout.resolveUrl(sec.ctaPrimary.url)}">${sec.ctaPrimary.text}</a>`
+                  : ""
+              }
+              ${
+                sec.ctaSecondary
+                  ? `<a class="ah-btn ah-btn-apple-outline" href="${AhooraLayout.resolveUrl(sec.ctaSecondary.url)}">${sec.ctaSecondary.text}</a>`
+                  : ""
+              }
+            </div>
           </div>
           <div class="ah-hero-media">
-            <img src="${AhooraLayout.resolveUrl(sec.image)}" alt="${sec.title}" width="820" height="420" loading="eager">
+            <img src="${AhooraLayout.resolveUrl(sec.image)}" alt="${sec.title}" width="820" height="420" loading="eager" decoding="async">
           </div>
         </section>`;
       }
       if (sec.type === "tiles") {
-        const icons = ["bi-geo-alt-fill", "bi-phone-fill", "bi-headphones", "bi-search"];
+        const tileMeta = [
+          { icon: "bi-geo-alt", theme: "dark" },
+          { icon: "bi-tools", theme: "light" },
+          { icon: "bi-headphones", theme: "blue" },
+          { icon: "bi-bag-check", theme: "graphite" },
+        ];
         return `<div class="ah-quick" aria-label="میانبرها">
             <a href="${AhooraLayout.resolveUrl("pages/booking.html")}"><i class="bi bi-calendar-check"></i>رزرو نوبت</a>
             <a href="${AhooraLayout.resolveUrl("pages/shop.html")}"><i class="bi bi-bag"></i>فروشگاه</a>
@@ -31,14 +51,26 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
           <section class="ah-tiles" aria-label="دسترسی سریع">
           ${(sec.items || [])
-            .map(
-              (t, i) => `<a class="ah-tile ${t.bg === "#f5f5f7" ? "light" : ""}" href="${AhooraLayout.resolveUrl(t.url)}" style="background:${t.bg};color:${t.color}">
-              <span class="ah-tile-icon"><i class="bi ${icons[i % icons.length]}"></i></span>
-              <h3>${t.title}</h3>
-              <p>${t.text}</p>
-              <span class="ah-btn ah-btn-ghost" style="color:inherit">بیشتر بدانید ›</span>
-            </a>`
-            )
+            .map((t, i) => {
+              const meta = tileMeta[i % tileMeta.length];
+              const theme =
+                t.bg === "#f5f5f7" || t.bg === "#fff"
+                  ? "light"
+                  : t.bg === "#0071e3"
+                    ? "blue"
+                    : t.bg === "#1d1d1f"
+                      ? "graphite"
+                      : meta.theme;
+              return `<a class="ah-tile ah-tile--${theme}" href="${AhooraLayout.resolveUrl(t.url)}">
+              <div class="ah-tile-body">
+                <span class="ah-tile-icon" aria-hidden="true"><i class="bi ${meta.icon}"></i></span>
+                <h3>${t.title}</h3>
+                <p>${t.text}</p>
+                <span class="ah-tile-link">بیشتر بدانید <i class="bi bi-chevron-left" aria-hidden="true"></i></span>
+              </div>
+              <div class="ah-tile-glow" aria-hidden="true"></div>
+            </a>`;
+            })
             .join("")}
         </section>`;
       }

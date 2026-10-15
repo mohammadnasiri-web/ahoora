@@ -13,22 +13,7 @@ const AhooraLayout = (() => {
     if (!host) return;
     const site = AhooraStore.site.get();
     const menu = (site.menu || []).slice().sort((a, b) => a.order - b.order);
-    const desktopMenuHtml = menu
-      .map((item) => {
-        const children = item.children || [];
-        if (children.length) {
-          return `<li>
-            <button type="button" class="ah-menu-btn" aria-haspopup="true">${item.title} ▾</button>
-            <div class="ah-submenu">${children
-              .map((c) => `<a href="${resolveUrl(c.url)}">${c.title}</a>`)
-              .join("")}</div>
-          </li>`;
-        }
-        return `<li><a href="${resolveUrl(item.url)}">${item.title}</a></li>`;
-      })
-      .join("");
 
-    // Drawer links: flat list with children indented (better for mobile)
     const drawerHtml = menu
       .map((item) => {
         const children = item.children || [];
@@ -47,7 +32,9 @@ const AhooraLayout = (() => {
       <div class="ah-nav-overlay" id="ahNavOverlay" hidden></div>
       <aside class="ah-drawer" id="ahDrawer" aria-hidden="true" aria-label="منوی موبایل">
         <div class="ah-drawer-head">
-          <strong>${site.site.name}</strong>
+          <a class="ah-logo ah-logo-drawer" href="${resolveUrl("index.html")}">
+            <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahoora.jpg")}" alt="${site.site.name}" width="120" height="48" decoding="async">
+          </a>
           <button type="button" class="ah-drawer-close" id="ahDrawerClose" aria-label="بستن منو"><i class="bi bi-x-lg"></i></button>
         </div>
         <ul class="ah-drawer-list">${drawerHtml}</ul>
@@ -56,22 +43,34 @@ const AhooraLayout = (() => {
           <a class="ah-drawer-phone" href="tel:${site.site.phone}" dir="ltr">${site.site.phone}</a>
         </div>
       </aside>
-      <nav class="ah-nav" aria-label="منوی اصلی">
-        <div class="ah-nav-inner">
-          <button class="ah-burger" id="ahBurger" type="button" aria-label="باز کردن منو" aria-expanded="false" aria-controls="ahDrawer"><i class="bi bi-list"></i></button>
-          <a class="ah-logo" href="${resolveUrl("index.html")}">${site.site.name}<span>${site.site.nameEn || ""}</span></a>
-          <ul class="ah-menu" id="ahMenu">${desktopMenuHtml}</ul>
-          <div class="ah-nav-actions">
-            ${site.header?.phoneVisible ? `<a class="ah-nav-phone" href="tel:${site.site.phone}" dir="ltr">${site.site.phone}</a>` : ""}
-            <a class="ah-icon-btn" href="${resolveUrl("pages/account.html")}" aria-label="حساب کاربری"><i class="bi bi-person"></i></a>
-            <a class="ah-icon-btn" href="${resolveUrl("pages/cart.html")}" aria-label="سبد خرید">
-              <i class="bi bi-bag"></i>
-              <span class="ah-badge" id="ahCartBadge" hidden>0</span>
-            </a>
-            <a class="ah-btn ah-btn-primary ah-btn-sm" href="${resolveUrl(site.header?.ctaLink || "pages/booking.html")}">${site.header?.ctaText || "رزرو"}</a>
+
+      <header class="ah-site-header">
+        <div class="ah-techno">
+          <div class="ah-techno-top">
+            <div class="ah-techno-top-inner">
+              <div class="ah-techno-brand">
+                <button type="button" class="ah-techno-burger" id="ahBurger" aria-label="باز کردن منو" aria-expanded="false" aria-controls="ahDrawer">
+                  <span class="ah-burger-lines" aria-hidden="true"></span>
+                </button>
+                <a href="${resolveUrl("index.html")}" class="ah-techno-logo">
+                  <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahoora.jpg")}" alt="${site.site.name}" width="140" height="48" decoding="async">
+                </a>
+              </div>
+              <form class="ah-techno-search" action="${resolveUrl("pages/shop.html")}" method="get" role="search">
+                <input type="search" name="q" placeholder="محصول، برند یا دسته مورد نظرتان را جستجو کنید" autocomplete="off">
+                <button type="submit" aria-label="جستجو"><i class="bi bi-search"></i></button>
+              </form>
+              <div class="ah-techno-user">
+                <a class="ah-techno-cart" href="${resolveUrl("pages/cart.html")}" aria-label="سبد خرید">
+                  <i class="bi bi-cart3"></i>
+                  <span class="ah-techno-cart-count" id="ahTechnoCartCount">۰</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-      </nav>
+      </header>
+
       <nav class="ah-bottom-nav" aria-label="میانبر پایین">
         <a href="${resolveUrl("index.html")}" data-nav="home"><i class="bi bi-house"></i><span>خانه</span></a>
         <a href="${resolveUrl("pages/shop.html")}" data-nav="shop"><i class="bi bi-bag"></i><span>فروشگاه</span></a>
@@ -81,7 +80,12 @@ const AhooraLayout = (() => {
       </nav>`;
 
     document.body.classList.add("has-bottom-nav");
+    bindHeaderEvents();
+    highlightBottomNav();
+    updateCartBadge();
+  }
 
+  function bindHeaderEvents() {
     const burger = document.getElementById("ahBurger");
     const drawer = document.getElementById("ahDrawer");
     const overlay = document.getElementById("ahNavOverlay");
@@ -96,7 +100,7 @@ const AhooraLayout = (() => {
       if (burger) {
         burger.setAttribute("aria-expanded", "false");
         burger.setAttribute("aria-label", "باز کردن منو");
-        burger.innerHTML = '<i class="bi bi-list"></i>';
+        burger.classList.remove("is-open");
       }
     };
 
@@ -111,7 +115,7 @@ const AhooraLayout = (() => {
       if (burger) {
         burger.setAttribute("aria-expanded", "true");
         burger.setAttribute("aria-label", "بستن منو");
-        burger.innerHTML = '<i class="bi bi-x-lg"></i>';
+        burger.classList.add("is-open");
       }
     };
 
@@ -121,11 +125,13 @@ const AhooraLayout = (() => {
     });
     overlay?.addEventListener("click", closeMenu);
     closeBtn?.addEventListener("click", closeMenu);
+
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeMenu();
     });
+  }
 
-    // highlight bottom nav
+  function highlightBottomNav() {
     const path = (location.pathname || "").replace(/\\/g, "/").toLowerCase();
     document.querySelectorAll(".ah-bottom-nav a").forEach((a) => {
       const key = a.dataset.nav;
@@ -137,8 +143,10 @@ const AhooraLayout = (() => {
       if (key === "account" && path.includes("/account")) active = true;
       if (active) a.classList.add("active");
     });
+  }
 
-    updateCartBadge();
+  function toPersianDigits(n) {
+    return String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]);
   }
 
   function renderPromo() {
@@ -175,7 +183,9 @@ const AhooraLayout = (() => {
         <div class="container-ah">
           <div class="ah-footer-grid">
             <div>
-              <h4>${site.site.name}</h4>
+              <a class="ah-footer-logo" href="${resolveUrl("index.html")}">
+                <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahoora.jpg")}" alt="${site.site.name}" width="160" height="64" loading="lazy" decoding="async">
+              </a>
               <p>${site.site.tagline}</p>
               <p>${site.site.address}</p>
               <p><a href="tel:${site.site.phone}" dir="ltr">${site.site.phone}</a></p>
@@ -193,11 +203,9 @@ const AhooraLayout = (() => {
   }
 
   function updateCartBadge() {
-    const badge = document.getElementById("ahCartBadge");
-    if (!badge) return;
     const n = AhooraStore.cart.count();
-    badge.hidden = n === 0;
-    badge.textContent = n;
+    const techno = document.getElementById("ahTechnoCartCount");
+    if (techno) techno.textContent = toPersianDigits(n);
   }
 
   function applyOrgSchema() {
