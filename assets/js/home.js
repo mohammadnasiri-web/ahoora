@@ -44,10 +44,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           { icon: "bi-bag-check", theme: "graphite" },
         ];
         return `<div class="ah-quick" aria-label="میانبرها">
-            <a href="${AhooraLayout.resolveUrl("pages/booking.html")}"><i class="bi bi-calendar-check"></i>رزرو نوبت</a>
-            <a href="${AhooraLayout.resolveUrl("pages/shop.html")}"><i class="bi bi-bag"></i>فروشگاه</a>
-            <a href="tel:${site.site.phone}"><i class="bi bi-telephone"></i>تماس</a>
-            <a href="${AhooraLayout.resolveUrl("pages/services.html")}"><i class="bi bi-tools"></i>خدمات</a>
+            <a href="${AhooraLayout.resolveUrl("pages/booking.html")}"><i class="bi bi-calendar-check"></i><span>رزرو نوبت</span></a>
+            <a href="${AhooraLayout.resolveUrl("pages/shop.html")}"><i class="bi bi-bag"></i><span>فروشگاه</span></a>
+            <a href="${AhooraLayout.resolveUrl("pages/services.html")}"><i class="bi bi-tools"></i><span>خدمات</span></a>
+            <a href="${AhooraLayout.resolveUrl("pages/account.html")}"><i class="bi bi-truck"></i><span>پیگیری</span></a>
+            <a href="${AhooraLayout.resolveUrl("pages/faq.html")}"><i class="bi bi-question-circle"></i><span>سوالات</span></a>
+            <a href="tel:${site.site.phone}"><i class="bi bi-telephone"></i><span>تماس</span></a>
           </div>
           <section class="ah-tiles" aria-label="دسترسی سریع">
           ${(sec.items || [])

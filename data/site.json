@@ -142,7 +142,7 @@
         "ctaSecondary": { "text": "خرید", "url": "pages/shop.html?featured=1" },
         "bg": "light",
         "bgImage": "assets/img/hero-bg-light.svg",
-        "image": "assets/img/hero-shop.svg"
+        "image": "assets/img/hero-shop.png"
       },
       {
         "id": "tiles",

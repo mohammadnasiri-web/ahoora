@@ -126,12 +126,16 @@ const AhooraStore = (() => {
               changed = true;
             }
           }
-          if (sec.id === "hero-shop" && !sec.bgImage) {
-            sec.bg = "light";
-            sec.bgImage = "assets/img/hero-bg-light.svg";
-            sec.ctaPrimary = { text: "بیشتر بدانید", url: "pages/shop.html" };
-            sec.ctaSecondary = { text: "خرید", url: "pages/shop.html?featured=1" };
-            changed = true;
+          if (sec.id === "hero-shop") {
+            const img = String(sec.image || "");
+            if (!sec.bgImage || img.endsWith(".svg") || img.endsWith(".jpg") || img.endsWith("hero-shop.jpg")) {
+              sec.bg = "light";
+              sec.bgImage = "assets/img/hero-bg-light.svg";
+              sec.image = "assets/img/hero-shop.png";
+              sec.ctaPrimary = { text: "بیشتر بدانید", url: "pages/shop.html" };
+              sec.ctaSecondary = { text: "خرید", url: "pages/shop.html?featured=1" };
+              changed = true;
+            }
           }
         });
         // migrate footer to Technolife-style structure

@@ -47,6 +47,28 @@ const AhooraLayout = (() => {
       })
       .join("");
 
+    const desktopNavHtml = menu
+      .map((item) => {
+        const children = item.children || [];
+        if (!children.length) {
+          return `<li class="ah-desk-item">
+            <a class="ah-desk-link" href="${resolveUrl(item.url)}">${item.title}</a>
+          </li>`;
+        }
+        return `<li class="ah-desk-item ah-desk-item--drop">
+          <a class="ah-desk-link" href="${resolveUrl(item.url)}">
+            ${item.title}
+            <i class="bi bi-chevron-down ah-desk-caret" aria-hidden="true"></i>
+          </a>
+          <ul class="ah-desk-drop" role="list">
+            ${children
+              .map((c) => `<li><a href="${resolveUrl(c.url)}">${c.title}</a></li>`)
+              .join("")}
+          </ul>
+        </li>`;
+      })
+      .join("");
+
     host.innerHTML = `
       <div class="ah-nav-overlay" id="ahNavOverlay" hidden></div>
       <aside class="ah-drawer" id="ahDrawer" aria-hidden="true" aria-label="منوی موبایل">
@@ -87,6 +109,9 @@ const AhooraLayout = (() => {
               </div>
             </div>
           </div>
+          <nav class="ah-desktop-nav" aria-label="منوی اصلی">
+            <ul class="ah-desk-list">${desktopNavHtml}</ul>
+          </nav>
         </div>
       </header>
 
