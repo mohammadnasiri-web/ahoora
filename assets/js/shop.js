@@ -40,13 +40,27 @@ document.addEventListener("DOMContentLoaded", async () => {
           .map((p) => {
             const price = p.discountPrice || p.price;
             const stock = AhooraUtils.stockLabel(p.stock);
+            const img = p.images?.[0] || "assets/img/products/iphone-15.jpg";
+            const off =
+              p.discountPrice && p.price
+                ? Math.round(((p.price - p.discountPrice) / p.price) * 100)
+                : 0;
             return `<a class="ah-card-product" href="product.html?slug=${encodeURIComponent(p.slug)}">
-              <div class="media"><img src="../${p.images[0]}" alt="${p.title}" loading="lazy" width="160" height="160"></div>
+              <div class="media">
+                ${off ? `<span class="ah-card-badge">٪${AhooraUtils.toFaDigits(off)} تخفیف</span>` : ""}
+                <img src="../${img}" alt="${p.title}" loading="lazy" width="400" height="400">
+              </div>
               <div class="body">
+                <span class="ah-card-brand">${p.brand || ""}</span>
                 <h3>${p.title}</h3>
-                <div class="small text-secondary mb-1">${p.brand || ""} ${p.model || ""}</div>
-                <div class="ah-price">${AhooraUtils.formatPrice(price)}${p.discountPrice ? `<span class="old">${AhooraUtils.formatPrice(p.price)}</span>` : ""}</div>
-                <div class="ah-stock ${stock.cls}">${stock.text}</div>
+                <div class="ah-price-row">
+                  <div class="ah-price">${AhooraUtils.formatPrice(price)}</div>
+                  ${p.discountPrice ? `<span class="old">${AhooraUtils.formatPrice(p.price)}</span>` : ""}
+                </div>
+                <div class="ah-card-foot">
+                  <span class="ah-stock ${stock.cls}">${stock.text}</span>
+                  <span class="ah-card-cta">خرید <i class="bi bi-arrow-left" aria-hidden="true"></i></span>
+                </div>
               </div>
             </a>`;
           })

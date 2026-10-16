@@ -141,23 +141,52 @@ document.addEventListener("DOMContentLoaded", async () => {
     })
     .join("");
 
-  // Featured products strip
-  const featured = AhooraStore.products.list({ featured: true }).slice(0, 4);
+  // Featured products strip (exactly 4)
+  let featured = AhooraStore.products.list({ featured: true }).slice(0, 4);
+  if (featured.length < 4) {
+    const ids = new Set(featured.map((p) => p.id));
+    const extras = AhooraStore.products
+      .list({ bestseller: true })
+      .concat(AhooraStore.products.list({}))
+      .filter((p) => !ids.has(p.id));
+    for (const p of extras) {
+      if (featured.length >= 4) break;
+      featured.push(p);
+      ids.add(p.id);
+    }
+  }
   const productsHtml = featured.length
-    ? `<section class="ah-section">
+    ? `<section class="ah-section ah-featured">
         <div class="container-ah">
-          <h2 class="ah-section-title">محصولات ویژه</h2>
-          <div class="ah-grid">
+          <div class="ah-featured-head">
+            <h2 class="ah-section-title">محصولات ویژه</h2>
+            <a class="ah-featured-more" href="pages/shop.html?featured=1">مشاهده همه <i class="bi bi-chevron-left" aria-hidden="true"></i></a>
+          </div>
+          <div class="ah-featured-grid">
             ${featured
               .map((p) => {
                 const price = p.discountPrice || p.price;
                 const stock = AhooraUtils.stockLabel(p.stock);
-                return `<a class="ah-card-product" href="pages/product.html?slug=${p.slug}">
-                  <div class="media"><img src="${p.images[0]}" alt="${p.title}" loading="lazy" width="160" height="160"></div>
+                const off =
+                  p.discountPrice && p.price
+                    ? Math.round(((p.price - p.discountPrice) / p.price) * 100)
+                    : 0;
+                return `<a class="ah-card-product ah-card-product--featured" href="pages/product.html?slug=${p.slug}">
+                  <div class="media">
+                    ${off ? `<span class="ah-card-badge">٪${AhooraUtils.toFaDigits(off)} تخفیف</span>` : ""}
+                    <img src="${p.images[0]}" alt="${p.title}" loading="lazy" width="180" height="180">
+                  </div>
                   <div class="body">
+                    <span class="ah-card-brand">${p.brand || ""}</span>
                     <h3>${p.title}</h3>
-                    <div class="ah-price">${AhooraUtils.formatPrice(price)}${p.discountPrice ? `<span class="old">${AhooraUtils.formatPrice(p.price)}</span>` : ""}</div>
-                    <div class="ah-stock ${stock.cls}">${stock.text}</div>
+                    <div class="ah-price-row">
+                      <div class="ah-price">${AhooraUtils.formatPrice(price)}</div>
+                      ${p.discountPrice ? `<span class="old">${AhooraUtils.formatPrice(p.price)}</span>` : ""}
+                    </div>
+                    <div class="ah-card-foot">
+                      <span class="ah-stock ${stock.cls}">${stock.text}</span>
+                      <span class="ah-card-cta">خرید <i class="bi bi-arrow-left" aria-hidden="true"></i></span>
+                    </div>
                   </div>
                 </a>`;
               })

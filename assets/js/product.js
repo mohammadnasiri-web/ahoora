@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     <nav class="ah-breadcrumb"><a href="shop.html">فروشگاه</a> / ${p.title}</nav>
     <div class="row g-4 align-items-start">
       <div class="col-md-5">
-        <div class="ah-form-card text-center p-4">
-          <img src="../${p.images[0]}" alt="${p.title}" width="280" height="280" style="margin:auto">
+        <div class="ah-form-card p-0 overflow-hidden">
+          <img src="../${p.images[0]}" alt="${p.title}" width="560" height="560" style="width:100%;height:auto;display:block;object-fit:cover;aspect-ratio:1">
         </div>
       </div>
       <div class="col-md-7">

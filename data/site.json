@@ -52,32 +52,62 @@
   "footer": {
     "columns": [
       {
-        "title": "فروشگاه",
+        "title": "دسترسی سریع",
         "links": [
+          { "title": "فروشگاه", "url": "pages/shop.html" },
           { "title": "گوشی موبایل", "url": "pages/shop.html?cat=phones" },
           { "title": "لوازم جانبی", "url": "pages/shop.html?cat=accessories" },
-          { "title": "قطعات تعمیراتی", "url": "pages/shop.html?cat=parts" }
+          { "title": "قطعات تعمیراتی", "url": "pages/shop.html?cat=parts" },
+          { "title": "رزرو نوبت", "url": "pages/booking.html" }
         ]
       },
       {
         "title": "خدمات",
         "links": [
-          { "title": "تعویض باتری در محل", "url": "pages/booking.html" },
-          { "title": "تعمیرات غیرحضوری", "url": "pages/services.html?type=workshop" },
+          { "title": "تعمیر در محل", "url": "pages/services.html?type=onsite" },
+          { "title": "تعویض باتری", "url": "pages/booking.html" },
+          { "title": "تعمیر غیرحضوری", "url": "pages/services.html?type=workshop" },
           { "title": "پیگیری سفارش", "url": "pages/account.html" }
         ]
       },
       {
-        "title": "اطلاعات",
+        "title": "درباره ما",
         "links": [
-          { "title": "درباره ما", "url": "pages/about.html" },
+          { "title": "اهورا تل در یک نگاه", "url": "pages/about.html" },
+          { "title": "سوالات متداول", "url": "pages/faq.html" },
+          { "title": "تماس با ما", "url": "pages/contact.html" }
+        ]
+      },
+      {
+        "title": "پیش از خرید",
+        "links": [
+          { "title": "راهنمای خرید", "url": "pages/faq.html" },
+          { "title": "شیوه ارسال", "url": "pages/terms.html" },
+          { "title": "گارانتی و اصالت", "url": "pages/terms.html" }
+        ]
+      },
+      {
+        "title": "پس از خرید",
+        "links": [
+          { "title": "پیگیری سفارش", "url": "pages/account.html" },
+          { "title": "مرجوعی کالا", "url": "pages/terms.html" },
+          { "title": "پشتیبانی", "url": "pages/contact.html" }
+        ]
+      },
+      {
+        "title": "قوانین",
+        "links": [
           { "title": "قوانین و شرایط", "url": "pages/terms.html" },
-          { "title": "حریم خصوصی", "url": "pages/privacy.html" },
-          { "title": "سوالات متداول", "url": "pages/faq.html" }
+          { "title": "حریم خصوصی", "url": "pages/privacy.html" }
         ]
       }
     ],
-    "copyright": "© ۱۴۰۵ اهورا تل. تمامی حقوق محفوظ است."
+    "highlights": [
+      { "title": "تعمیر در محل", "text": "سریع و تخصصی", "icon": "bi-geo-alt" },
+      { "title": "گارانتی اصالت", "text": "کالای اصل", "icon": "bi-shield-check" },
+      { "title": "پشتیبانی", "text": "همه روزه", "icon": "bi-headset" }
+    ],
+    "copyright": "تمامی حقوق مادی و معنوی این سایت متعلق به اهورا تل می‌باشد."
   },
   "social": [
     { "id": "instagram", "title": "اینستاگرام", "url": "https://instagram.com/ahooora_tel", "icon": "bi-instagram" },

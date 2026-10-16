@@ -63,6 +63,37 @@ const AhooraStore = (() => {
       if (!get(KEYS.products)) set(KEYS.products, await loadSeed("products", "products.json"));
       if (!get(KEYS.services)) set(KEYS.services, await loadSeed("services", "services.json"));
       if (!get(KEYS.content)) set(KEYS.content, await loadSeed("content", "content.json"));
+      // ensure featured products + real product photos
+      const productsData = get(KEYS.products);
+      if (productsData?.products) {
+        let pChanged = false;
+        const photoMap = {
+          "p-iphone15": "assets/img/products/iphone-15.jpg",
+          "p-airpods": "assets/img/products/airpods-pro.jpg",
+          "p-glass15": "assets/img/products/screen-glass.jpg",
+          "p-charger": "assets/img/products/charger-20w.jpg",
+          "p-case15": "assets/img/products/phone-case.jpg",
+          "p-battery-iphone": "assets/img/products/battery.jpg",
+          "p-lcd13": "assets/img/products/lcd.jpg",
+          "p-powerbank": "assets/img/products/powerbank.jpg",
+        };
+        productsData.products.forEach((p) => {
+          const photo = photoMap[p.id];
+          if (photo && (!p.images?.[0] || String(p.images[0]).endsWith(".svg"))) {
+            p.images = [photo];
+            pChanged = true;
+          }
+        });
+        const featuredCount = productsData.products.filter((p) => p.featured && p.active !== false).length;
+        if (featuredCount < 4) {
+          const glass = productsData.products.find((p) => p.id === "p-glass15");
+          if (glass && !glass.featured) {
+            glass.featured = true;
+            pChanged = true;
+          }
+        }
+        if (pChanged) set(KEYS.products, productsData);
+      }
       // migrate logo paths + Apple-style hero fields for older localStorage
       const siteData = get(KEYS.site);
       if (siteData?.site) {
@@ -103,6 +134,73 @@ const AhooraStore = (() => {
             changed = true;
           }
         });
+        // migrate footer to Technolife-style structure
+        if (!siteData.footer?.highlights || (siteData.footer?.columns || []).length < 5) {
+          siteData.footer = {
+            ...(siteData.footer || {}),
+            columns: [
+              {
+                title: "دسترسی سریع",
+                links: [
+                  { title: "فروشگاه", url: "pages/shop.html" },
+                  { title: "گوشی موبایل", url: "pages/shop.html?cat=phones" },
+                  { title: "لوازم جانبی", url: "pages/shop.html?cat=accessories" },
+                  { title: "قطعات تعمیراتی", url: "pages/shop.html?cat=parts" },
+                  { title: "رزرو نوبت", url: "pages/booking.html" },
+                ],
+              },
+              {
+                title: "خدمات",
+                links: [
+                  { title: "تعمیر در محل", url: "pages/services.html?type=onsite" },
+                  { title: "تعویض باتری", url: "pages/booking.html" },
+                  { title: "تعمیر غیرحضوری", url: "pages/services.html?type=workshop" },
+                  { title: "پیگیری سفارش", url: "pages/account.html" },
+                ],
+              },
+              {
+                title: "درباره ما",
+                links: [
+                  { title: "اهورا تل در یک نگاه", url: "pages/about.html" },
+                  { title: "سوالات متداول", url: "pages/faq.html" },
+                  { title: "تماس با ما", url: "pages/contact.html" },
+                ],
+              },
+              {
+                title: "پیش از خرید",
+                links: [
+                  { title: "راهنمای خرید", url: "pages/faq.html" },
+                  { title: "شیوه ارسال", url: "pages/terms.html" },
+                  { title: "گارانتی و اصالت", url: "pages/terms.html" },
+                ],
+              },
+              {
+                title: "پس از خرید",
+                links: [
+                  { title: "پیگیری سفارش", url: "pages/account.html" },
+                  { title: "مرجوعی کالا", url: "pages/terms.html" },
+                  { title: "پشتیبانی", url: "pages/contact.html" },
+                ],
+              },
+              {
+                title: "قوانین",
+                links: [
+                  { title: "قوانین و شرایط", url: "pages/terms.html" },
+                  { title: "حریم خصوصی", url: "pages/privacy.html" },
+                ],
+              },
+            ],
+            highlights: [
+              { title: "تعمیر در محل", text: "سریع و تخصصی", icon: "bi-geo-alt" },
+              { title: "گارانتی اصالت", text: "کالای اصل", icon: "bi-shield-check" },
+              { title: "پشتیبانی", text: "همه روزه", icon: "bi-headset" },
+            ],
+            copyright:
+              siteData.footer?.copyright ||
+              "تمامی حقوق مادی و معنوی این سایت متعلق به اهورا تل می‌باشد.",
+          };
+          changed = true;
+        }
         if (changed) set(KEYS.site, siteData);
       }
     } catch (err) {

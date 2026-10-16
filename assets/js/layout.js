@@ -15,15 +15,34 @@ const AhooraLayout = (() => {
     const menu = (site.menu || []).slice().sort((a, b) => a.order - b.order);
 
     const drawerHtml = menu
-      .map((item) => {
+      .map((item, idx) => {
         const children = item.children || [];
-        const main = `<a class="ah-drawer-link" href="${resolveUrl(item.url)}">${item.title}</a>`;
-        if (!children.length) return `<li>${main}</li>`;
-        return `<li>
-          ${main}
-          <ul class="ah-drawer-sub">
-            ${children.map((c) => `<li><a href="${resolveUrl(c.url)}">${c.title}</a></li>`).join("")}
-          </ul>
+        const delay = `style="--ah-i:${idx}"`;
+        if (!children.length) {
+          return `<li class="ah-drawer-item" ${delay}>
+            <a class="ah-drawer-link" href="${resolveUrl(item.url)}">${item.title}</a>
+          </li>`;
+        }
+        const subId = `ahDrawerSub_${item.id || idx}`;
+        return `<li class="ah-drawer-item ah-drawer-item--parent" ${delay}>
+          <div class="ah-drawer-row">
+            <a class="ah-drawer-link" href="${resolveUrl(item.url)}">${item.title}</a>
+            <button type="button" class="ah-drawer-toggle" aria-expanded="false" aria-controls="${subId}" aria-label="باز کردن ${item.title}">
+              <span class="ah-drawer-chevron" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="ah-drawer-panel" id="${subId}" aria-hidden="true">
+            <div class="ah-drawer-panel-inner">
+              <ul class="ah-drawer-sub">
+                ${children
+                  .map(
+                    (c, ci) =>
+                      `<li style="--ah-si:${ci}"><a href="${resolveUrl(c.url)}" tabindex="-1">${c.title}</a></li>`
+                  )
+                  .join("")}
+              </ul>
+            </div>
+          </div>
         </li>`;
       })
       .join("");
@@ -102,6 +121,18 @@ const AhooraLayout = (() => {
         burger.setAttribute("aria-label", "باز کردن منو");
         burger.classList.remove("is-open");
       }
+      drawer?.querySelectorAll(".ah-drawer-item--parent.is-open").forEach((item) => {
+        item.classList.remove("is-open");
+        const toggle = item.querySelector(".ah-drawer-toggle");
+        const panel = item.querySelector(".ah-drawer-panel");
+        const title = item.querySelector(".ah-drawer-link")?.textContent?.trim() || "منو";
+        if (toggle) {
+          toggle.setAttribute("aria-expanded", "false");
+          toggle.setAttribute("aria-label", `باز کردن ${title}`);
+        }
+        if (panel) panel.setAttribute("aria-hidden", "true");
+        item.querySelectorAll(".ah-drawer-sub a").forEach((a) => a.setAttribute("tabindex", "-1"));
+      });
     };
 
     const openMenu = () => {
@@ -125,6 +156,45 @@ const AhooraLayout = (() => {
     });
     overlay?.addEventListener("click", closeMenu);
     closeBtn?.addEventListener("click", closeMenu);
+
+    const setCategoryOpen = (item, willOpen) => {
+      const panel = item.querySelector(".ah-drawer-panel");
+      const title = item.querySelector(".ah-drawer-link")?.textContent?.trim() || "منو";
+      const toggle = item.querySelector(".ah-drawer-toggle");
+
+      if (willOpen) {
+        // force reflow so open transition always plays
+        if (panel) void panel.offsetHeight;
+        item.classList.add("is-open");
+      } else {
+        item.classList.remove("is-open");
+      }
+
+      if (toggle) {
+        toggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
+        toggle.setAttribute("aria-label", `${willOpen ? "بستن" : "باز کردن"} ${title}`);
+      }
+      if (panel) panel.setAttribute("aria-hidden", willOpen ? "false" : "true");
+      item.querySelectorAll(".ah-drawer-sub a").forEach((a) => {
+        if (willOpen) a.removeAttribute("tabindex");
+        else a.setAttribute("tabindex", "-1");
+      });
+    };
+
+    drawer?.querySelectorAll(".ah-drawer-toggle").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const item = btn.closest(".ah-drawer-item--parent");
+        if (!item) return;
+        const willOpen = !item.classList.contains("is-open");
+        // Apple-like: only one category open at a time
+        drawer.querySelectorAll(".ah-drawer-item--parent.is-open").forEach((openItem) => {
+          if (openItem !== item) setCategoryOpen(openItem, false);
+        });
+        requestAnimationFrame(() => setCategoryOpen(item, willOpen));
+      });
+    });
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeMenu();
@@ -165,9 +235,12 @@ const AhooraLayout = (() => {
     const host = document.getElementById("ah-footer");
     if (!host) return;
     const site = AhooraStore.site.get();
-    const cols = (site.footer?.columns || [])
+    const s = site.site || {};
+    const footer = site.footer || {};
+
+    const cols = (footer.columns || [])
       .map(
-        (col) => `<div>
+        (col) => `<div class="ah-footer-col">
           <h4>${col.title}</h4>
           <ul>${(col.links || []).map((l) => `<li><a href="${resolveUrl(l.url)}">${l.title}</a></li>`).join("")}</ul>
         </div>`
@@ -175,31 +248,79 @@ const AhooraLayout = (() => {
       .join("");
 
     const social = (site.social || [])
-      .map((s) => `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.title}"><i class="bi ${s.icon}"></i></a>`)
+      .map(
+        (item) =>
+          `<a class="ah-footer-social-btn" href="${item.url}" target="_blank" rel="noopener" aria-label="${item.title}"><i class="bi ${item.icon}"></i></a>`
+      )
       .join("");
+
+    const highlights = (footer.highlights || [])
+      .map(
+        (h) => `<div class="ah-footer-highlight">
+          <span class="ah-footer-highlight-icon" aria-hidden="true"><i class="bi ${h.icon || "bi-check-circle"}"></i></span>
+          <span class="ah-footer-highlight-text">
+            <strong>${h.title}</strong>
+            <small>${h.text || ""}</small>
+          </span>
+        </div>`
+      )
+      .join("");
+
+    const phone = s.phone || "";
+    const phoneDisplay = phone.replace(/(\d{3})(\d+)/, "$1-$2");
 
     host.innerHTML = `
       <footer class="ah-footer">
-        <div class="container-ah">
-          <div class="ah-footer-grid">
-            <div>
-              <a class="ah-footer-logo" href="${resolveUrl("index.html")}">
-                <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahoora.jpg")}" alt="${site.site.name}" width="160" height="64" loading="lazy" decoding="async">
-              </a>
-              <p>${site.site.tagline}</p>
-              <p>${site.site.address}</p>
-              <p><a href="tel:${site.site.phone}" dir="ltr">${site.site.phone}</a></p>
-              <p>${site.site.workingHours}</p>
-              <div class="ah-social mt-2">${social}</div>
-            </div>
-            ${cols}
+        <div class="ah-footer-inner">
+          <div class="ah-footer-top">
+            <a class="ah-footer-logo" href="${resolveUrl("index.html")}">
+              <img src="${resolveUrl(s.logo || "assets/img/logo-ahoora.jpg")}" alt="${s.name || ""}" width="140" height="48" loading="lazy" decoding="async">
+            </a>
+            <button type="button" class="ah-footer-topbtn" id="ahFooterTopBtn" aria-label="بازگشت به بالا">
+              <span>بازگشت به بالا</span>
+              <i class="bi bi-chevron-up" aria-hidden="true"></i>
+            </button>
           </div>
+
+          <div class="ah-footer-section ah-footer-links">
+            <div class="ah-footer-grid">${cols}</div>
+          </div>
+
+          <div class="ah-footer-section ah-footer-contact">
+            <div class="ah-footer-contact-grid">
+              <div class="ah-footer-contact-block">
+                <h4>ارتباط با ما</h4>
+                <p class="ah-footer-meta"><span>تلفن:</span> <a href="tel:${phone}" dir="ltr">${phoneDisplay}</a></p>
+                <p class="ah-footer-meta"><span>ایمیل:</span> <a href="mailto:${s.email || ""}">${s.email || ""}</a></p>
+                <p class="ah-footer-meta"><span>آدرس:</span> ${s.address || ""}</p>
+                <p class="ah-footer-meta"><span>ساعات کاری:</span> ${s.workingHours || ""}</p>
+              </div>
+              <div class="ah-footer-contact-block">
+                <h4>شبکه های اجتماعی</h4>
+                <div class="ah-footer-social">${social}</div>
+              </div>
+            </div>
+          </div>
+
+          ${
+            highlights
+              ? `<div class="ah-footer-section ah-footer-highlights">${highlights}</div>`
+              : ""
+          }
+
           <div class="ah-footer-bottom">
-            <span>${site.footer?.copyright || ""}</span>
-            <span>${site.site.email}</span>
+            <div class="ah-footer-years">۱۴۰۵–۱۳۹۹</div>
+            <p>${footer.copyright || ""}</p>
           </div>
         </div>
       </footer>`;
+
+    const topBtn = document.getElementById("ahFooterTopBtn");
+    if (topBtn) {
+      topBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
   }
 
   function updateCartBadge() {
