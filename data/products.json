@@ -73,7 +73,13 @@
       "order": 2
     }
   ],
-  "brands": ["Apple", "Samsung", "Xiaomi", "Huawei", "Generic"],
+  "brands": [
+    "Apple",
+    "Samsung",
+    "Xiaomi",
+    "Huawei",
+    "Generic"
+  ],
   "products": [
     {
       "id": "p-iphone15",
@@ -88,7 +94,9 @@
       "active": true,
       "featured": true,
       "bestseller": true,
-      "images": ["assets/img/products/iphone-15.jpg"],
+      "images": [
+        "assets/img/products/iphone-15.png"
+      ],
       "description": "گوشی آیفون ۱۵ با نمایشگر Super Retina و دوربین ۴۸ مگاپیکسلی.",
       "specs": {
         "display": "۶٫۱ اینچ OLED",
@@ -97,9 +105,27 @@
         "battery": "لیتیوم یون"
       },
       "variants": [
-        { "id": "v1", "color": "مشکی", "storage": "128GB", "price": 50500000, "stock": 3 },
-        { "id": "v2", "color": "آبی", "storage": "128GB", "price": 50500000, "stock": 2 },
-        { "id": "v3", "color": "مشکی", "storage": "256GB", "price": 56500000, "stock": 3 }
+        {
+          "id": "v1",
+          "color": "مشکی",
+          "storage": "128GB",
+          "price": 50500000,
+          "stock": 3
+        },
+        {
+          "id": "v2",
+          "color": "آبی",
+          "storage": "128GB",
+          "price": 50500000,
+          "stock": 2
+        },
+        {
+          "id": "v3",
+          "color": "مشکی",
+          "storage": "256GB",
+          "price": 56500000,
+          "stock": 3
+        }
       ],
       "seo": {
         "title": "خرید آیفون ۱۵ | اهورا تل",
@@ -121,11 +147,19 @@
       "active": true,
       "featured": true,
       "bestseller": true,
-      "images": ["assets/img/products/airpods-pro.jpg"],
+      "images": [
+        "assets/img/products/airpods-pro.png"
+      ],
       "description": "هندزفری بی‌سیم با نویزکنسلینگ فعال.",
-      "specs": { "anc": "فعال", "battery": "تا ۳۰ ساعت با کیس" },
+      "specs": {
+        "anc": "فعال",
+        "battery": "تا ۳۰ ساعت با کیس"
+      },
       "variants": [],
-      "seo": { "title": "خرید ایرپاد پرو", "description": "ایرپاد پرو اصل" },
+      "seo": {
+        "title": "خرید ایرپاد پرو",
+        "description": "ایرپاد پرو اصل"
+      },
       "rating": 4.6,
       "reviewCount": 18
     },
@@ -142,11 +176,19 @@
       "active": true,
       "featured": true,
       "bestseller": true,
-      "images": ["assets/img/products/screen-glass.jpg"],
+      "images": [
+        "assets/img/products/screen-glass.png"
+      ],
       "description": "گلس ۹H با پوشش کامل لبه به لبه.",
-      "specs": { "hardness": "۹H", "type": "Tempered Glass" },
+      "specs": {
+        "hardness": "۹H",
+        "type": "Tempered Glass"
+      },
       "variants": [],
-      "seo": { "title": "گلس آیفون ۱۵", "description": "محافظ صفحه آیفون ۱۵" },
+      "seo": {
+        "title": "گلس آیفون ۱۵",
+        "description": "محافظ صفحه آیفون ۱۵"
+      },
       "rating": 4.4,
       "reviewCount": 41
     },
@@ -163,15 +205,40 @@
       "active": true,
       "featured": false,
       "bestseller": false,
-      "images": ["assets/img/products/phone-case.jpg"],
-      "description": "قاب سیلیکونی نرم با حفاظت گوشه‌ها.",
-      "specs": { "material": "سیلیکون" },
-      "variants": [
-        { "id": "c1", "color": "مشکی", "storage": null, "price": 450000, "stock": 10 },
-        { "id": "c2", "color": "آبی", "storage": null, "price": 450000, "stock": 8 },
-        { "id": "c3", "color": "صورتی", "storage": null, "price": 450000, "stock": 7 }
+      "images": [
+        "assets/img/products/phone-case.png"
       ],
-      "seo": { "title": "قاب آیفون ۱۵", "description": "قاب سیلیکونی آیفون ۱۵" },
+      "description": "قاب سیلیکونی نرم با حفاظت گوشه‌ها.",
+      "specs": {
+        "material": "سیلیکون"
+      },
+      "variants": [
+        {
+          "id": "c1",
+          "color": "مشکی",
+          "storage": null,
+          "price": 450000,
+          "stock": 10
+        },
+        {
+          "id": "c2",
+          "color": "آبی",
+          "storage": null,
+          "price": 450000,
+          "stock": 8
+        },
+        {
+          "id": "c3",
+          "color": "صورتی",
+          "storage": null,
+          "price": 450000,
+          "stock": 7
+        }
+      ],
+      "seo": {
+        "title": "قاب آیفون ۱۵",
+        "description": "قاب سیلیکونی آیفون ۱۵"
+      },
       "rating": 4.2,
       "reviewCount": 12
     },
@@ -188,11 +255,19 @@
       "active": true,
       "featured": true,
       "bestseller": false,
-      "images": ["assets/img/products/charger-20w.jpg"],
+      "images": [
+        "assets/img/products/charger-20w.png"
+      ],
       "description": "آداپتور شارژ سریع ۲۰ وات USB-C.",
-      "specs": { "power": "۲۰ وات", "port": "USB-C" },
+      "specs": {
+        "power": "۲۰ وات",
+        "port": "USB-C"
+      },
       "variants": [],
-      "seo": { "title": "شارژر ۲۰ وات", "description": "شارژر سریع ۲۰ وات" },
+      "seo": {
+        "title": "شارژر ۲۰ وات",
+        "description": "شارژر سریع ۲۰ وات"
+      },
       "rating": 4.5,
       "reviewCount": 33
     },
@@ -209,11 +284,18 @@
       "active": true,
       "featured": false,
       "bestseller": false,
-      "images": ["assets/img/products/battery.jpg"],
+      "images": [
+        "assets/img/products/battery.png"
+      ],
       "description": "باتری جایگزین با ظرفیت استاندارد برای آیفون ۱۳.",
-      "specs": { "capacity": "۳۲۴۰ mAh" },
+      "specs": {
+        "capacity": "۳۲۴۰ mAh"
+      },
       "variants": [],
-      "seo": { "title": "باتری آیفون ۱۳", "description": "فروش باتری آیفون ۱۳" },
+      "seo": {
+        "title": "باتری آیفون ۱۳",
+        "description": "فروش باتری آیفون ۱۳"
+      },
       "rating": 4.7,
       "reviewCount": 9
     },
@@ -230,11 +312,18 @@
       "active": true,
       "featured": false,
       "bestseller": false,
-      "images": ["assets/img/products/lcd.jpg"],
+      "images": [
+        "assets/img/products/lcd.png"
+      ],
       "description": "صفحه نمایش جایگزین آیفون ۱۳ با کیفیت بالا.",
-      "specs": { "type": "OLED" },
+      "specs": {
+        "type": "OLED"
+      },
       "variants": [],
-      "seo": { "title": "ال‌سی‌دی آیفون ۱۳", "description": "تعویض و فروش LCD آیفون ۱۳" },
+      "seo": {
+        "title": "ال‌سی‌دی آیفون ۱۳",
+        "description": "تعویض و فروش LCD آیفون ۱۳"
+      },
       "rating": 4.3,
       "reviewCount": 7
     },
@@ -251,11 +340,19 @@
       "active": true,
       "featured": false,
       "bestseller": false,
-      "images": ["assets/img/products/powerbank.jpg"],
+      "images": [
+        "assets/img/products/powerbank.png"
+      ],
       "description": "پاوربانک سبک با ظرفیت ۱۰۰۰۰ میلی‌آمپر.",
-      "specs": { "capacity": "۱۰۰۰۰ mAh", "ports": "USB-A / USB-C" },
+      "specs": {
+        "capacity": "۱۰۰۰۰ mAh",
+        "ports": "USB-A / USB-C"
+      },
       "variants": [],
-      "seo": { "title": "پاوربانک ۱۰۰۰۰", "description": "خرید پاوربانک" },
+      "seo": {
+        "title": "پاوربانک ۱۰۰۰۰",
+        "description": "خرید پاوربانک"
+      },
       "rating": 4.1,
       "reviewCount": 15
     }

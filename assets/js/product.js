@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     <div class="row g-4 align-items-start">
       <div class="col-md-5">
         <div class="ah-form-card p-0 overflow-hidden">
-          <img src="../${p.images[0]}" alt="${p.title}" width="560" height="560" style="width:100%;height:auto;display:block;object-fit:cover;aspect-ratio:1">
+          <img src="../${p.images[0]}" alt="${p.title}" width="560" height="560" class="ah-product-detail-img" style="width:100%;height:auto;display:block;object-fit:contain;aspect-ratio:1;background:transparent;padding:1.25rem">
         </div>
       </div>
       <div class="col-md-7">

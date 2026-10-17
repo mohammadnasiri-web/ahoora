@@ -25,7 +25,7 @@
     document.addEventListener("DOMContentLoaded", async () => {
       await AhooraLayout.boot({ seo:{ title:"سوالات متداول | اهورا تل", description:"پاسخ سوالات رایج مشتریان اهورا تل" }});
       const faqs = (AhooraStore.content.get().faqs||[]).filter(f=>f.active).sort((a,b)=>a.order-b.order);
-      document.getElementById("faqRoot").innerHTML = `<div class="accordion" id="faqAcc">${faqs.map((f,i)=>`
+      document.getElementById("faqRoot").innerHTML = `<div class="accordion ah-accordion" id="faqAcc">${faqs.map((f,i)=>`
         <div class="accordion-item"><h2 class="accordion-header">
           <button class="accordion-button ${i?'collapsed':''}" type="button" data-bs-toggle="collapse" data-bs-target="#q${f.id}">${f.question}</button>
         </h2><div id="q${f.id}" class="accordion-collapse collapse ${i?'':'show'}" data-bs-parent="#faqAcc"><div class="accordion-body">${f.answer}</div></div></div>`).join("")}</div>`;

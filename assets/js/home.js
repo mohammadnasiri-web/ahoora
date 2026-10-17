@@ -9,14 +9,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     .map((sec) => {
       if (sec.type === "hero") {
         const theme = sec.bg || "dark";
-        const bgImg = AhooraLayout.resolveUrl(
-          sec.bgImage || (theme === "dark" ? "assets/img/hero-bg-dark.svg" : "assets/img/hero-bg-light.svg")
-        );
+        const bgLayer = sec.bgImage
+          ? `<div class="ah-hero-bg" style="background-image:url('${AhooraLayout.resolveUrl(sec.bgImage)}')" aria-hidden="true"></div>`
+          : "";
         return `<section class="ah-hero ah-hero-${theme} ah-hero-apple">
-          <div class="ah-hero-bg" style="background-image:url('${bgImg}')" aria-hidden="true"></div>
+          ${bgLayer}
           <div class="ah-hero-content">
             <h2 class="ah-hero-eyebrow">${sec.title}</h2>
-            <p class="ah-hero-title">${sec.subtitle || ""}</p>
+            ${sec.subtitle ? `<p class="ah-hero-title">${sec.subtitle}</p>` : ""}
             ${sec.text ? `<p class="ah-hero-text">${sec.text}</p>` : ""}
             <div class="ah-hero-actions">
               ${
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       if (sec.type === "testimonials") {
         const items = (content.testimonials || []).filter((t) => t.active && t.approved);
-        return `<section class="ah-section" style="background:var(--ah-bg)">
+        return `<section class="ah-section ah-section--testimonials">
           <div class="container-ah">
             <h2 class="ah-section-title">${sec.title}</h2>
             <div class="row g-3">

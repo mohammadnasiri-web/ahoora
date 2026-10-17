@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           .map((p) => {
             const price = p.discountPrice || p.price;
             const stock = AhooraUtils.stockLabel(p.stock);
-            const img = p.images?.[0] || "assets/img/products/iphone-15.jpg";
+            const img = p.images?.[0] || "assets/img/products/iphone-15.png";
             const off =
               p.discountPrice && p.price
                 ? Math.round(((p.price - p.discountPrice) / p.price) * 100)

@@ -3,7 +3,7 @@
     "name": "اهورا تل",
     "nameEn": "Ahoora Tel",
     "tagline": "تعمیرات تخصصی و فروش تجهیزات موبایل",
-    "logo": "assets/img/logo-ahoora.jpg",
+    "logo": "assets/img/logo-ahoora.png",
     "logoMark": "assets/img/logo-mark.svg",
     "favicon": "assets/img/favicon.svg",
     "phone": "02191000000",
@@ -23,16 +23,33 @@
     "phoneVisible": true
   },
   "menu": [
-    { "id": "home", "title": "خانه", "url": "index.html", "order": 1 },
+    {
+      "id": "home",
+      "title": "خانه",
+      "url": "index.html",
+      "order": 1
+    },
     {
       "id": "shop",
       "title": "فروشگاه",
       "url": "pages/shop.html",
       "order": 2,
       "children": [
-        { "id": "phones", "title": "گوشی موبایل", "url": "pages/shop.html?cat=phones" },
-        { "id": "accessories", "title": "لوازم جانبی", "url": "pages/shop.html?cat=accessories" },
-        { "id": "parts", "title": "قطعات", "url": "pages/shop.html?cat=parts" }
+        {
+          "id": "phones",
+          "title": "گوشی موبایل",
+          "url": "pages/shop.html?cat=phones"
+        },
+        {
+          "id": "accessories",
+          "title": "لوازم جانبی",
+          "url": "pages/shop.html?cat=accessories"
+        },
+        {
+          "id": "parts",
+          "title": "قطعات",
+          "url": "pages/shop.html?cat=parts"
+        }
       ]
     },
     {
@@ -41,78 +58,188 @@
       "url": "pages/services.html",
       "order": 3,
       "children": [
-        { "id": "onsite", "title": "تعمیر در محل", "url": "pages/services.html?type=onsite" },
-        { "id": "workshop", "title": "تعمیر غیرحضوری", "url": "pages/services.html?type=workshop" }
+        {
+          "id": "onsite",
+          "title": "تعمیر در محل",
+          "url": "pages/services.html?type=onsite"
+        },
+        {
+          "id": "workshop",
+          "title": "تعمیر غیرحضوری",
+          "url": "pages/services.html?type=workshop"
+        }
       ]
     },
-    { "id": "booking", "title": "رزرو نوبت", "url": "pages/booking.html", "order": 4 },
-    { "id": "about", "title": "درباره ما", "url": "pages/about.html", "order": 5 },
-    { "id": "contact", "title": "تماس", "url": "pages/contact.html", "order": 6 }
+    {
+      "id": "booking",
+      "title": "رزرو نوبت",
+      "url": "pages/booking.html",
+      "order": 4
+    },
+    {
+      "id": "about",
+      "title": "درباره ما",
+      "url": "pages/about.html",
+      "order": 5
+    },
+    {
+      "id": "contact",
+      "title": "تماس",
+      "url": "pages/contact.html",
+      "order": 6
+    }
   ],
   "footer": {
     "columns": [
       {
         "title": "دسترسی سریع",
         "links": [
-          { "title": "فروشگاه", "url": "pages/shop.html" },
-          { "title": "گوشی موبایل", "url": "pages/shop.html?cat=phones" },
-          { "title": "لوازم جانبی", "url": "pages/shop.html?cat=accessories" },
-          { "title": "قطعات تعمیراتی", "url": "pages/shop.html?cat=parts" },
-          { "title": "رزرو نوبت", "url": "pages/booking.html" }
+          {
+            "title": "فروشگاه",
+            "url": "pages/shop.html"
+          },
+          {
+            "title": "گوشی موبایل",
+            "url": "pages/shop.html?cat=phones"
+          },
+          {
+            "title": "لوازم جانبی",
+            "url": "pages/shop.html?cat=accessories"
+          },
+          {
+            "title": "قطعات تعمیراتی",
+            "url": "pages/shop.html?cat=parts"
+          },
+          {
+            "title": "رزرو نوبت",
+            "url": "pages/booking.html"
+          }
         ]
       },
       {
         "title": "خدمات",
         "links": [
-          { "title": "تعمیر در محل", "url": "pages/services.html?type=onsite" },
-          { "title": "تعویض باتری", "url": "pages/booking.html" },
-          { "title": "تعمیر غیرحضوری", "url": "pages/services.html?type=workshop" },
-          { "title": "پیگیری سفارش", "url": "pages/account.html" }
+          {
+            "title": "تعمیر در محل",
+            "url": "pages/services.html?type=onsite"
+          },
+          {
+            "title": "تعویض باتری",
+            "url": "pages/booking.html"
+          },
+          {
+            "title": "تعمیر غیرحضوری",
+            "url": "pages/services.html?type=workshop"
+          },
+          {
+            "title": "پیگیری سفارش",
+            "url": "pages/account.html"
+          }
         ]
       },
       {
         "title": "درباره ما",
         "links": [
-          { "title": "اهورا تل در یک نگاه", "url": "pages/about.html" },
-          { "title": "سوالات متداول", "url": "pages/faq.html" },
-          { "title": "تماس با ما", "url": "pages/contact.html" }
+          {
+            "title": "اهورا تل در یک نگاه",
+            "url": "pages/about.html"
+          },
+          {
+            "title": "سوالات متداول",
+            "url": "pages/faq.html"
+          },
+          {
+            "title": "تماس با ما",
+            "url": "pages/contact.html"
+          }
         ]
       },
       {
         "title": "پیش از خرید",
         "links": [
-          { "title": "راهنمای خرید", "url": "pages/faq.html" },
-          { "title": "شیوه ارسال", "url": "pages/terms.html" },
-          { "title": "گارانتی و اصالت", "url": "pages/terms.html" }
+          {
+            "title": "راهنمای خرید",
+            "url": "pages/faq.html"
+          },
+          {
+            "title": "شیوه ارسال",
+            "url": "pages/terms.html"
+          },
+          {
+            "title": "گارانتی و اصالت",
+            "url": "pages/terms.html"
+          }
         ]
       },
       {
         "title": "پس از خرید",
         "links": [
-          { "title": "پیگیری سفارش", "url": "pages/account.html" },
-          { "title": "مرجوعی کالا", "url": "pages/terms.html" },
-          { "title": "پشتیبانی", "url": "pages/contact.html" }
+          {
+            "title": "پیگیری سفارش",
+            "url": "pages/account.html"
+          },
+          {
+            "title": "مرجوعی کالا",
+            "url": "pages/terms.html"
+          },
+          {
+            "title": "پشتیبانی",
+            "url": "pages/contact.html"
+          }
         ]
       },
       {
         "title": "قوانین",
         "links": [
-          { "title": "قوانین و شرایط", "url": "pages/terms.html" },
-          { "title": "حریم خصوصی", "url": "pages/privacy.html" }
+          {
+            "title": "قوانین و شرایط",
+            "url": "pages/terms.html"
+          },
+          {
+            "title": "حریم خصوصی",
+            "url": "pages/privacy.html"
+          }
         ]
       }
     ],
     "highlights": [
-      { "title": "تعمیر در محل", "text": "سریع و تخصصی", "icon": "bi-geo-alt" },
-      { "title": "گارانتی اصالت", "text": "کالای اصل", "icon": "bi-shield-check" },
-      { "title": "پشتیبانی", "text": "همه روزه", "icon": "bi-headset" }
+      {
+        "title": "تعمیر در محل",
+        "text": "سریع و تخصصی",
+        "icon": "bi-geo-alt"
+      },
+      {
+        "title": "گارانتی اصالت",
+        "text": "کالای اصل",
+        "icon": "bi-shield-check"
+      },
+      {
+        "title": "پشتیبانی",
+        "text": "همه روزه",
+        "icon": "bi-headset"
+      }
     ],
     "copyright": "تمامی حقوق مادی و معنوی این سایت متعلق به اهورا تل می‌باشد."
   },
   "social": [
-    { "id": "instagram", "title": "اینستاگرام", "url": "https://instagram.com/ahooora_tel", "icon": "bi-instagram" },
-    { "id": "telegram", "title": "تلگرام", "url": "https://t.me/ahooora_tel", "icon": "bi-telegram" },
-    { "id": "whatsapp", "title": "واتساپ", "url": "https://wa.me/989121234567", "icon": "bi-whatsapp" }
+    {
+      "id": "instagram",
+      "title": "اینستاگرام",
+      "url": "https://instagram.com/ahooora_tel",
+      "icon": "bi-instagram"
+    },
+    {
+      "id": "telegram",
+      "title": "تلگرام",
+      "url": "https://t.me/ahooora_tel",
+      "icon": "bi-telegram"
+    },
+    {
+      "id": "whatsapp",
+      "title": "واتساپ",
+      "url": "https://wa.me/989121234567",
+      "icon": "bi-whatsapp"
+    }
   ],
   "homepage": {
     "sections": [
@@ -121,14 +248,20 @@
         "type": "hero",
         "order": 1,
         "active": true,
-        "title": "تعویض باتری در محل",
-        "subtitle": "سریع‌تر. مطمئن‌تر.",
-        "text": "از آیفون ۷ تا ۱۸ — رزرو آنلاین و پیگیری لحظه‌ای",
-        "ctaPrimary": { "text": "بیشتر بدانید", "url": "pages/services.html" },
-        "ctaSecondary": { "text": "رزرو نوبت", "url": "pages/booking.html" },
+        "title": "تعویض فوری انواع باتری در محل",
+        "subtitle": "",
+        "text": "",
+        "ctaPrimary": {
+          "text": "بیشتر بدانید",
+          "url": "pages/services.html"
+        },
+        "ctaSecondary": {
+          "text": "رزرو نوبت",
+          "url": "pages/booking.html"
+        },
         "bg": "light",
-        "bgImage": "assets/img/hero-bg-light.svg",
-        "image": "assets/img/hero-battery.svg"
+        "bgImage": "",
+        "image": "assets/img/hero-battery.png"
       },
       {
         "id": "hero-shop",
@@ -138,10 +271,16 @@
         "title": "فروشگاه اهورا",
         "subtitle": "گوشی و لوازم اصل.",
         "text": "با گارانتی معتبر و ارسال سریع",
-        "ctaPrimary": { "text": "بیشتر بدانید", "url": "pages/shop.html" },
-        "ctaSecondary": { "text": "خرید", "url": "pages/shop.html?featured=1" },
+        "ctaPrimary": {
+          "text": "بیشتر بدانید",
+          "url": "pages/shop.html"
+        },
+        "ctaSecondary": {
+          "text": "خرید",
+          "url": "pages/shop.html?featured=1"
+        },
         "bg": "light",
-        "bgImage": "assets/img/hero-bg-light.svg",
+        "bgImage": "",
         "image": "assets/img/hero-shop.png"
       },
       {
@@ -187,10 +326,26 @@
         "active": true,
         "title": "چرا اهورا تل؟",
         "items": [
-          { "icon": "bi-shield-check", "title": "گارانتی معتبر", "text": "قطعات اصل با ضمانت کتبی" },
-          { "icon": "bi-geo-alt", "title": "سرویس در محل", "text": "تعویض باتری بدون مراجعه حضوری" },
-          { "icon": "bi-lightning-charge", "title": "رزرو آنلاین", "text": "انتخاب زمان دلخواه با ظرفیت محدود" },
-          { "icon": "bi-credit-card", "title": "پرداخت امن", "text": "درگاه آنلاین و پیگیری پیامکی" }
+          {
+            "icon": "bi-shield-check",
+            "title": "گارانتی معتبر",
+            "text": "قطعات اصل با ضمانت کتبی"
+          },
+          {
+            "icon": "bi-geo-alt",
+            "title": "سرویس در محل",
+            "text": "تعویض باتری بدون مراجعه حضوری"
+          },
+          {
+            "icon": "bi-lightning-charge",
+            "title": "رزرو آنلاین",
+            "text": "انتخاب زمان دلخواه با ظرفیت محدود"
+          },
+          {
+            "icon": "bi-credit-card",
+            "title": "پرداخت امن",
+            "text": "درگاه آنلاین و پیگیری پیامکی"
+          }
         ]
       },
       {
@@ -249,9 +404,27 @@
     }
   },
   "shipping": [
-    { "id": "tehran", "title": "تهران", "price": 45000, "eta": "۱ تا ۲ روز کاری", "coverage": "تهران و حومه" },
-    { "id": "iranpost", "title": "پست پیشتاز", "price": 85000, "eta": "۲ تا ۵ روز کاری", "coverage": "سراسر ایران" },
-    { "id": "pickup", "title": "تحویل حضوری", "price": 0, "eta": "همان روز", "coverage": "فروشگاه اهورا" }
+    {
+      "id": "tehran",
+      "title": "تهران",
+      "price": 45000,
+      "eta": "۱ تا ۲ روز کاری",
+      "coverage": "تهران و حومه"
+    },
+    {
+      "id": "iranpost",
+      "title": "پست پیشتاز",
+      "price": 85000,
+      "eta": "۲ تا ۵ روز کاری",
+      "coverage": "سراسر ایران"
+    },
+    {
+      "id": "pickup",
+      "title": "تحویل حضوری",
+      "price": 0,
+      "eta": "همان روز",
+      "coverage": "فروشگاه اهورا"
+    }
   ],
   "payment": {
     "gateway": "bale-pay",
@@ -273,6 +446,11 @@
   },
   "chatbot": {
     "welcome": "سلام! من دستیار اهورا تل هستم. درباره خدمات، محصولات یا رزرو بپرسید.",
-    "suggestions": ["تعویض باتری", "قیمت تعمیر LCD", "پیگیری سفارش", "فروشگاه"]
+    "suggestions": [
+      "تعویض باتری",
+      "قیمت تعمیر LCD",
+      "پیگیری سفارش",
+      "فروشگاه"
+    ]
   }
 }

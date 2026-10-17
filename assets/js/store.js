@@ -68,18 +68,19 @@ const AhooraStore = (() => {
       if (productsData?.products) {
         let pChanged = false;
         const photoMap = {
-          "p-iphone15": "assets/img/products/iphone-15.jpg",
-          "p-airpods": "assets/img/products/airpods-pro.jpg",
-          "p-glass15": "assets/img/products/screen-glass.jpg",
-          "p-charger": "assets/img/products/charger-20w.jpg",
-          "p-case15": "assets/img/products/phone-case.jpg",
-          "p-battery-iphone": "assets/img/products/battery.jpg",
-          "p-lcd13": "assets/img/products/lcd.jpg",
-          "p-powerbank": "assets/img/products/powerbank.jpg",
+          "p-iphone15": "assets/img/products/iphone-15.png",
+          "p-airpods": "assets/img/products/airpods-pro.png",
+          "p-glass15": "assets/img/products/screen-glass.png",
+          "p-charger": "assets/img/products/charger-20w.png",
+          "p-case15": "assets/img/products/phone-case.png",
+          "p-battery-iphone": "assets/img/products/battery.png",
+          "p-lcd13": "assets/img/products/lcd.png",
+          "p-powerbank": "assets/img/products/powerbank.png",
         };
         productsData.products.forEach((p) => {
           const photo = photoMap[p.id];
-          if (photo && (!p.images?.[0] || String(p.images[0]).endsWith(".svg"))) {
+          const cur = String(p.images?.[0] || "");
+          if (photo && (!cur || cur.endsWith(".svg") || cur.endsWith(".jpg") || cur.endsWith(".jpeg"))) {
             p.images = [photo];
             pChanged = true;
           }
@@ -98,8 +99,12 @@ const AhooraStore = (() => {
       const siteData = get(KEYS.site);
       if (siteData?.site) {
         let changed = false;
-        if (!siteData.site.logo || String(siteData.site.logo).includes("logo.svg")) {
-          siteData.site.logo = "assets/img/logo-ahoora.jpg";
+        if (
+          !siteData.site.logo ||
+          String(siteData.site.logo).includes("logo.svg") ||
+          String(siteData.site.logo).endsWith(".jpg")
+        ) {
+          siteData.site.logo = "assets/img/logo-ahoora.png";
           changed = true;
         }
         if (!siteData.site.logoMark) {
@@ -116,21 +121,34 @@ const AhooraStore = (() => {
         heroes.forEach((sec) => {
           if (sec.type !== "hero") return;
           if (sec.id === "hero-battery") {
-            if (sec.bg !== "light" || sec.bgImage !== "assets/img/hero-bg-light.svg") {
+            const img = String(sec.image || "");
+            const titleOk = sec.title === "تعویض فوری انواع باتری در محل";
+            if (
+              !titleOk ||
+              sec.bg !== "light" ||
+              sec.bgImage ||
+              img.endsWith(".svg") ||
+              img.includes("hero-battery.svg") ||
+              !img.endsWith(".png") ||
+              sec.subtitle ||
+              sec.text
+            ) {
               sec.bg = "light";
-              sec.bgImage = "assets/img/hero-bg-light.svg";
-              sec.image = "assets/img/hero-battery.svg";
+              sec.bgImage = "";
+              sec.image = "assets/img/hero-battery.png";
+              sec.title = "تعویض فوری انواع باتری در محل";
+              sec.subtitle = "";
+              sec.text = "";
               sec.ctaPrimary = { text: "بیشتر بدانید", url: "pages/services.html" };
               sec.ctaSecondary = { text: "رزرو نوبت", url: "pages/booking.html" };
-              sec.text = "از آیفون ۷ تا ۱۸ — رزرو آنلاین و پیگیری لحظه‌ای";
               changed = true;
             }
           }
           if (sec.id === "hero-shop") {
             const img = String(sec.image || "");
-            if (!sec.bgImage || img.endsWith(".svg") || img.endsWith(".jpg") || img.endsWith("hero-shop.jpg")) {
+            if (sec.bgImage || img.endsWith(".svg") || img.endsWith(".jpg") || !img.endsWith("hero-shop.png")) {
               sec.bg = "light";
-              sec.bgImage = "assets/img/hero-bg-light.svg";
+              sec.bgImage = "";
               sec.image = "assets/img/hero-shop.png";
               sec.ctaPrimary = { text: "بیشتر بدانید", url: "pages/shop.html" };
               sec.ctaSecondary = { text: "خرید", url: "pages/shop.html?featured=1" };

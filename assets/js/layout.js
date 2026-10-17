@@ -1,4 +1,12 @@
 const AhooraLayout = (() => {
+  // clear leftover dark-theme preference from older builds
+  try {
+    document.documentElement.removeAttribute("data-theme");
+    localStorage.removeItem("ahoora-theme");
+  } catch {
+    /* ignore */
+  }
+
   function resolveUrl(url) {
     if (!url || url.startsWith("http") || url.startsWith("#")) return url;
     const prefix = AhooraUtils.pathPrefix();
@@ -74,7 +82,7 @@ const AhooraLayout = (() => {
       <aside class="ah-drawer" id="ahDrawer" aria-hidden="true" aria-label="منوی موبایل">
         <div class="ah-drawer-head">
           <a class="ah-logo ah-logo-drawer" href="${resolveUrl("index.html")}">
-            <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahoora.jpg")}" alt="${site.site.name}" width="120" height="48" decoding="async">
+            <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahoora.png")}" alt="${site.site.name}" width="80" height="128" decoding="async">
           </a>
           <button type="button" class="ah-drawer-close" id="ahDrawerClose" aria-label="بستن منو"><i class="bi bi-x-lg"></i></button>
         </div>
@@ -94,7 +102,7 @@ const AhooraLayout = (() => {
                   <span class="ah-burger-lines" aria-hidden="true"></span>
                 </button>
                 <a href="${resolveUrl("index.html")}" class="ah-techno-logo">
-                  <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahoora.jpg")}" alt="${site.site.name}" width="140" height="48" decoding="async">
+                  <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahoora.png")}" alt="${site.site.name}" width="80" height="128" decoding="async">
                 </a>
               </div>
               <form class="ah-techno-search" action="${resolveUrl("pages/shop.html")}" method="get" role="search">
@@ -224,6 +232,7 @@ const AhooraLayout = (() => {
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeMenu();
     });
+
   }
 
   function highlightBottomNav() {
@@ -264,12 +273,21 @@ const AhooraLayout = (() => {
     const footer = site.footer || {};
 
     const cols = (footer.columns || [])
-      .map(
-        (col) => `<div class="ah-footer-col">
-          <h4>${col.title}</h4>
-          <ul>${(col.links || []).map((l) => `<li><a href="${resolveUrl(l.url)}">${l.title}</a></li>`).join("")}</ul>
-        </div>`
-      )
+      .map((col, i) => {
+        const panelId = `ahFooterCol${i}`;
+        const links = (col.links || [])
+          .map((l) => `<li><a href="${resolveUrl(l.url)}">${l.title}</a></li>`)
+          .join("");
+        return `<div class="ah-footer-col">
+          <button type="button" class="ah-footer-col-toggle" aria-expanded="false" aria-controls="${panelId}">
+            <span>${col.title}</span>
+            <i class="bi bi-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ah-footer-col-panel" id="${panelId}" aria-hidden="true">
+            <ul>${links}</ul>
+          </div>
+        </div>`;
+      })
       .join("");
 
     const social = (site.social || [])
@@ -299,7 +317,7 @@ const AhooraLayout = (() => {
         <div class="ah-footer-inner">
           <div class="ah-footer-top">
             <a class="ah-footer-logo" href="${resolveUrl("index.html")}">
-              <img src="${resolveUrl(s.logo || "assets/img/logo-ahoora.jpg")}" alt="${s.name || ""}" width="140" height="48" loading="lazy" decoding="async">
+              <img src="${resolveUrl(s.logo || "assets/img/logo-ahoora.png")}" alt="${s.name || ""}" width="80" height="128" loading="lazy" decoding="async">
             </a>
             <button type="button" class="ah-footer-topbtn" id="ahFooterTopBtn" aria-label="بازگشت به بالا">
               <span>بازگشت به بالا</span>
@@ -346,6 +364,40 @@ const AhooraLayout = (() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     }
+
+    const setFooterColOpen = (col, open) => {
+      const btn = col.querySelector(".ah-footer-col-toggle");
+      const panel = col.querySelector(".ah-footer-col-panel");
+      col.classList.toggle("is-open", open);
+      if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (panel) panel.setAttribute("aria-hidden", open ? "false" : "true");
+    };
+
+    const syncFooterColsForViewport = () => {
+      const desktop = window.matchMedia("(min-width: 992px)").matches;
+      host.querySelectorAll(".ah-footer-col").forEach((col) => {
+        if (desktop) setFooterColOpen(col, true);
+        else if (!col.classList.contains("is-open")) setFooterColOpen(col, false);
+      });
+    };
+
+    host.querySelectorAll(".ah-footer-col-toggle").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (window.matchMedia("(min-width: 992px)").matches) return;
+        const col = btn.closest(".ah-footer-col");
+        if (!col) return;
+        const willOpen = !col.classList.contains("is-open");
+        if (willOpen) {
+          host.querySelectorAll(".ah-footer-col.is-open").forEach((openCol) => {
+            if (openCol !== col) setFooterColOpen(openCol, false);
+          });
+        }
+        setFooterColOpen(col, willOpen);
+      });
+    });
+
+    syncFooterColsForViewport();
+    window.matchMedia("(min-width: 992px)").addEventListener("change", syncFooterColsForViewport);
   }
 
   function updateCartBadge() {
