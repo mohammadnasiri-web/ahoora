@@ -5,33 +5,36 @@
   --ah-gray: #86868b;
   --ah-blue: #0071e3;
   --ah-blue-hover: #0077ed;
-  --ah-border: rgba(0, 0, 0, 0.08);
-  --ah-nav: rgba(255, 255, 255, 0.72);
+  --ah-border: rgba(0, 0, 0, 0.06);
+  --ah-nav: rgba(245, 245, 247, 0.72);
   --ah-nav-text: #1d1d1f;
   --ah-nav-muted: #6e6e73;
   --ah-techno-accent: #00a0a8;
   --ah-radius: 22px;
   --ah-font: "Vazirmatn", "SF Pro Display", "Segoe UI", Tahoma, sans-serif;
-  --ah-transition: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ah-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ah-transition: 0.35s var(--ah-ease);
   --ah-nav-h: 44px;
   --ah-bottom-h: 64px;
   --ah-safe-b: env(safe-area-inset-bottom, 0px);
+  --ah-section-pad: clamp(3.25rem, 6vw, 5rem);
   /* Apple.com page canvas */
   --ah-page-bg: #f5f5f7;
   --ah-surface: #f5f5f7;
+  --ah-elevated: #ffffff;
   --ah-card-bg: transparent;
-  --ah-card-border: rgba(0, 0, 0, 0.08);
-  --ah-card-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+  --ah-card-border: rgba(0, 0, 0, 0.06);
+  --ah-card-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
   --ah-card-media-bg: transparent;
   --ah-section-bg: transparent;
   --ah-text: #1d1d1f;
-  --ah-text-muted: #86868b;
+  --ah-text-muted: #6e6e73;
   --ah-footer-logo-bg: transparent;
-  --ah-header-bg: #f5f5f7;
+  --ah-header-bg: rgba(245, 245, 247, 0.82);
   --ah-search-bg: #ffffff;
   --ah-control-border: #d2d2d7;
   --ah-control-color: #1d1d1f;
-  --ah-bottom-nav-bg: rgba(245, 245, 247, 0.92);
+  --ah-bottom-nav-bg: rgba(245, 245, 247, 0.88);
 }
 
 *,
@@ -51,9 +54,12 @@ body {
   font-family: var(--ah-font);
   color: var(--ah-text);
   background: var(--ah-page-bg);
-  line-height: 1.65;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
 body.menu-open {
@@ -72,7 +78,7 @@ img {
 }
 
 .container-ah {
-  width: min(1120px, calc(100% - 2rem));
+  width: min(1120px, calc(100% - 2.5rem));
   margin-inline: auto;
 }
 
@@ -163,6 +169,8 @@ img {
   z-index: 1100;
   background: var(--ah-header-bg);
   border-bottom: 1px solid var(--ah-border);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
 }
 
 .ah-techno-burger {
@@ -176,10 +184,16 @@ img {
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
+  border-radius: 10px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.ah-techno-burger:hover {
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .ah-techno-top {
-  border-bottom: 1px solid var(--ah-border);
+  border-bottom: 1px solid transparent;
 }
 
 .ah-techno-top-inner {
@@ -189,7 +203,7 @@ img {
   gap: 1rem;
   width: min(1200px, calc(100% - 1.5rem));
   margin-inline: auto;
-  padding: 0.75rem 0;
+  padding: 0.65rem 0;
 }
 
 .ah-techno-brand {
@@ -222,19 +236,25 @@ img {
   display: flex;
   align-items: center;
   background: var(--ah-search-bg);
-  border: 1px solid var(--ah-border);
-  border-radius: 10px;
+  border: 1px solid var(--ah-control-border);
+  border-radius: 12px;
   overflow: hidden;
-  min-height: 46px;
+  min-height: 44px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ah-techno-search:focus-within {
+  border-color: rgba(0, 113, 227, 0.45);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.12);
 }
 
 .ah-techno-search input {
   flex: 1;
   border: 0;
   background: transparent;
-  padding: 0.7rem 1rem;
+  padding: 0.65rem 1rem;
   font: inherit;
-  font-size: 13.5px;
+  font-size: 14px;
   outline: none;
   color: var(--ah-text);
 }
@@ -263,22 +283,23 @@ img {
   position: relative;
   display: grid;
   place-items: center;
-  width: 44px;
+  width: 42px;
   height: 42px;
   border: 1px solid var(--ah-control-border);
-  border-radius: 10px;
+  border-radius: 12px;
   color: var(--ah-control-color);
-  font-size: 1.2rem;
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
-  background: transparent;
+  font-size: 1.15rem;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  background: var(--ah-elevated);
   cursor: pointer;
   font-family: inherit;
   padding: 0;
 }
 
 .ah-techno-cart:hover {
-  border-color: var(--ah-blue);
+  border-color: rgba(0, 113, 227, 0.4);
   color: var(--ah-blue);
+  background: #fff;
 }
 
 .ah-techno-cart-count {
@@ -489,7 +510,7 @@ img {
 /* Apple.com CTA pills */
 .ah-btn-apple {
   min-height: 44px;
-  padding: 0.7rem 1.45rem;
+  padding: 0.7rem 1.55rem;
   border-radius: 980px;
   border: 0;
   background: #0071e3;
@@ -498,24 +519,28 @@ img {
   font-weight: 400;
   letter-spacing: -0.01em;
   line-height: 1.2;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.25s ease;
+  box-shadow: 0 1px 2px rgba(0, 113, 227, 0.2);
 }
 
 .ah-btn-apple:hover {
   background: #0077ed;
   color: #fff !important;
+  box-shadow: 0 4px 14px rgba(0, 113, 227, 0.28);
 }
 
 .ah-btn-apple-outline {
   min-height: 44px;
-  padding: 0.65rem 1.4rem;
+  padding: 0.65rem 1.45rem;
   border-radius: 980px;
   border: 1px solid #0071e3;
-  background: #fff;
+  background: transparent;
   color: #0071e3 !important;
   font-size: 17px;
   font-weight: 400;
   letter-spacing: -0.01em;
   line-height: 1.2;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .ah-btn-apple-outline:hover {
@@ -951,10 +976,10 @@ body.menu-open .ah-drawer-list {
   inset-inline: 0;
   z-index: 1050;
   background: var(--ah-bottom-nav-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-top: 1px solid var(--ah-border);
-  padding: 0.35rem 0.5rem calc(0.35rem + var(--ah-safe-b));
+  padding: 0.3rem 0.45rem calc(0.3rem + var(--ah-safe-b));
   grid-template-columns: repeat(5, 1fr);
   gap: 0;
 }
@@ -964,13 +989,19 @@ body.menu-open .ah-drawer-list {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.15rem;
+  gap: 0.18rem;
   padding: 0.4rem 0.2rem;
   font-size: 10px;
-  color: var(--ah-gray);
+  font-weight: 500;
+  color: var(--ah-text-muted);
   min-height: 52px;
-  border-radius: 12px;
+  border-radius: 14px;
   -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.ah-bottom-nav a:hover {
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .ah-bottom-nav a i {
@@ -1010,13 +1041,13 @@ body.menu-open .ah-drawer-list {
 
 /* ---- Hero (Apple.com style) ---- */
 .ah-hero {
-  min-height: min(86vh, 820px);
+  min-height: min(82vh, 780px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   text-align: center;
-  padding: 4.25rem 1.25rem 0;
+  padding: 3.5rem 1.25rem 0;
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -1080,31 +1111,32 @@ body.menu-open .ah-drawer-list {
 }
 
 .ah-hero-eyebrow {
-  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-size: clamp(2.15rem, 6.2vw, 3.75rem);
   font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1.08;
-  margin: 0 0 0.35rem;
-  animation: ah-fade-up 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  margin: 0 0 0.85rem;
+  animation: ah-fade-up 0.65s var(--ah-ease) both;
 }
 
 .ah-hero-title {
-  font-size: clamp(1.2rem, 2.8vw, 1.75rem);
+  font-size: clamp(1.15rem, 2.6vw, 1.65rem);
   font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
-  margin: 0 0 0.55rem;
-  animation: ah-fade-up 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) 0.06s both;
+  letter-spacing: -0.022em;
+  line-height: 1.3;
+  margin: 0 0 0.5rem;
+  color: var(--ah-text-muted) !important;
+  animation: ah-fade-up 0.65s var(--ah-ease) 0.05s both;
 }
 
 .ah-hero-text {
   max-width: 28rem;
-  margin: 0 auto 1.35rem;
+  margin: 0 auto 1.25rem;
   color: var(--ah-text-muted) !important;
-  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  font-size: clamp(0.95rem, 2vw, 1.12rem);
   font-weight: 400;
-  line-height: 1.4;
-  animation: ah-fade-up 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) 0.12s both;
+  line-height: 1.45;
+  animation: ah-fade-up 0.65s var(--ah-ease) 0.1s both;
 }
 
 .ah-hero-dark .ah-hero-text {
@@ -1114,10 +1146,10 @@ body.menu-open .ah-drawer-list {
 .ah-hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.85rem 1rem;
+  gap: 0.75rem 0.9rem;
   justify-content: center;
-  margin-bottom: 2rem;
-  animation: ah-fade-up 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) 0.18s both;
+  margin-bottom: 1.5rem;
+  animation: ah-fade-up 0.65s var(--ah-ease) 0.14s both;
 }
 
 .ah-hero-media {
@@ -1125,8 +1157,8 @@ body.menu-open .ah-drawer-list {
   z-index: 1;
   width: min(920px, 100%);
   margin-top: auto;
-  padding-bottom: 0;
-  animation: ah-fade-up 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0.24s both;
+  padding-bottom: 0.5rem;
+  animation: ah-fade-up 0.85s var(--ah-ease) 0.18s both;
 }
 
 .ah-hero-media img,
@@ -1134,36 +1166,36 @@ body.menu-open .ah-drawer-list {
   width: 100%;
   margin-inline: auto;
   display: block;
-  filter: drop-shadow(0 28px 56px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.14));
 }
 
 .ah-hero-media img[src$=".jpg"],
 .ah-hero-media img[src$=".jpeg"],
 .ah-hero-media img[src$=".png"],
 .ah-hero-media img[src$=".webp"] {
-  max-height: min(52vh, 480px);
+  max-height: min(50vh, 460px);
   width: auto;
   max-width: 100%;
   object-fit: contain;
   border-radius: 0;
   background: transparent;
-  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.16));
+  filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.12));
 }
 
 .ah-hero-light .ah-hero-media img,
 .ah-hero-light .ah-hero-media svg {
-  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.12));
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.1));
 }
 
 .ah-hero-light .ah-hero-media img[src$=".png"] {
   background: transparent;
-  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.12));
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.1));
 }
 
 @keyframes ah-fade-up {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -1175,11 +1207,11 @@ body.menu-open .ah-drawer-list {
 .ah-quick {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.65rem;
-  padding: 0.95rem 1rem;
+  gap: 0.55rem;
+  padding: 1.1rem 1rem 1.35rem;
   overflow: visible;
   background: transparent;
-  border-bottom: 1px solid var(--ah-border);
+  border-bottom: 0;
   width: 100%;
   max-width: 1200px;
   margin-inline: auto;
@@ -1194,21 +1226,25 @@ body.menu-open .ah-drawer-list {
   min-width: 0;
   padding: 0.7rem 0.75rem;
   border-radius: 999px;
-  background: var(--ah-bg);
+  background: var(--ah-elevated);
+  border: 1px solid var(--ah-border);
   font-size: 0.875rem;
   font-weight: 600;
   white-space: nowrap;
-  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  color: var(--ah-text);
+  transition: background 0.2s var(--ah-ease), border-color 0.2s var(--ah-ease),
+    box-shadow 0.2s var(--ah-ease), transform 0.2s var(--ah-ease);
 }
 
 .ah-quick a:hover {
-  background: #ebebed;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  background: #fff;
+  border-color: rgba(0, 113, 227, 0.28);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
 }
 
 .ah-quick a:active {
   transform: scale(0.97);
-  background: #ebebed;
 }
 
 .ah-quick a span {
@@ -1226,8 +1262,8 @@ body.menu-open .ah-drawer-list {
 .ah-tiles {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  padding: 20px 14px 28px;
+  gap: 16px;
+  padding: 8px 14px 36px;
   max-width: 1200px;
   margin-inline: auto;
   background: transparent;
@@ -1273,25 +1309,26 @@ body.menu-open .ah-drawer-list {
 
 .ah-tile {
   position: relative;
-  min-height: 420px;
+  min-height: 400px;
   border-radius: 28px;
-  padding: 2.75rem 1.75rem 2rem;
+  padding: 2.85rem 1.85rem 2.1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   overflow: hidden;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.45);
   color: var(--ah-text);
   border: 1px solid var(--ah-border);
-  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), border-color 0.3s ease;
+  transition: transform 0.4s var(--ah-ease), border-color 0.3s ease, background 0.3s ease, box-shadow 0.35s ease;
   box-shadow: none;
 }
 
 .ah-tile:hover {
-  transform: translateY(-4px) scale(1.01);
-  border-color: rgba(0, 113, 227, 0.35);
-  box-shadow: none;
+  transform: translateY(-5px);
+  border-color: rgba(0, 113, 227, 0.22);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
 }
 
 .ah-tile-body {
@@ -1310,24 +1347,25 @@ body.menu-open .ah-drawer-list {
 }
 
 .ah-tile-icon {
-  width: 64px;
-  height: 64px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 1.55rem;
-  margin-bottom: 1.35rem;
-  background: transparent;
+  font-size: 1.4rem;
+  margin-bottom: 1.25rem;
+  background: #fff;
   color: var(--ah-blue);
   border: 1px solid var(--ah-border);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
 }
 
 .ah-tile h3 {
-  font-size: clamp(1.55rem, 3vw, 2.35rem);
+  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
   font-weight: 600;
-  margin: 0 0 0.55rem;
-  letter-spacing: -0.035em;
-  line-height: 1.15;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.04em;
+  line-height: 1.12;
   color: var(--ah-text);
 }
 
@@ -1385,8 +1423,8 @@ body.menu-open .ah-drawer-list {
 .ah-tile--dark .ah-tile-icon,
 .ah-tile--blue .ah-tile-icon,
 .ah-tile--graphite .ah-tile-icon {
-  background: transparent;
-  box-shadow: none;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
   border: 1px solid var(--ah-border);
 }
 
@@ -1406,52 +1444,63 @@ body.menu-open .ah-drawer-list {
 
 /* ---- Sections ---- */
 .ah-section {
-  padding: 4rem 0;
+  padding: var(--ah-section-pad) 0;
   background: transparent;
 }
 
 .ah-section-title {
   text-align: center;
-  font-size: clamp(1.55rem, 3.2vw, 2.35rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  margin: 0 0 1.75rem;
-  line-height: 1.25;
+  font-size: clamp(1.65rem, 3.4vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  margin: 0 0 2rem;
+  line-height: 1.15;
   color: var(--ah-text);
 }
 
 .ah-benefits {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+  gap: 1.15rem;
 }
 
 .ah-benefit {
   text-align: center;
-  padding: 1.35rem 1rem;
-  background: transparent;
+  padding: 1.6rem 1.15rem;
+  background: rgba(255, 255, 255, 0.5);
   border: 1px solid var(--ah-border);
-  border-radius: 18px;
+  border-radius: 20px;
   color: var(--ah-text);
+  transition: transform 0.3s var(--ah-ease), border-color 0.25s ease, background 0.25s ease, box-shadow 0.3s ease;
+}
+
+.ah-benefit:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 113, 227, 0.18);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.05);
 }
 
 .ah-benefit i {
-  font-size: 1.7rem;
+  font-size: 1.65rem;
   color: var(--ah-blue);
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.85rem;
   display: inline-block;
 }
 
 .ah-benefit h3 {
-  font-size: 1rem;
-  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  margin: 0 0 0.4rem;
   color: var(--ah-text);
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .ah-benefit p {
   margin: 0;
   color: var(--ah-text-muted);
-  font-size: 0.88rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 /* ---- Products ---- */
@@ -1463,7 +1512,7 @@ body.menu-open .ah-drawer-list {
 
 .ah-featured {
   background: var(--ah-section-bg);
-  padding-block: 3.5rem;
+  padding-block: var(--ah-section-pad);
 }
 
 .ah-featured-head {
@@ -1471,7 +1520,7 @@ body.menu-open .ah-drawer-list {
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
   flex-wrap: wrap;
 }
 
@@ -1482,51 +1531,55 @@ body.menu-open .ah-drawer-list {
 
 .ah-featured-more {
   color: var(--ah-blue);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 400;
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
   white-space: nowrap;
+  transition: opacity 0.2s ease;
 }
 
 .ah-featured-more:hover {
-  text-decoration: underline;
+  opacity: 0.75;
+  text-decoration: none;
 }
 
 .ah-featured-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 1.15rem;
 }
 
 .ah-card-product {
-  background: var(--ah-card-bg);
+  background: rgba(255, 255, 255, 0.55);
   border-radius: 22px;
   overflow: hidden;
   border: 1px solid var(--ah-card-border);
-  box-shadow: var(--ah-card-shadow);
-  transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1),
+  box-shadow: none;
+  transition: transform 0.35s var(--ah-ease),
     box-shadow 0.35s ease,
-    border-color 0.35s ease;
+    border-color 0.3s ease,
+    background 0.3s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .ah-card-product:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 113, 227, 0.18);
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.07);
+  border-color: rgba(0, 113, 227, 0.16);
 }
 
 .ah-card-product .media {
   position: relative;
   aspect-ratio: 1;
   display: block;
-  padding: 1rem;
+  padding: 1.15rem;
   overflow: hidden;
-  background: var(--ah-card-media-bg);
+  background: transparent;
 }
 
 .ah-card-product .media img {
@@ -1578,9 +1631,9 @@ body.menu-open .ah-drawer-list {
 .ah-card-product h3 {
   font-size: 1.02rem;
   margin: 0;
-  line-height: 1.35;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.025em;
   color: var(--ah-text);
 }
 
@@ -1718,7 +1771,7 @@ body.menu-open .ah-drawer-list {
 
 /* ---- Footer (themeable, no baked background) ---- */
 .ah-footer {
-  margin: 3rem 1rem 1rem;
+  margin: 4rem 0 0;
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -1727,12 +1780,13 @@ body.menu-open .ah-drawer-list {
   color: var(--ah-text);
   font-size: 0.875rem;
   box-shadow: none;
+  border-top: 1px solid var(--ah-border);
 }
 
 .ah-footer-inner {
-  width: min(1200px, calc(100% - 2rem));
+  width: min(1200px, calc(100% - 2.5rem));
   margin-inline: auto;
-  padding: 2.5rem 0 1.5rem;
+  padding: 2.75rem 0 2rem;
 }
 
 .ah-footer-top {
@@ -1748,20 +1802,21 @@ body.menu-open .ah-drawer-list {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  border: 1px solid var(--ah-border);
-  background: transparent;
+  border: 1px solid var(--ah-control-border);
+  background: var(--ah-elevated);
   color: var(--ah-text);
   border-radius: 999px;
-  padding: 0.55rem 1rem;
+  padding: 0.55rem 1.05rem;
   font-size: 0.85rem;
   font-family: inherit;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .ah-footer-topbtn:hover {
-  border-color: var(--ah-blue);
+  border-color: rgba(0, 113, 227, 0.4);
   color: var(--ah-blue);
+  transform: translateY(-1px);
 }
 
 .ah-footer-section {
@@ -1791,8 +1846,9 @@ body.menu-open .ah-drawer-list {
   background: transparent;
   color: var(--ah-text);
   font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   text-align: start;
   cursor: pointer;
   line-height: 1.4;
@@ -1827,8 +1883,9 @@ body.menu-open .ah-drawer-list {
 
 .ah-footer-contact-block h4 {
   color: var(--ah-text);
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   margin: 0 0 1rem;
 }
 
@@ -1930,49 +1987,55 @@ body.menu-open .ah-drawer-list {
 }
 
 .ah-footer-social-btn {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
-  border-radius: 12px;
-  background: transparent;
-  border: 1px solid var(--ah-border);
+  border-radius: 980px;
+  background: var(--ah-elevated);
+  border: 1px solid var(--ah-control-border);
   color: var(--ah-text);
-  font-size: 1.15rem;
-  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  font-size: 1.1rem;
+  transition: background 0.2s var(--ah-ease), transform 0.2s var(--ah-ease), border-color 0.2s var(--ah-ease), color 0.2s var(--ah-ease);
 }
 
 .ah-footer-social-btn:hover {
-  border-color: var(--ah-blue);
+  border-color: rgba(0, 113, 227, 0.4);
   color: var(--ah-blue);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .ah-footer-highlights {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 0.85rem;
 }
 
 .ah-footer-highlight {
   display: flex;
   align-items: center;
   gap: 0.85rem;
-  padding: 0.85rem 1rem;
-  border-radius: 16px;
-  background: transparent;
+  padding: 0.9rem 1.05rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.55);
   border: 1px solid var(--ah-border);
+  transition: background 0.2s var(--ah-ease), border-color 0.2s var(--ah-ease);
+}
+
+.ah-footer-highlight:hover {
+  background: var(--ah-elevated);
+  border-color: var(--ah-control-border);
 }
 
 .ah-footer-highlight-icon {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 12px;
   display: grid;
   place-items: center;
   background: transparent;
   color: var(--ah-blue);
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   flex-shrink: 0;
   border: 1px solid var(--ah-border);
 }
@@ -1980,42 +2043,45 @@ body.menu-open .ah-drawer-list {
 .ah-footer-highlight-text {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.12rem;
   min-width: 0;
 }
 
 .ah-footer-highlight-text strong {
-  font-size: 0.92rem;
-  font-weight: 700;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   color: var(--ah-text);
 }
 
 .ah-footer-highlight-text small {
   font-size: 0.78rem;
   color: var(--ah-text-muted);
+  line-height: 1.4;
 }
 
 .ah-footer-bottom {
   border-top: 1px solid var(--ah-border);
-  padding-top: 1.25rem;
+  padding-top: 1.35rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
 
 .ah-footer-years {
-  font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
   color: var(--ah-text);
 }
 
 .ah-footer-bottom p {
   margin: 0;
   color: var(--ah-text-muted);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
+  letter-spacing: -0.01em;
 }
 
 .ah-social {
@@ -2171,30 +2237,43 @@ body.menu-open .ah-drawer-list {
 }
 
 .ah-testimonial {
-  background: transparent;
-  border-radius: var(--ah-radius);
-  padding: 1.35rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  padding: 1.5rem 1.4rem;
   height: 100%;
   border: 1px solid var(--ah-border);
   color: var(--ah-text);
   box-shadow: none;
+  transition: transform 0.3s var(--ah-ease), background 0.25s ease, box-shadow 0.3s ease;
+}
+
+.ah-testimonial:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.05);
 }
 
 .ah-testimonial p {
   color: var(--ah-text-muted);
+  line-height: 1.6;
+  font-size: 0.95rem;
 }
 
 .ah-testimonial strong {
   color: var(--ah-text);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .ah-stars {
   color: #f5a623;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
 }
 
 .ah-accordion {
   background: transparent;
+  border-top: 1px solid var(--ah-border);
 }
 
 .ah-accordion .accordion-item {
@@ -2212,17 +2291,18 @@ body.menu-open .ah-drawer-list {
 .ah-accordion .accordion-item:last-of-type {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  border-bottom: 0;
 }
 
 .ah-accordion .accordion-button {
   font-family: inherit;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1rem;
   background: transparent;
   color: var(--ah-text);
   box-shadow: none;
-  padding-inline: 0;
+  padding: 1.15rem 0;
+  letter-spacing: -0.015em;
+  transition: color 0.2s ease;
 }
 
 .ah-accordion .accordion-button:not(.collapsed) {
@@ -2238,13 +2318,20 @@ body.menu-open .ah-drawer-list {
 
 .ah-accordion .accordion-button::after {
   filter: none;
-  opacity: 0.7;
+  opacity: 0.55;
+  transition: opacity 0.2s ease, transform 0.25s ease;
+}
+
+.ah-accordion .accordion-button:not(.collapsed)::after {
+  opacity: 0.85;
 }
 
 .ah-accordion .accordion-body {
   background: transparent;
   color: var(--ah-text-muted);
-  padding-inline: 0;
+  padding: 0 0 1.25rem;
+  line-height: 1.65;
+  font-size: 0.95rem;
 }
 
 .ah-accordion .accordion-collapse {
@@ -2527,13 +2614,13 @@ body.menu-open .ah-drawer-list {
   }
 
   .ah-footer {
-    margin: 2rem 0.75rem 0.75rem;
+    margin: 3rem 0 0;
     border-radius: 0;
   }
 
   .ah-footer-inner {
-    width: calc(100% - 1.5rem);
-    padding-top: 1.75rem;
+    width: calc(100% - 2rem);
+    padding: 2rem 0 1.75rem;
   }
 
   .ah-footer-grid {
@@ -2673,10 +2760,37 @@ body.menu-open .ah-drawer-list {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
     animation: none !important;
     transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  .ah-hero-eyebrow,
+  .ah-hero-title,
+  .ah-hero-text,
+  .ah-hero-actions,
+  .ah-hero-media {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .ah-tile:hover,
+  .ah-benefit:hover,
+  .ah-card-product:hover,
+  .ah-card-product:hover .media img,
+  .ah-testimonial:hover,
+  .ah-footer-topbtn:hover,
+  .ah-footer-social-btn:hover,
+  .ah-footer-highlight:hover,
+  .ah-quick a:hover,
+  .ah-quick a:active {
+    transform: none !important;
   }
 }
