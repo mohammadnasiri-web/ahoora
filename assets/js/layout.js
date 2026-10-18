@@ -320,8 +320,8 @@ const AhooraLayout = (() => {
               <img src="${resolveUrl(s.logo || "assets/img/logo-ahoora.png")}" alt="${s.name || ""}" width="80" height="128" loading="lazy" decoding="async">
             </a>
             <button type="button" class="ah-footer-topbtn" id="ahFooterTopBtn" aria-label="بازگشت به بالا">
-              <span>بازگشت به بالا</span>
               <i class="bi bi-chevron-up" aria-hidden="true"></i>
+              <span>بازگشت به بالا</span>
             </button>
           </div>
 
@@ -330,17 +330,25 @@ const AhooraLayout = (() => {
           </div>
 
           <div class="ah-footer-section ah-footer-contact">
-            <div class="ah-footer-contact-grid">
-              <div class="ah-footer-contact-block">
-                <h4>ارتباط با ما</h4>
-                <p class="ah-footer-meta"><span>تلفن:</span> <a href="tel:${phone}" dir="ltr">${phoneDisplay}</a></p>
-                <p class="ah-footer-meta"><span>ایمیل:</span> <a href="mailto:${s.email || ""}">${s.email || ""}</a></p>
-                <p class="ah-footer-meta"><span>آدرس:</span> ${s.address || ""}</p>
-                <p class="ah-footer-meta"><span>ساعات کاری:</span> ${s.workingHours || ""}</p>
-              </div>
-              <div class="ah-footer-contact-block">
-                <h4>شبکه های اجتماعی</h4>
-                <div class="ah-footer-social">${social}</div>
+            <div class="ah-footer-col ah-footer-contact-acc">
+              <button type="button" class="ah-footer-col-toggle" aria-expanded="false" aria-controls="ahFooterContactPanel">
+                <span>ارتباط با ما</span>
+                <i class="bi bi-chevron-down" aria-hidden="true"></i>
+              </button>
+              <div class="ah-footer-col-panel" id="ahFooterContactPanel" aria-hidden="true">
+                <div class="ah-footer-contact-grid">
+                  <div class="ah-footer-contact-block">
+                    <h4 class="ah-footer-contact-heading">ارتباط با ما</h4>
+                    <p class="ah-footer-meta"><span>تلفن:</span> <a href="tel:${phone}" dir="ltr">${phoneDisplay}</a></p>
+                    <p class="ah-footer-meta"><span>ایمیل:</span> <a href="mailto:${s.email || ""}">${s.email || ""}</a></p>
+                    <p class="ah-footer-meta"><span>آدرس:</span> ${s.address || ""}</p>
+                    <p class="ah-footer-meta"><span>ساعات کاری:</span> ${s.workingHours || ""}</p>
+                  </div>
+                  <div class="ah-footer-contact-block">
+                    <h4 class="ah-footer-contact-heading">شبکه های اجتماعی</h4>
+                    <div class="ah-footer-social">${social}</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -376,8 +384,7 @@ const AhooraLayout = (() => {
     const syncFooterColsForViewport = () => {
       const desktop = window.matchMedia("(min-width: 992px)").matches;
       host.querySelectorAll(".ah-footer-col").forEach((col) => {
-        if (desktop) setFooterColOpen(col, true);
-        else if (!col.classList.contains("is-open")) setFooterColOpen(col, false);
+        setFooterColOpen(col, desktop);
       });
     };
 

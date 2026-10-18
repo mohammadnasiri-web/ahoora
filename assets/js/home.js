@@ -44,12 +44,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           { icon: "bi-bag-check", theme: "graphite" },
         ];
         return `<div class="ah-quick" aria-label="میانبرها">
-            <a href="${AhooraLayout.resolveUrl("pages/booking.html")}"><i class="bi bi-calendar-check"></i><span>رزرو نوبت</span></a>
-            <a href="${AhooraLayout.resolveUrl("pages/shop.html")}"><i class="bi bi-bag"></i><span>فروشگاه</span></a>
-            <a href="${AhooraLayout.resolveUrl("pages/services.html")}"><i class="bi bi-tools"></i><span>خدمات</span></a>
-            <a href="${AhooraLayout.resolveUrl("pages/account.html")}"><i class="bi bi-truck"></i><span>پیگیری</span></a>
-            <a href="${AhooraLayout.resolveUrl("pages/faq.html")}"><i class="bi bi-question-circle"></i><span>سوالات</span></a>
-            <a href="tel:${site.site.phone}"><i class="bi bi-telephone"></i><span>تماس</span></a>
+            <a href="${AhooraLayout.resolveUrl("pages/booking.html")}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-calendar-check"></i></span><span class="ah-quick-label">رزرو نوبت</span></a>
+            <a href="${AhooraLayout.resolveUrl("pages/shop.html")}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-bag"></i></span><span class="ah-quick-label">فروشگاه</span></a>
+            <a href="${AhooraLayout.resolveUrl("pages/services.html")}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-tools"></i></span><span class="ah-quick-label">خدمات</span></a>
+            <a href="${AhooraLayout.resolveUrl("pages/account.html")}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-truck"></i></span><span class="ah-quick-label">پیگیری</span></a>
+            <a href="${AhooraLayout.resolveUrl("pages/faq.html")}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-question-circle"></i></span><span class="ah-quick-label">سوالات</span></a>
+            <a href="tel:${site.site.phone}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-telephone"></i></span><span class="ah-quick-label">تماس</span></a>
           </div>
           <section class="ah-tiles" aria-label="دسترسی سریع">
           ${(sec.items || [])

@@ -352,7 +352,7 @@
         "id": "testimonials",
         "type": "testimonials",
         "order": 5,
-        "active": true,
+        "active": false,
         "title": "نظر مشتریان"
       },
       {

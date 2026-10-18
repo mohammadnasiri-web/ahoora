@@ -119,6 +119,10 @@ const AhooraStore = (() => {
         });
         const heroes = siteData.homepage?.sections || [];
         heroes.forEach((sec) => {
+          if (sec.type === "testimonials" && sec.active) {
+            sec.active = false;
+            changed = true;
+          }
           if (sec.type !== "hero") return;
           if (sec.id === "hero-battery") {
             const img = String(sec.image || "");
@@ -156,6 +160,15 @@ const AhooraStore = (() => {
             }
           }
         });
+        // rename legacy footer column title to match Technolife
+        if (Array.isArray(siteData.footer?.columns)) {
+          siteData.footer.columns.forEach((col) => {
+            if (col && col.title === "قوانین") {
+              col.title = "قوانین و مقررات";
+              changed = true;
+            }
+          });
+        }
         // migrate footer to Technolife-style structure
         if (!siteData.footer?.highlights || (siteData.footer?.columns || []).length < 5) {
           siteData.footer = {
@@ -205,7 +218,7 @@ const AhooraStore = (() => {
                 ],
               },
               {
-                title: "قوانین",
+                title: "قوانین و مقررات",
                 links: [
                   { title: "قوانین و شرایط", url: "pages/terms.html" },
                   { title: "حریم خصوصی", url: "pages/privacy.html" },
