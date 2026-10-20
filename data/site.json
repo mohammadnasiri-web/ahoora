@@ -246,28 +246,23 @@
       {
         "id": "hero-battery",
         "type": "hero",
+        "layout": "banner",
         "order": 1,
         "active": true,
-        "title": "تعویض فوری انواع باتری در محل",
+        "title": "تعویض فوری باتری",
         "subtitle": "",
         "text": "",
-        "ctaPrimary": {
-          "text": "بیشتر بدانید",
-          "url": "pages/services.html"
-        },
-        "ctaSecondary": {
-          "text": "رزرو نوبت",
-          "url": "pages/booking.html"
-        },
+        "ctaPrimary": null,
+        "ctaSecondary": null,
         "bg": "light",
         "bgImage": "",
-        "image": "assets/img/hero-battery.png"
+        "image": "assets/img/hero-banner.jpg"
       },
       {
         "id": "hero-shop",
         "type": "hero",
         "order": 2,
-        "active": true,
+        "active": false,
         "title": "فروشگاه اهورا",
         "subtitle": "گوشی و لوازم اصل.",
         "text": "با گارانتی معتبر و ارسال سریع",

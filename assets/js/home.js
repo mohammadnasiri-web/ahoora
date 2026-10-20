@@ -7,6 +7,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const html = sections
     .map((sec) => {
+      if (sec.type === "hero" && sec.layout === "banner") {
+        return `<section class="ah-hero ah-hero-banner">
+          <img src="${AhooraLayout.resolveUrl(sec.image)}" alt="${sec.title || ""}" width="1600" height="900" loading="eager" decoding="async">
+        </section>`;
+      }
       if (sec.type === "hero") {
         const theme = sec.bg || "dark";
         const bgLayer = sec.bgImage
@@ -74,6 +79,33 @@ document.addEventListener("DOMContentLoaded", async () => {
             </a>`;
             })
             .join("")}
+        </section>
+        <section class="ah-suggest" aria-label="وبلاگ">
+          <h2 class="ah-suggest-title">وبلاگ</h2>
+          <div class="ah-suggest-wrap">
+            <button type="button" class="ah-suggest-nav ah-suggest-left" aria-label="بعدی"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+            <div class="ah-suggest-track" id="ahSuggestTrack">
+              ${AhooraBlog.list()
+                .map((item) => {
+                  const href = AhooraLayout.resolveUrl(`pages/blog.html?slug=${item.slug}`);
+                  return `<article class="ah-suggest-card">
+                    <a class="ah-suggest-media" href="${href}">
+                      <img src="${AhooraLayout.resolveUrl(item.image)}" alt="${item.title}" width="320" height="180" loading="lazy">
+                      <span class="ah-suggest-date">${item.date}</span>
+                    </a>
+                    <span class="ah-suggest-avatar" aria-hidden="true">
+                      <img src="${AhooraLayout.resolveUrl(site.site.logo || "assets/img/logo-ahoora.png")}" alt="" width="44" height="44">
+                    </span>
+                    <div class="ah-suggest-body">
+                      <span class="ah-suggest-name">اهورا تل</span>
+                      <a class="ah-suggest-link" href="${href}">${item.title}</a>
+                    </div>
+                  </article>`;
+                })
+                .join("")}
+            </div>
+            <button type="button" class="ah-suggest-nav ah-suggest-right" aria-label="قبلی"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+          </div>
         </section>`;
       }
       if (sec.type === "benefits") {
@@ -199,6 +231,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     : "";
 
   root.innerHTML = html + productsHtml;
+
+  const suggestTrack = document.getElementById("ahSuggestTrack");
+  if (suggestTrack) {
+    const cards = () => [...suggestTrack.querySelectorAll(".ah-suggest-card")];
+    const currentIndex = () => {
+      const edge = suggestTrack.getBoundingClientRect().right;
+      let best = 0;
+      let bestDist = Infinity;
+      cards().forEach((card, index) => {
+        const dist = Math.abs(card.getBoundingClientRect().right - edge);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = index;
+        }
+      });
+      return best;
+    };
+    const goTo = (index) => {
+      const list = cards();
+      const card = list[Math.max(0, Math.min(list.length - 1, index))];
+      if (!card) return;
+      const delta = card.getBoundingClientRect().right - suggestTrack.getBoundingClientRect().right;
+      suggestTrack.scrollBy({ left: delta, behavior: "smooth" });
+    };
+    document.querySelector(".ah-suggest-left")?.addEventListener("click", () => {
+      goTo(currentIndex() + 1);
+    });
+    document.querySelector(".ah-suggest-right")?.addEventListener("click", () => {
+      goTo(currentIndex() - 1);
+    });
+  }
 
   AhooraUtils.injectSchema({
     "@context": "https://schema.org",

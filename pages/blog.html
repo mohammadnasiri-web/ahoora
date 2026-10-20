@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>وبلاگ | اهورا تل</title>
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="../assets/css/main.css" rel="stylesheet">
+</head>
+<body>
+  <div id="ah-header"></div>
+  <main class="ah-blog-page container-ah" id="blogRoot"></main>
+  <div id="ah-footer"></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/seed.js"></script>
+  <script src="../assets/js/store.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/chatbot.js"></script>
+  <script src="../assets/js/layout.js"></script>
+  <script src="../assets/js/blog.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const params = new URLSearchParams(location.search);
+      const slug = params.get("slug");
+      const post = slug ? AhooraBlog.get(slug) : null;
+      await AhooraLayout.boot({
+        seo: {
+          title: post ? `${post.title} | اهورا تل` : "وبلاگ | اهورا تل",
+          description: post?.excerpt || "مطالب راهنمای خرید و تعمیر اهورا تل",
+        },
+      });
+
+      const root = document.getElementById("blogRoot");
+      const logo = AhooraLayout.resolveUrl(
+        AhooraStore.site.get().site?.logo || "assets/img/logo-ahoora.png"
+      );
+
+      if (!post) {
+        root.innerHTML = `<p class="ah-blog-missing">این مطلب پیدا نشد.</p>
+          <div class="ah-blog-related-grid">
+            ${AhooraBlog.list()
+              .map(
+                (item) => `<a class="ah-blog-related-card" href="blog.html?slug=${item.slug}">
+                  <img src="${AhooraLayout.resolveUrl(item.image)}" alt="">
+                  <span>${item.title}</span>
+                </a>`
+              )
+              .join("")}
+          </div>`;
+        return;
+      }
+
+      const related = AhooraBlog.list()
+        .filter((item) => item.slug !== post.slug)
+        .slice(0, 3);
+
+      root.innerHTML = `
+        <nav class="ah-breadcrumb" aria-label="مسیر">
+          <a href="../index.html">خانه</a>
+          <span aria-hidden="true">/</span>
+          <span>وبلاگ</span>
+        </nav>
+        <article class="ah-blog-article">
+          <h1>${post.title}</h1>
+          <div class="ah-blog-byline">
+            <img src="${logo}" alt="" width="44" height="44">
+            <div>
+              <strong>اهورا تل</strong>
+              <span>${post.date}</span>
+            </div>
+          </div>
+          <figure class="ah-blog-cover">
+            <img src="${AhooraLayout.resolveUrl(post.image)}" alt="${post.title}" width="960" height="540">
+          </figure>
+          <div class="ah-blog-content">
+            ${post.paragraphs.map((text) => `<p>${text}</p>`).join("")}
+          </div>
+        </article>
+        <section class="ah-blog-related" aria-label="مطالب مرتبط">
+          <h2>مطالب مرتبط</h2>
+          <div class="ah-blog-related-grid">
+            ${related
+              .map(
+                (item) => `<a class="ah-blog-related-card" href="blog.html?slug=${item.slug}">
+                  <img src="${AhooraLayout.resolveUrl(item.image)}" alt="">
+                  <span>${item.title}</span>
+                </a>`
+              )
+              .join("")}
+          </div>
+        </section>`;
+    });
+  </script>
+</body>
+</html>

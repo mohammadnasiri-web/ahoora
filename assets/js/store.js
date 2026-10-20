@@ -126,38 +126,22 @@ const AhooraStore = (() => {
           if (sec.type !== "hero") return;
           if (sec.id === "hero-battery") {
             const img = String(sec.image || "");
-            const titleOk = sec.title === "تعویض فوری انواع باتری در محل";
-            if (
-              !titleOk ||
-              sec.bg !== "light" ||
-              sec.bgImage ||
-              img.endsWith(".svg") ||
-              img.includes("hero-battery.svg") ||
-              !img.endsWith(".png") ||
-              sec.subtitle ||
-              sec.text
-            ) {
+            if (sec.layout !== "banner" || !img.endsWith("hero-banner.jpg")) {
+              sec.layout = "banner";
               sec.bg = "light";
               sec.bgImage = "";
-              sec.image = "assets/img/hero-battery.png";
-              sec.title = "تعویض فوری انواع باتری در محل";
+              sec.image = "assets/img/hero-banner.jpg";
+              sec.title = "تعویض فوری باتری";
               sec.subtitle = "";
               sec.text = "";
-              sec.ctaPrimary = { text: "بیشتر بدانید", url: "pages/services.html" };
-              sec.ctaSecondary = { text: "رزرو نوبت", url: "pages/booking.html" };
+              sec.ctaPrimary = null;
+              sec.ctaSecondary = null;
               changed = true;
             }
           }
-          if (sec.id === "hero-shop") {
-            const img = String(sec.image || "");
-            if (sec.bgImage || img.endsWith(".svg") || img.endsWith(".jpg") || !img.endsWith("hero-shop.png")) {
-              sec.bg = "light";
-              sec.bgImage = "";
-              sec.image = "assets/img/hero-shop.png";
-              sec.ctaPrimary = { text: "بیشتر بدانید", url: "pages/shop.html" };
-              sec.ctaSecondary = { text: "خرید", url: "pages/shop.html?featured=1" };
-              changed = true;
-            }
+          if (sec.id === "hero-shop" && sec.active) {
+            sec.active = false;
+            changed = true;
           }
         });
         // rename legacy footer column title to match Technolife

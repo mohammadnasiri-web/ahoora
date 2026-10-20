@@ -22,36 +22,44 @@ const AhooraLayout = (() => {
     const site = AhooraStore.site.get();
     const menu = (site.menu || []).slice().sort((a, b) => a.order - b.order);
 
-    const drawerHtml = menu
-      .map((item, idx) => {
-        const children = item.children || [];
-        const delay = `style="--ah-i:${idx}"`;
-        if (!children.length) {
-          return `<li class="ah-drawer-item" ${delay}>
-            <a class="ah-drawer-link" href="${resolveUrl(item.url)}">${item.title}</a>
-          </li>`;
-        }
-        const subId = `ahDrawerSub_${item.id || idx}`;
-        return `<li class="ah-drawer-item ah-drawer-item--parent" ${delay}>
-          <div class="ah-drawer-row">
-            <a class="ah-drawer-link" href="${resolveUrl(item.url)}">${item.title}</a>
-            <button type="button" class="ah-drawer-toggle" aria-expanded="false" aria-controls="${subId}" aria-label="باز کردن ${item.title}">
-              <span class="ah-drawer-chevron" aria-hidden="true"></span>
-            </button>
-          </div>
-          <div class="ah-drawer-panel" id="${subId}" aria-hidden="true">
-            <div class="ah-drawer-panel-inner">
-              <ul class="ah-drawer-sub">
-                ${children
-                  .map(
-                    (c, ci) =>
-                      `<li style="--ah-si:${ci}"><a href="${resolveUrl(c.url)}" tabindex="-1">${c.title}</a></li>`
-                  )
-                  .join("")}
-              </ul>
-            </div>
-          </div>
-        </li>`;
+    const drawerIcons = {
+      home: "bi-house",
+      shop: "bi-phone",
+      services: "bi-tools",
+      booking: "bi-calendar-check",
+      about: "bi-info-circle",
+      contact: "bi-telephone",
+    };
+    const drawerAccent = {
+      home: "#0071e3",
+      shop: "#7b61ff",
+      services: "#d4a017",
+      booking: "#0071e3",
+      about: "#6e6e73",
+      contact: "#16a34a",
+    };
+    const defaultCat = menu.find((item) => (item.children || []).length) || menu[0];
+    const drawerCards = (item) => {
+      const links = (item.children || []).length ? item.children : [{ title: item.title, url: item.url }];
+      return links
+        .map((link) => `<a class="ah-drawer-card" href="${resolveUrl(link.url)}">${link.title}</a>`)
+        .join("");
+    };
+    const railHtml = menu
+      .map((item) => {
+        const active = item.id === defaultCat?.id ? " is-active" : "";
+        const icon = drawerIcons[item.id] || "bi-grid";
+        const color = drawerAccent[item.id] || "#0071e3";
+        return `<button type="button" class="ah-drawer-cat${active}" data-cat="${item.id}">
+          <span class="ah-drawer-cat-icon" style="color:${color}"><i class="bi ${icon}" aria-hidden="true"></i></span>
+          <span class="ah-drawer-cat-label">${item.title}</span>
+        </button>`;
+      })
+      .join("");
+    const cardSetsHtml = menu
+      .map((item) => {
+        const active = item.id === defaultCat?.id ? " is-active" : "";
+        return `<div class="ah-drawer-cardset${active}" data-cat="${item.id}">${drawerCards(item)}</div>`;
       })
       .join("");
 
@@ -79,17 +87,16 @@ const AhooraLayout = (() => {
 
     host.innerHTML = `
       <div class="ah-nav-overlay" id="ahNavOverlay" hidden></div>
-      <aside class="ah-drawer" id="ahDrawer" aria-hidden="true" aria-label="منوی موبایل">
+      <aside class="ah-drawer" id="ahDrawer" aria-hidden="true" aria-label="دسته‌بندی">
         <div class="ah-drawer-head">
+          <button type="button" class="ah-drawer-close" id="ahDrawerClose" aria-label="بستن منو"><i class="bi bi-x-lg"></i></button>
           <a class="ah-logo ah-logo-drawer" href="${resolveUrl("index.html")}">
             <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahoora.png")}" alt="${site.site.name}" width="80" height="128" decoding="async">
           </a>
-          <button type="button" class="ah-drawer-close" id="ahDrawerClose" aria-label="بستن منو"><i class="bi bi-x-lg"></i></button>
         </div>
-        <ul class="ah-drawer-list">${drawerHtml}</ul>
-        <div class="ah-drawer-foot">
-          <a class="ah-btn ah-btn-primary w-100" href="${resolveUrl(site.header?.ctaLink || "pages/booking.html")}">${site.header?.ctaText || "رزرو آنلاین"}</a>
-          <a class="ah-drawer-phone" href="tel:${site.site.phone}" dir="ltr">${site.site.phone}</a>
+        <div class="ah-drawer-split">
+          <nav class="ah-drawer-rail" aria-label="دسته‌ها">${railHtml}</nav>
+          <div class="ah-drawer-cards">${cardSetsHtml}</div>
         </div>
       </aside>
 
@@ -154,18 +161,6 @@ const AhooraLayout = (() => {
         burger.setAttribute("aria-label", "باز کردن منو");
         burger.classList.remove("is-open");
       }
-      drawer?.querySelectorAll(".ah-drawer-item--parent.is-open").forEach((item) => {
-        item.classList.remove("is-open");
-        const toggle = item.querySelector(".ah-drawer-toggle");
-        const panel = item.querySelector(".ah-drawer-panel");
-        const title = item.querySelector(".ah-drawer-link")?.textContent?.trim() || "منو";
-        if (toggle) {
-          toggle.setAttribute("aria-expanded", "false");
-          toggle.setAttribute("aria-label", `باز کردن ${title}`);
-        }
-        if (panel) panel.setAttribute("aria-hidden", "true");
-        item.querySelectorAll(".ah-drawer-sub a").forEach((a) => a.setAttribute("tabindex", "-1"));
-      });
     };
 
     const openMenu = () => {
@@ -190,43 +185,17 @@ const AhooraLayout = (() => {
     overlay?.addEventListener("click", closeMenu);
     closeBtn?.addEventListener("click", closeMenu);
 
-    const setCategoryOpen = (item, willOpen) => {
-      const panel = item.querySelector(".ah-drawer-panel");
-      const title = item.querySelector(".ah-drawer-link")?.textContent?.trim() || "منو";
-      const toggle = item.querySelector(".ah-drawer-toggle");
-
-      if (willOpen) {
-        // force reflow so open transition always plays
-        if (panel) void panel.offsetHeight;
-        item.classList.add("is-open");
-      } else {
-        item.classList.remove("is-open");
-      }
-
-      if (toggle) {
-        toggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
-        toggle.setAttribute("aria-label", `${willOpen ? "بستن" : "باز کردن"} ${title}`);
-      }
-      if (panel) panel.setAttribute("aria-hidden", willOpen ? "false" : "true");
-      item.querySelectorAll(".ah-drawer-sub a").forEach((a) => {
-        if (willOpen) a.removeAttribute("tabindex");
-        else a.setAttribute("tabindex", "-1");
+    const showCategory = (id) => {
+      drawer?.querySelectorAll(".ah-drawer-cat").forEach((btn) => {
+        btn.classList.toggle("is-active", btn.dataset.cat === id);
+      });
+      drawer?.querySelectorAll(".ah-drawer-cardset").forEach((set) => {
+        set.classList.toggle("is-active", set.dataset.cat === id);
       });
     };
 
-    drawer?.querySelectorAll(".ah-drawer-toggle").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const item = btn.closest(".ah-drawer-item--parent");
-        if (!item) return;
-        const willOpen = !item.classList.contains("is-open");
-        // Apple-like: only one category open at a time
-        drawer.querySelectorAll(".ah-drawer-item--parent.is-open").forEach((openItem) => {
-          if (openItem !== item) setCategoryOpen(openItem, false);
-        });
-        requestAnimationFrame(() => setCategoryOpen(item, willOpen));
-      });
+    drawer?.querySelectorAll(".ah-drawer-cat").forEach((btn) => {
+      btn.addEventListener("click", () => showCategory(btn.dataset.cat));
     });
 
     document.addEventListener("keydown", (e) => {
