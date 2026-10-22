@@ -1066,6 +1066,14 @@ body.menu-open .ah-bottom-nav {
   }
 }
 
+@media (max-width: 991px) {
+  .ah-dk-slide img {
+    aspect-ratio: 2.45 / 1;
+    height: auto;
+    max-height: 168px;
+  }
+}
+
 .ah-hero-bg {
   position: absolute;
   inset: 0;
@@ -3683,14 +3691,18 @@ body.ah-auth-mode #accountRoot {
 
   .ah-tiles {
     grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 12px;
+    gap: 10px;
+    padding: 8px 12px 20px;
   }
 
   .ah-tile {
-    min-height: 280px;
-    padding: 2.25rem 1.5rem 1.75rem;
-    border-radius: 22px;
+    min-height: 0;
+    padding: 1.05rem 1rem 0.95rem;
+    border-radius: 18px;
+  }
+
+  .ah-tile-body {
+    flex: 0;
   }
 
   .ah-tile:hover {
@@ -3703,23 +3715,26 @@ body.ah-auth-mode #accountRoot {
   }
 
   .ah-tile-icon {
-    width: 56px;
-    height: 56px;
-    font-size: 1.35rem;
-    margin-bottom: 1.1rem;
+    width: 42px;
+    height: 42px;
+    font-size: 1.05rem;
+    margin-bottom: 0.55rem;
   }
 
   .ah-tile h3 {
-    font-size: 1.65rem;
+    font-size: 1.15rem;
+    margin-bottom: 0.25rem;
   }
 
   .ah-tile p {
-    font-size: 1rem;
-    margin-bottom: 1.1rem;
+    font-size: 0.88rem;
+    margin-bottom: 0.45rem;
+    line-height: 1.4;
   }
 
   .ah-tile-link {
-    font-size: 1rem;
+    margin-top: 0;
+    font-size: 0.9rem;
   }
 
   .ah-benefits {
