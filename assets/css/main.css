@@ -1068,9 +1068,9 @@ body.menu-open .ah-bottom-nav {
 
 @media (max-width: 991px) {
   .ah-dk-slide img {
-    aspect-ratio: 2.45 / 1;
+    aspect-ratio: 1.68 / 1;
     height: auto;
-    max-height: 168px;
+    max-height: 250px;
   }
 }
 
