@@ -3,7 +3,7 @@
     "name": "اهورا تل",
     "nameEn": "Ahoora Tel",
     "tagline": "تعمیرات تخصصی و فروش تجهیزات موبایل",
-    "logo": "assets/img/logo-ahoora.png",
+    "logo": "assets/img/logo-ahura-tell.png",
     "logoMark": "assets/img/logo-mark.svg",
     "favicon": "assets/img/favicon.svg",
     "phone": "02191000000",
@@ -67,6 +67,11 @@
           "id": "workshop",
           "title": "تعمیر غیرحضوری",
           "url": "pages/services.html?type=workshop"
+        },
+        {
+          "id": "battery",
+          "title": "تعویض باتری",
+          "url": "pages/battery.html"
         }
       ]
     },
@@ -87,6 +92,12 @@
       "title": "تماس",
       "url": "pages/contact.html",
       "order": 6
+    },
+    {
+      "id": "blog",
+      "title": "وبلاگ",
+      "url": "pages/blog.html",
+      "order": 7
     }
   ],
   "footer": {
@@ -125,7 +136,7 @@
           },
           {
             "title": "تعویض باتری",
-            "url": "pages/booking.html"
+            "url": "pages/battery.html"
           },
           {
             "title": "تعمیر غیرحضوری",

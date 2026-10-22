@@ -102,9 +102,10 @@ const AhooraStore = (() => {
         if (
           !siteData.site.logo ||
           String(siteData.site.logo).includes("logo.svg") ||
-          String(siteData.site.logo).endsWith(".jpg")
+          String(siteData.site.logo).endsWith(".jpg") ||
+          String(siteData.site.logo).includes("logo-ahoora.png")
         ) {
-          siteData.site.logo = "assets/img/logo-ahoora.png";
+          siteData.site.logo = "assets/img/logo-ahura-tell.png";
           changed = true;
         }
         if (!siteData.site.logoMark) {
@@ -117,6 +118,68 @@ const AhooraStore = (() => {
             changed = true;
           }
         });
+        if (Array.isArray(siteData.menu) && !siteData.menu.some((item) => item.id === "blog")) {
+          siteData.menu.push({
+            id: "blog",
+            title: "وبلاگ",
+            url: "pages/blog.html",
+            order: 7,
+          });
+          changed = true;
+        }
+        if (Array.isArray(siteData.menu)) {
+          const servicesItem = siteData.menu.find((item) => item.id === "services");
+          if (servicesItem) {
+            servicesItem.children = servicesItem.children || [];
+            const batteryChild = servicesItem.children.find(
+              (child) => child.id === "device" || child.id === "battery" || String(child.url || "").includes("device.html")
+            );
+            if (batteryChild) {
+              if (batteryChild.title !== "تعویض باتری" || batteryChild.url !== "pages/battery.html" || batteryChild.id !== "battery") {
+                batteryChild.id = "battery";
+                batteryChild.title = "تعویض باتری";
+                batteryChild.url = "pages/battery.html";
+                changed = true;
+              }
+            } else {
+              servicesItem.children.push({
+                id: "battery",
+                title: "تعویض باتری",
+                url: "pages/battery.html",
+              });
+              changed = true;
+            }
+          }
+        }
+        const serviceCol = (siteData.footer?.columns || []).find((col) => col.title === "خدمات");
+        if (serviceCol) {
+          const links = serviceCol.links || [];
+          links.forEach((link) => {
+            const url = String(link.url || "");
+            if (url.includes("device.html") || link.title === "تعویض دیوایس" || (link.title === "تعویض باتری" && url.includes("booking"))) {
+              link.title = "تعویض باتری";
+              link.url = "pages/battery.html";
+              changed = true;
+            }
+          });
+          const seen = new Set();
+          serviceCol.links = links.filter((link) => {
+            if (!String(link.url || "").includes("battery.html")) return true;
+            if (seen.has("battery")) {
+              changed = true;
+              return false;
+            }
+            seen.add("battery");
+            return true;
+          });
+          if (!seen.has("battery")) {
+            serviceCol.links.splice(Math.min(1, serviceCol.links.length), 0, {
+              title: "تعویض باتری",
+              url: "pages/battery.html",
+            });
+            changed = true;
+          }
+        }
         const heroes = siteData.homepage?.sections || [];
         heroes.forEach((sec) => {
           if (sec.type === "testimonials" && sec.active) {
@@ -491,11 +554,20 @@ const AhooraStore = (() => {
     },
   };
 
+  const sameContact = (user, contact) => {
+    const q = String(contact || "").trim();
+    if (!q) return false;
+    if (user.phone === q) return true;
+    return Boolean(user.email) && user.email.toLowerCase() === q.toLowerCase();
+  };
+
   const auth = {
     current: () => get(KEYS.user),
+    findByContact: (contact) => get(KEYS.users, []).find((user) => sameContact(user, contact)) || null,
     login: (phone, password) => {
+      const pass = String(password || "");
       const users = get(KEYS.users, []);
-      const u = users.find((x) => x.phone === phone && x.password === password);
+      const u = users.find((x) => sameContact(x, phone) && x.password === pass);
       if (!u) return null;
       set(KEYS.user, { id: u.id, name: u.name, phone: u.phone, email: u.email });
       return get(KEYS.user);

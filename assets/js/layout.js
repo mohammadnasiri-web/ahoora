@@ -29,6 +29,7 @@ const AhooraLayout = (() => {
       booking: "bi-calendar-check",
       about: "bi-info-circle",
       contact: "bi-telephone",
+      blog: "bi-journal-text",
     };
     const drawerAccent = {
       home: "#0071e3",
@@ -37,6 +38,7 @@ const AhooraLayout = (() => {
       booking: "#0071e3",
       about: "#6e6e73",
       contact: "#16a34a",
+      blog: "#6994c7",
     };
     const defaultCat = menu.find((item) => (item.children || []).length) || menu[0];
     const drawerCards = (item) => {
@@ -50,7 +52,8 @@ const AhooraLayout = (() => {
         const active = item.id === defaultCat?.id ? " is-active" : "";
         const icon = drawerIcons[item.id] || "bi-grid";
         const color = drawerAccent[item.id] || "#0071e3";
-        return `<button type="button" class="ah-drawer-cat${active}" data-cat="${item.id}">
+        const direct = item.id === "blog" ? ` data-href="${resolveUrl(item.url)}"` : "";
+        return `<button type="button" class="ah-drawer-cat${active}" data-cat="${item.id}"${direct}>
           <span class="ah-drawer-cat-icon" style="color:${color}"><i class="bi ${icon}" aria-hidden="true"></i></span>
           <span class="ah-drawer-cat-label">${item.title}</span>
         </button>`;
@@ -91,7 +94,7 @@ const AhooraLayout = (() => {
         <div class="ah-drawer-head">
           <button type="button" class="ah-drawer-close" id="ahDrawerClose" aria-label="بستن منو"><i class="bi bi-x-lg"></i></button>
           <a class="ah-logo ah-logo-drawer" href="${resolveUrl("index.html")}">
-            <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahoora.png")}" alt="${site.site.name}" width="80" height="128" decoding="async">
+            <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahura-tell.png")}" alt="${site.site.name}" width="240" height="86" decoding="async">
           </a>
         </div>
         <div class="ah-drawer-split">
@@ -109,7 +112,7 @@ const AhooraLayout = (() => {
                   <span class="ah-burger-lines" aria-hidden="true"></span>
                 </button>
                 <a href="${resolveUrl("index.html")}" class="ah-techno-logo">
-                  <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahoora.png")}" alt="${site.site.name}" width="80" height="128" decoding="async">
+                  <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahura-tell.png")}" alt="${site.site.name}" width="240" height="86" decoding="async">
                 </a>
               </div>
               <form class="ah-techno-search" action="${resolveUrl("pages/shop.html")}" method="get" role="search">
@@ -132,7 +135,7 @@ const AhooraLayout = (() => {
 
       <nav class="ah-bottom-nav" aria-label="میانبر پایین">
         <a href="${resolveUrl("index.html")}" data-nav="home"><i class="bi bi-house"></i><span>خانه</span></a>
-        <a href="${resolveUrl("pages/shop.html")}" data-nav="shop"><i class="bi bi-bag"></i><span>فروشگاه</span></a>
+        <a href="${resolveUrl("pages/blog.html")}" data-nav="blog"><i class="bi bi-journal-text"></i><span>وبلاگ</span></a>
         <a class="cta" href="${resolveUrl("pages/booking.html")}" data-nav="booking"><i class="bi bi-calendar-check"></i><span>رزرو</span></a>
         <a href="${resolveUrl("pages/services.html")}" data-nav="services"><i class="bi bi-tools"></i><span>خدمات</span></a>
         <a href="${resolveUrl("pages/account.html")}" data-nav="account"><i class="bi bi-person"></i><span>حساب</span></a>
@@ -195,7 +198,13 @@ const AhooraLayout = (() => {
     };
 
     drawer?.querySelectorAll(".ah-drawer-cat").forEach((btn) => {
-      btn.addEventListener("click", () => showCategory(btn.dataset.cat));
+      btn.addEventListener("click", () => {
+        if (btn.dataset.href) {
+          location.href = btn.dataset.href;
+          return;
+        }
+        showCategory(btn.dataset.cat);
+      });
     });
 
     document.addEventListener("keydown", (e) => {
@@ -210,7 +219,7 @@ const AhooraLayout = (() => {
       const key = a.dataset.nav;
       let active = false;
       if (key === "home" && (path.endsWith("/") || path.endsWith("/index.html"))) active = true;
-      if (key === "shop" && path.includes("/shop")) active = true;
+      if (key === "blog" && path.includes("/blog")) active = true;
       if (key === "booking" && path.includes("/booking")) active = true;
       if (key === "services" && path.includes("/services")) active = true;
       if (key === "account" && path.includes("/account")) active = true;
@@ -286,7 +295,7 @@ const AhooraLayout = (() => {
         <div class="ah-footer-inner">
           <div class="ah-footer-top">
             <a class="ah-footer-logo" href="${resolveUrl("index.html")}">
-              <img src="${resolveUrl(s.logo || "assets/img/logo-ahoora.png")}" alt="${s.name || ""}" width="80" height="128" loading="lazy" decoding="async">
+              <img src="${resolveUrl(s.logo || "assets/img/logo-ahura-tell.png")}" alt="${s.name || ""}" width="240" height="86" loading="lazy" decoding="async">
             </a>
             <button type="button" class="ah-footer-topbtn" id="ahFooterTopBtn" aria-label="بازگشت به بالا">
               <i class="bi bi-chevron-up" aria-hidden="true"></i>

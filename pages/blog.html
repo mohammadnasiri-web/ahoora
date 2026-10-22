@@ -12,7 +12,7 @@
 </head>
 <body>
   <div id="ah-header"></div>
-  <main class="ah-blog-page container-ah" id="blogRoot"></main>
+  <main id="blogRoot"></main>
   <div id="ah-footer"></div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../assets/js/seed.js"></script>
@@ -35,10 +35,92 @@
 
       const root = document.getElementById("blogRoot");
       const logo = AhooraLayout.resolveUrl(
-        AhooraStore.site.get().site?.logo || "assets/img/logo-ahoora.png"
+        AhooraStore.site.get().site?.logo || "assets/img/logo-ahura-tell.png"
       );
 
+      const cardHtml = (item) => {
+        const href = `blog.html?slug=${encodeURIComponent(item.slug)}`;
+        return `<article class="ah-suggest-card">
+          <a class="ah-suggest-media" href="${href}">
+            <img src="${AhooraLayout.resolveUrl(item.image)}" alt="${item.title}" width="320" height="180" loading="lazy">
+            <span class="ah-suggest-date">${item.date}</span>
+          </a>
+          <span class="ah-suggest-avatar" aria-hidden="true">
+            <img src="${logo}" alt="" width="44" height="44">
+          </span>
+          <div class="ah-suggest-body">
+            <span class="ah-suggest-name">اهورا تل</span>
+            <a class="ah-suggest-link" href="${href}">${item.title}</a>
+          </div>
+        </article>`;
+      };
+      const railHtml = (id, title, posts, plain) => `
+        <section class="ah-suggest${plain ? " ah-suggest--plain" : ""}" id="${id}" aria-label="${title}">
+          <h2 class="ah-suggest-title">${title}</h2>
+          <div class="ah-suggest-wrap">
+            <button type="button" class="ah-suggest-nav ah-suggest-left" aria-label="بعدی"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+            <div class="ah-suggest-track">${posts.map(cardHtml).join("")}</div>
+            <button type="button" class="ah-suggest-nav ah-suggest-right" aria-label="قبلی"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+          </div>
+        </section>`;
+      const bindRails = () => {
+        document.querySelectorAll(".ah-suggest-wrap").forEach((wrap) => {
+          const track = wrap.querySelector(".ah-suggest-track");
+          if (!track) return;
+          const cards = () => [...track.querySelectorAll(".ah-suggest-card")];
+          const currentIndex = () => {
+            const edge = track.getBoundingClientRect().right;
+            let best = 0;
+            let bestDist = Infinity;
+            cards().forEach((card, index) => {
+              const dist = Math.abs(card.getBoundingClientRect().right - edge);
+              if (dist < bestDist) {
+                bestDist = dist;
+                best = index;
+              }
+            });
+            return best;
+          };
+          const goTo = (index) => {
+            const list = cards();
+            const card = list[Math.max(0, Math.min(list.length - 1, index))];
+            if (!card) return;
+            const delta = card.getBoundingClientRect().right - track.getBoundingClientRect().right;
+            track.scrollBy({ left: delta, behavior: "smooth" });
+          };
+          wrap.querySelector(".ah-suggest-left")?.addEventListener("click", () => goTo(currentIndex() + 1));
+          wrap.querySelector(".ah-suggest-right")?.addEventListener("click", () => goTo(currentIndex() - 1));
+        });
+      };
+
+      if (!slug) {
+        const posts = AhooraBlog.list();
+        const guide = posts.filter((item) =>
+          ["screen-glass", "original-charger", "earphones", "powerbank", "lcd-replace"].includes(item.slug)
+        );
+        root.className = "ah-blog-feed";
+        root.innerHTML = `
+          <header class="ah-blog-feed-head">
+            <h1>وبلاگ اهورا تل</h1>
+          </header>
+          <div class="ah-blog-hot" aria-label="داغ‌ترین‌ها">
+            <strong>داغ‌ترین‌ها</strong>
+            <a href="#suggest">باتری</a>
+            <a href="#guide">گلس گوشی</a>
+            <a href="#latest">شارژر</a>
+            <a href="#guide">هندزفری</a>
+            <a href="#latest">تعمیر نمایشگر</a>
+          </div>
+          ${railHtml("suggest", "پیشنهادی", posts.slice(0, 5), false)}
+          ${railHtml("latest", "تازه‌ترین‌ها", [...posts].reverse(), true)}
+          ${railHtml("guide", "راهنمای خرید", guide, true)}
+        `;
+        bindRails();
+        return;
+      }
+
       if (!post) {
+        root.className = "ah-blog-page container-ah";
         root.innerHTML = `<p class="ah-blog-missing">این مطلب پیدا نشد.</p>
           <div class="ah-blog-related-grid">
             ${AhooraBlog.list()
@@ -57,11 +139,14 @@
         .filter((item) => item.slug !== post.slug)
         .slice(0, 3);
 
+      root.className = "ah-blog-page container-ah";
       root.innerHTML = `
         <nav class="ah-breadcrumb" aria-label="مسیر">
           <a href="../index.html">خانه</a>
           <span aria-hidden="true">/</span>
-          <span>وبلاگ</span>
+          <a href="blog.html">وبلاگ</a>
+          <span aria-hidden="true">/</span>
+          <span>${post.title}</span>
         </nav>
         <article class="ah-blog-article">
           <h1>${post.title}</h1>

@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return `<div class="admin-layout">
       <aside class="admin-side">
         <div class="px-2 mb-3 admin-brand">
-          <img src="../assets/img/logo-ahoora.png" alt="اهورا تل" width="80" height="128" style="height:52px;width:auto;background:transparent;display:block;margin-bottom:0.4rem">
+          <img src="../assets/img/logo-ahura-tell.png" alt="اهورا تل" width="240" height="86" style="height:44px;width:auto;max-width:200px;background:transparent;display:block;margin-bottom:0.4rem">
           <span class="fw-bold">پنل مدیریت</span>
         </div>
         ${nav

@@ -122,6 +122,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   fillModels();
+  const preGroup = AhooraUtils.qs("group");
+  if (preGroup === "iphone" || preGroup === "other") {
+    document.getElementById("modelGroup").value = preGroup;
+    fillModels();
+  }
+  const preModel = AhooraUtils.qs("model");
+  if (preModel) {
+    const sel = document.getElementById("deviceModel");
+    if ([...sel.options].some((option) => option.value === preModel)) sel.value = preModel;
+  }
   toggleAddress();
   updatePrice();
   renderSlots();

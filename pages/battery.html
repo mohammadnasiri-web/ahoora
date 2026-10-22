@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تعویض باتری | اهورا تل</title>
+  <meta name="description" content="تعویض باتری گوشی در محل، با قیمت بر اساس مدل و گارانتی کتبی">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="../assets/css/main.css" rel="stylesheet">
+</head>
+<body>
+  <div id="ah-header"></div>
+  <main class="ah-bat">
+    <header class="ah-bat-hero">
+      <p class="ah-bat-kicker">سرویس در محل</p>
+      <h1>تعویض باتری</h1>
+      <p>مدل گوشی را انتخاب کنید. قیمت همان باتری، مدت کار و نوبت تعویض در آدرس شما همین‌جا مشخص می‌شود.</p>
+      <ul class="ah-bat-facts">
+        <li><i class="bi bi-geo-alt"></i>تعویض در آدرس شما</li>
+        <li><i class="bi bi-patch-check"></i>باتری سازگار با مدل</li>
+        <li><i class="bi bi-shield-check"></i>گارانتی کتبی</li>
+      </ul>
+    </header>
+    <div class="ah-bat-layout">
+      <section class="ah-bat-pick">
+        <h2>برند</h2>
+        <div class="ah-bat-brands" id="brandRow"></div>
+        <h2>مدل گوشی</h2>
+        <div class="ah-bat-models" id="modelRow"></div>
+      </section>
+      <section class="ah-bat-quote" id="quote" aria-live="polite"></section>
+    </div>
+    <section class="ah-bat-signs" aria-label="نشانه‌های ضعف باتری">
+      <h2>کی باتری را عوض کنیم؟</h2>
+      <div class="ah-bat-signgrid">
+        <article class="ah-bat-sign">
+          <i class="bi bi-hourglass-split"></i>
+          <strong>شارژ زود تمام می‌شود</strong>
+          <p>همان استفاده همیشگی، خیلی زودتر از قبل گوشی را به شارژر می‌رساند.</p>
+        </article>
+        <article class="ah-bat-sign">
+          <i class="bi bi-power"></i>
+          <strong>خاموشی ناگهانی</strong>
+          <p>درصد می‌پرد یا گوشی در حالی که هنوز شارژ نشان می‌دهد خاموش می‌شود.</p>
+        </article>
+        <article class="ah-bat-sign">
+          <i class="bi bi-exclamation-triangle"></i>
+          <strong>باد کردن بدنه</strong>
+          <p>اگر قاب جدا شده یا گوشی داغ می‌کند، تعویض را عقب نیندازید.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+  <div id="ah-footer"></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/seed.js"></script>
+  <script src="../assets/js/store.js"></script>
+  <script src="../assets/js/utils.js"></script>
+  <script src="../assets/js/chatbot.js"></script>
+  <script src="../assets/js/layout.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      await AhooraLayout.boot({
+        seo: {
+          title: "تعویض باتری | اهورا تل",
+          description: "تعویض باتری گوشی در محل، با قیمت بر اساس مدل و گارانتی کتبی",
+        },
+      });
+
+      const data = AhooraStore.services.all();
+      const models = data.deviceModels || { iphone: [], other: [] };
+      const brands = [
+        { id: "iphone", group: "iphone", title: "آیفون", service: "svc-battery-iphone", list: models.iphone || [] },
+        { id: "samsung", group: "other", title: "سامسونگ", service: "svc-battery-other", list: (models.other || []).filter((m) => m.startsWith("Samsung")) },
+        { id: "xiaomi", group: "other", title: "شیائومی", service: "svc-battery-other", list: (models.other || []).filter((m) => m.startsWith("Xiaomi")) },
+        {
+          id: "other",
+          group: "other",
+          title: "سایر",
+          service: "svc-battery-other",
+          list: (models.other || []).filter((m) => !m.startsWith("Samsung") && !m.startsWith("Xiaomi")),
+        },
+      ].filter((brand) => brand.list.length);
+
+      let brand = brands[0];
+      let model = brand?.list.includes("iPhone 15") ? "iPhone 15" : brand?.list[0] || "";
+
+      const priceOf = (svc, name) => {
+        if (!svc) return 0;
+        if (svc.priceByModel?.[name]) return svc.priceByModel[name];
+        const key = Object.keys(svc.priceByModel || {}).find((item) => name.startsWith(item));
+        return key ? svc.priceByModel[key] : svc.basePrice || 0;
+      };
+      const exactPrice = (svc, name) => {
+        if (!svc?.priceByModel) return false;
+        if (svc.priceByModel[name]) return true;
+        return Object.keys(svc.priceByModel).some((item) => name.startsWith(item));
+      };
+
+      const render = () => {
+        document.getElementById("brandRow").innerHTML = brands
+          .map(
+            (item) =>
+              `<button type="button" class="ah-bat-chip${item.id === brand.id ? " is-on" : ""}" data-brand="${item.id}">${item.title}</button>`
+          )
+          .join("");
+        document.getElementById("modelRow").innerHTML = brand.list
+          .map(
+            (name) =>
+              `<button type="button" class="ah-bat-chip${name === model ? " is-on" : ""}" data-model="${name}">${name}</button>`
+          )
+          .join("");
+
+        const quote = document.getElementById("quote");
+        const svc = AhooraStore.services.byId(brand.service);
+        if (!model || !svc) {
+          quote.innerHTML = `<p class="ah-bat-note">یک مدل را انتخاب کنید.</p>`;
+          return;
+        }
+        const price = priceOf(svc, model);
+        const exact = exactPrice(svc, model);
+        const href = `booking.html?service=${encodeURIComponent(svc.id)}&group=${encodeURIComponent(brand.group)}&model=${encodeURIComponent(model)}`;
+        quote.innerHTML = `
+          <div class="ah-bat-mark" aria-hidden="true"><i class="bi bi-battery-charging"></i></div>
+          <p class="ah-bat-model">باتری ${model}</p>
+          <p class="ah-bat-price">${exact ? "" : "از "}${AhooraUtils.formatPrice(price)}</p>
+          <p class="ah-bat-note">${exact ? "قیمت همین مدل" : "قیمت پایه این برند"} · تعویض در آدرس شما، با تست سلامت بعد از کار.</p>
+          <ul class="ah-bat-meta">
+            <li><small>نوع سرویس</small><strong>در محل</strong></li>
+            <li><small>زمان تقریبی</small><strong>حدود ${svc.durationMinutes} دقیقه</strong></li>
+            <li><small>ظرفیت امروز</small><strong>${svc.dailyCapacity} نوبت</strong></li>
+            <li><small>بعد از تعویض</small><strong>گارانتی کتبی</strong></li>
+          </ul>
+          <a class="ah-bat-cta" href="${href}">رزرو تعویض باتری</a>`;
+
+        const row = document.getElementById("modelRow");
+        const active = row.querySelector(".is-on");
+        if (!active) return;
+        const rowBox = row.getBoundingClientRect();
+        const chip = active.getBoundingClientRect();
+        row.scrollBy({ left: chip.left - rowBox.left - (rowBox.width - chip.width) / 2 });
+      };
+
+      document.getElementById("brandRow").addEventListener("click", (event) => {
+        const btn = event.target.closest("[data-brand]");
+        if (!btn) return;
+        brand = brands.find((item) => item.id === btn.dataset.brand) || brand;
+        model = brand.list[0] || "";
+        render();
+      });
+      document.getElementById("modelRow").addEventListener("click", (event) => {
+        const btn = event.target.closest("[data-model]");
+        if (!btn) return;
+        model = btn.dataset.model;
+        render();
+      });
+      render();
+    });
+  </script>
+</body>
+</html>
