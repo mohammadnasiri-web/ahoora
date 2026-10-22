@@ -112,7 +112,7 @@ const AhooraLayout = (() => {
                   <span class="ah-burger-lines" aria-hidden="true"></span>
                 </button>
                 <a href="${resolveUrl("index.html")}" class="ah-techno-logo">
-                  <img src="${resolveUrl(site.site.logo || "assets/img/logo-ahura-tell.png")}" alt="${site.site.name}" width="240" height="86" decoding="async">
+                  <img src="${resolveUrl("assets/img/logo-ahura-word.png")}" alt="${site.site.name}" width="643" height="95" decoding="async">
                 </a>
               </div>
               <form class="ah-techno-search" action="${resolveUrl("pages/shop.html")}" method="get" role="search">
@@ -134,11 +134,11 @@ const AhooraLayout = (() => {
       </header>
 
       <nav class="ah-bottom-nav" aria-label="میانبر پایین">
-        <a href="${resolveUrl("index.html")}" data-nav="home"><i class="bi bi-house"></i><span>خانه</span></a>
-        <a href="${resolveUrl("pages/cart.html")}" data-nav="cart"><i class="bi bi-cart3"></i><span>سبد خرید</span><span class="ah-bottom-cart-count" id="ahBottomCartCount" hidden>۰</span></a>
-        <a class="cta" href="${resolveUrl("pages/booking.html")}" data-nav="booking"><i class="bi bi-calendar-check"></i><span>رزرو</span></a>
-        <a href="${resolveUrl("pages/services.html")}" data-nav="services"><i class="bi bi-tools"></i><span>خدمات</span></a>
-        <a href="${resolveUrl("pages/account.html")}" data-nav="account"><i class="bi bi-person"></i><span>حساب</span></a>
+        <a href="${resolveUrl("index.html")}" data-nav="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.1 12 4.4l8 6.7V20a.8.8 0 0 1-.8.8h-5v-6.1H9.8V20.8H4.8A.8.8 0 0 1 4 20v-8.9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>خانه</span></a>
+        <button type="button" data-nav="categories" id="ahBottomCats" aria-label="دسته‌بندی"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="2.05" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="2.05" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="16" r="2.05" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="16" r="2.05" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>دسته‌بندی</span></button>
+        <a href="${resolveUrl("pages/cart.html")}" data-nav="cart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 7.2h14l-1.5 8.2H8.2L6.5 7.2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M6.5 7.2 5.4 4.2H2.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="9.3" cy="19.2" r="1.15" fill="currentColor" stroke="none"/><circle cx="16.8" cy="19.2" r="1.15" fill="currentColor" stroke="none"/></svg><span>سبد خرید</span><span class="ah-bottom-cart-count" id="ahBottomCartCount" hidden>۰</span></a>
+        <a href="${resolveUrl("pages/battery.html")}" data-nav="battery"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="7.2" width="15.2" height="9.6" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M18.4 10.1h1.5a.9.9 0 0 1 .9.9v2a.9.9 0 0 1-.9.9h-1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10.2 9.7 8.2 12.2h2.3L9.1 14.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>تعویض باتری</span></a>
+        <a href="${resolveUrl("pages/account.html")}" data-nav="account"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.1" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.8 19.2c1.2-2.8 3.4-4.1 6.2-4.1s5 1.3 6.2 4.1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>ورود</span></a>
       </nav>`;
 
     document.body.classList.add("has-bottom-nav");
@@ -164,6 +164,7 @@ const AhooraLayout = (() => {
         burger.setAttribute("aria-label", "باز کردن منو");
         burger.classList.remove("is-open");
       }
+      document.getElementById("ahBottomCats")?.classList.remove("is-active");
     };
 
     const openMenu = () => {
@@ -179,12 +180,15 @@ const AhooraLayout = (() => {
         burger.setAttribute("aria-label", "بستن منو");
         burger.classList.add("is-open");
       }
+      document.getElementById("ahBottomCats")?.classList.add("is-active");
     };
 
-    burger?.addEventListener("click", () => {
+    const toggleMenu = () => {
       if (drawer?.classList.contains("open")) closeMenu();
       else openMenu();
-    });
+    };
+    burger?.addEventListener("click", toggleMenu);
+    document.getElementById("ahBottomCats")?.addEventListener("click", toggleMenu);
     overlay?.addEventListener("click", closeMenu);
     closeBtn?.addEventListener("click", closeMenu);
 
@@ -215,15 +219,14 @@ const AhooraLayout = (() => {
 
   function highlightBottomNav() {
     const path = (location.pathname || "").replace(/\\/g, "/").toLowerCase();
-    document.querySelectorAll(".ah-bottom-nav a").forEach((a) => {
+    document.querySelectorAll(".ah-bottom-nav [data-nav]").forEach((a) => {
       const key = a.dataset.nav;
       let active = false;
       if (key === "home" && (path.endsWith("/") || path.endsWith("/index.html"))) active = true;
       if (key === "cart" && path.includes("/cart")) active = true;
-      if (key === "booking" && path.includes("/booking")) active = true;
-      if (key === "services" && path.includes("/services")) active = true;
+      if (key === "battery" && path.includes("/battery")) active = true;
       if (key === "account" && path.includes("/account")) active = true;
-      if (active) a.classList.add("active");
+      a.classList.toggle("active", active);
     });
   }
 
