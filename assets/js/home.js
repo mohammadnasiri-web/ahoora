@@ -8,8 +8,38 @@ document.addEventListener("DOMContentLoaded", async () => {
   const html = sections
     .map((sec) => {
       if (sec.type === "hero" && sec.layout === "banner") {
-        return `<section class="ah-hero ah-hero-banner">
-          <img src="${AhooraLayout.resolveUrl(sec.image)}" alt="${sec.title || ""}" width="1600" height="900" loading="eager" decoding="async">
+        const slides = [
+          {
+            image: sec.image || "assets/img/hero-banner.jpg",
+            title: sec.title || "تعویض فوری باتری",
+            url: "pages/services.html",
+          },
+          {
+            image: "assets/img/hero-banner-2.jpg",
+            title: "لوازم جانبی اصل",
+            url: "pages/shop.html?cat=accessories",
+          },
+        ];
+        return `<section class="ah-dk" aria-roledescription="carousel" aria-label="اسلایدر">
+          <div class="ah-dk-viewport" id="ahDkViewport">
+            <div class="ah-dk-track" id="ahDkTrack">
+              ${slides
+                .map(
+                  (slide, index) => `<a class="ah-dk-slide" href="${AhooraLayout.resolveUrl(slide.url)}">
+                    <img src="${AhooraLayout.resolveUrl(slide.image)}" alt="${slide.title}" width="1280" height="720" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" draggable="false">
+                  </a>`
+                )
+                .join("")}
+            </div>
+          </div>
+          <div class="ah-dk-dots" id="ahDkDots">
+            ${slides
+              .map(
+                (slide, index) =>
+                  `<button type="button" class="ah-dk-dot${index === 0 ? " is-active" : ""}" data-index="${index}" aria-label="${slide.title}"></button>`
+              )
+              .join("")}
+          </div>
         </section>`;
       }
       if (sec.type === "hero") {
@@ -231,6 +261,91 @@ document.addEventListener("DOMContentLoaded", async () => {
     : "";
 
   root.innerHTML = html + productsHtml;
+
+  const dkViewport = document.getElementById("ahDkViewport");
+  const dkTrack = document.getElementById("ahDkTrack");
+  if (dkViewport && dkTrack) {
+    const slides = [...dkTrack.querySelectorAll(".ah-dk-slide")];
+    const dots = [...document.querySelectorAll("#ahDkDots .ah-dk-dot")];
+    let index = 0;
+    let paused = false;
+    let dragging = false;
+    let moved = false;
+    let startX = 0;
+    let dragX = 0;
+
+    const paint = (animate) => {
+      const width = dkViewport.clientWidth;
+      dkTrack.style.transition = animate ? "transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1)" : "none";
+      dkTrack.style.transform = `translate3d(${index * width + dragX}px, 0, 0)`;
+      dots.forEach((dot, i) => dot.classList.toggle("is-active", i === index));
+    };
+
+    const goTo = (next, animate = true) => {
+      index = (next + slides.length) % slides.length;
+      dragX = 0;
+      paint(animate);
+    };
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        paused = true;
+        goTo(Number(dot.dataset.index));
+        window.setTimeout(() => {
+          paused = false;
+        }, 5000);
+      });
+    });
+
+    dkViewport.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      dragging = true;
+      moved = false;
+      paused = true;
+      startX = event.clientX;
+      dragX = 0;
+      dkViewport.setPointerCapture(event.pointerId);
+      paint(false);
+    });
+
+    dkViewport.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+      dragX = event.clientX - startX;
+      if (Math.abs(dragX) > 6) moved = true;
+      paint(false);
+    });
+
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      const width = dkViewport.clientWidth;
+      if (dragX > 48) goTo(index + 1);
+      else if (dragX < -48) goTo(index - 1);
+      else goTo(index);
+      window.setTimeout(() => {
+        paused = false;
+        moved = false;
+      }, 700);
+    };
+
+    dkViewport.addEventListener("pointerup", endDrag);
+    dkViewport.addEventListener("pointercancel", endDrag);
+
+    slides.forEach((slide) => {
+      slide.addEventListener("click", (event) => {
+        if (moved) event.preventDefault();
+      });
+      slide.addEventListener("dragstart", (event) => event.preventDefault());
+    });
+
+    window.addEventListener("resize", () => paint(false));
+    paint(false);
+
+    window.setInterval(() => {
+      if (paused || dragging || document.hidden) return;
+      goTo(index + 1);
+    }, 4000);
+  }
 
   const suggestTrack = document.getElementById("ahSuggestTrack");
   if (suggestTrack) {

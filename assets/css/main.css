@@ -935,6 +935,90 @@ body.menu-open .ah-bottom-nav {
   background: transparent;
 }
 
+/* Digikala-style top slider */
+.ah-dk {
+  background: var(--ah-page-bg);
+  padding: 12px 0 2px;
+}
+
+.ah-dk-viewport {
+  width: min(1120px, calc(100% - 32px));
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #fff;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+}
+
+.ah-dk-viewport:active {
+  cursor: grabbing;
+}
+
+.ah-dk-track {
+  display: flex;
+  width: 100%;
+  will-change: transform;
+}
+
+.ah-dk-slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  display: block;
+}
+
+.ah-dk-slide img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  pointer-events: none;
+}
+
+.ah-dk-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 0 2px;
+}
+
+.ah-dk-dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 99px;
+  background: #c0c2c5;
+  cursor: pointer;
+}
+
+.ah-dk-dot.is-active {
+  width: 16px;
+  background: #ef394e;
+}
+
+@media (min-width: 992px) {
+  .ah-dk {
+    padding-top: 18px;
+  }
+
+  .ah-dk-viewport {
+    width: min(1180px, calc(100% - 48px));
+    border-radius: 22px;
+  }
+
+  .ah-dk-slide img {
+    height: 420px;
+    aspect-ratio: auto;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
 .ah-hero-bg {
   position: absolute;
   inset: 0;
@@ -1083,11 +1167,15 @@ body.menu-open .ah-bottom-nav {
 
 /* ---- Quick actions (Technolife-style category circles) ---- */
 .ah-quick {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.75rem 0.5rem;
-  padding: 1.35rem 1rem 1.5rem;
-  overflow: visible;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.85rem;
+  padding: 14px 16px 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
   background: transparent;
   border-bottom: 0;
   width: 100%;
@@ -1096,13 +1184,19 @@ body.menu-open .ah-bottom-nav {
   box-sizing: border-box;
 }
 
+.ah-quick::-webkit-scrollbar {
+  display: none;
+}
+
 .ah-quick a {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.55rem;
-  min-width: 0;
+  gap: 0.45rem;
+  flex: 0 0 76px;
+  scroll-snap-align: start;
+  min-width: 76px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -1158,6 +1252,35 @@ body.menu-open .ah-bottom-nav {
   white-space: nowrap;
   line-height: 1.35;
   letter-spacing: -0.01em;
+}
+
+@media (min-width: 992px) {
+  .ah-quick {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    overflow: visible;
+    width: min(1180px, calc(100% - 48px));
+    max-width: none;
+    gap: 1rem;
+    padding: 1.5rem 0.25rem 0.5rem;
+  }
+
+  .ah-quick a {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    font-size: 0.95rem;
+  }
+
+  .ah-quick-icon {
+    width: 76px;
+    height: 76px;
+  }
+
+  .ah-quick-icon i {
+    font-size: 1.6rem;
+  }
 }
 
 /* ---- Suggested slider (one Technolife blog carousel) ---- */
@@ -2217,16 +2340,26 @@ body.menu-open .ah-bottom-nav {
   padding-top: 1.25rem;
   text-align: center;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: center;
+  gap: 0.65rem;
 }
 
 .ah-footer-years {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   letter-spacing: -0.01em;
   color: var(--ah-text);
+  white-space: nowrap;
+}
+
+.ah-footer-years::after {
+  content: "·";
+  margin-inline-start: 0.65rem;
+  color: var(--ah-text-muted);
+  font-weight: 400;
 }
 
 .ah-footer-bottom p {
@@ -2234,12 +2367,15 @@ body.menu-open .ah-bottom-nav {
   color: var(--ah-text-muted);
   font-size: 0.8rem;
   letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
 /* Desktop: columns always expanded, chevron hidden */
 @media (min-width: 992px) {
   .ah-footer {
     margin: 4rem 1.25rem 1.5rem;
+    background: #f4f7fb;
+    border-color: rgba(0, 0, 0, 0.04);
   }
 
   .ah-footer-inner {
@@ -2844,23 +2980,38 @@ body.menu-open .ah-bottom-nav {
   }
 
   .ah-quick {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 0.55rem 0.25rem;
-    padding: 1rem 0.65rem 1.15rem;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    max-width: none;
+    gap: 14px;
+    padding: 12px 16px 8px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
   }
 
   .ah-quick a {
-    font-size: 10.5px;
-    gap: 0.4rem;
+    flex: 0 0 78px;
+    width: 78px;
+    min-width: 78px;
+    max-width: 78px;
+    scroll-snap-align: start;
+    font-size: 11px;
+    gap: 0.35rem;
   }
 
   .ah-quick-icon {
-    width: 52px;
-    height: 52px;
+    width: 58px;
+    height: 58px;
   }
 
   .ah-quick-icon i {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
   }
 
   body.has-bottom-nav {
