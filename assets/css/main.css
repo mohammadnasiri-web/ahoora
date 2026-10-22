@@ -225,14 +225,15 @@ img {
 }
 
 .ah-techno-logo img {
-  height: 46px;
+  height: 56px;
   width: auto;
-  max-width: 210px;
+  max-width: 220px;
   object-fit: contain;
+  object-position: center;
   display: block;
+  image-rendering: auto;
 }
 
-.ah-techno-logo img,
 .ah-logo-drawer img,
 .ah-footer-logo img {
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
@@ -850,6 +851,7 @@ body.menu-open .ah-bottom-nav {
 }
 
 .ah-bottom-nav a {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -863,6 +865,26 @@ body.menu-open .ah-bottom-nav {
   border-radius: 14px;
   -webkit-tap-highlight-color: transparent;
   transition: color 0.2s ease, background 0.2s ease;
+}
+
+.ah-bottom-cart-count {
+  position: absolute;
+  top: 4px;
+  inset-inline-start: calc(50% + 6px);
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--ah-techno-accent, #0071e3);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+
+.ah-bottom-cart-count[hidden] {
+  display: none;
 }
 
 .ah-bottom-nav a:hover {
@@ -3495,7 +3517,7 @@ body.ah-auth-mode #accountRoot {
   }
 
   .ah-techno-top-inner {
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
     gap: 0.35rem;
     width: min(1200px, calc(100% - 0.85rem));
@@ -3515,8 +3537,8 @@ body.ah-auth-mode #accountRoot {
   }
 
   .ah-techno-logo img {
-    height: 30px;
-    max-width: 88px;
+    height: 44px;
+    max-width: 132px;
   }
 
   .ah-techno-search {
@@ -3539,9 +3561,7 @@ body.ah-auth-mode #accountRoot {
   }
 
   .ah-techno-user {
-    order: 0;
-    justify-self: end;
-    gap: 0;
+    display: none;
   }
 
   .ah-techno-cart {

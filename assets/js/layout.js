@@ -116,7 +116,7 @@ const AhooraLayout = (() => {
                 </a>
               </div>
               <form class="ah-techno-search" action="${resolveUrl("pages/shop.html")}" method="get" role="search">
-                <input type="search" name="q" placeholder="محصول، برند یا دسته مورد نظرتان را جستجو کنید" autocomplete="off">
+                <input type="search" name="q" placeholder="جستجو در کالای مورد نظر" autocomplete="off">
                 <button type="submit" aria-label="جستجو"><i class="bi bi-search"></i></button>
               </form>
               <div class="ah-techno-user">
@@ -135,7 +135,7 @@ const AhooraLayout = (() => {
 
       <nav class="ah-bottom-nav" aria-label="میانبر پایین">
         <a href="${resolveUrl("index.html")}" data-nav="home"><i class="bi bi-house"></i><span>خانه</span></a>
-        <a href="${resolveUrl("pages/blog.html")}" data-nav="blog"><i class="bi bi-journal-text"></i><span>وبلاگ</span></a>
+        <a href="${resolveUrl("pages/cart.html")}" data-nav="cart"><i class="bi bi-cart3"></i><span>سبد خرید</span><span class="ah-bottom-cart-count" id="ahBottomCartCount" hidden>۰</span></a>
         <a class="cta" href="${resolveUrl("pages/booking.html")}" data-nav="booking"><i class="bi bi-calendar-check"></i><span>رزرو</span></a>
         <a href="${resolveUrl("pages/services.html")}" data-nav="services"><i class="bi bi-tools"></i><span>خدمات</span></a>
         <a href="${resolveUrl("pages/account.html")}" data-nav="account"><i class="bi bi-person"></i><span>حساب</span></a>
@@ -219,7 +219,7 @@ const AhooraLayout = (() => {
       const key = a.dataset.nav;
       let active = false;
       if (key === "home" && (path.endsWith("/") || path.endsWith("/index.html"))) active = true;
-      if (key === "blog" && path.includes("/blog")) active = true;
+      if (key === "cart" && path.includes("/cart")) active = true;
       if (key === "booking" && path.includes("/booking")) active = true;
       if (key === "services" && path.includes("/services")) active = true;
       if (key === "account" && path.includes("/account")) active = true;
@@ -387,8 +387,14 @@ const AhooraLayout = (() => {
 
   function updateCartBadge() {
     const n = AhooraStore.cart.count();
+    const label = toPersianDigits(n);
     const techno = document.getElementById("ahTechnoCartCount");
-    if (techno) techno.textContent = toPersianDigits(n);
+    if (techno) techno.textContent = label;
+    const bottom = document.getElementById("ahBottomCartCount");
+    if (bottom) {
+      bottom.textContent = label;
+      bottom.hidden = n < 1;
+    }
   }
 
   function applyOrgSchema() {
