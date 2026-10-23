@@ -1828,7 +1828,7 @@ body.menu-open .ah-bottom-nav {
 }
 
 .ah-tile--dark .ah-tile-icon {
-  color: #64d2ff;
+  color: var(--ah-blue);
 }
 
 .ah-tile--blue .ah-tile-icon {
@@ -2832,6 +2832,104 @@ body.ah-auth-mode #accountRoot {
 .ah-book-price {
   font-weight: 600;
   font-size: 0.95rem;
+}
+
+.ah-shamsi {
+  position: relative;
+}
+
+.ah-shamsi-btn {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid var(--ah-border);
+  background: #fff;
+  color: var(--ah-text);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.ah-shamsi-btn i {
+  color: var(--ah-text-muted);
+}
+
+.ah-shamsi-pop {
+  position: absolute;
+  z-index: 20;
+  inset-inline: 0;
+  top: calc(100% + 0.35rem);
+  background: #fff;
+  border: 1px solid var(--ah-border);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  padding: 0.75rem;
+}
+
+.ah-shamsi-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.55rem;
+}
+
+.ah-shamsi-head strong {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.ah-shamsi-head button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--ah-page-bg);
+  color: var(--ah-text);
+  cursor: pointer;
+}
+
+.ah-shamsi-week,
+.ah-shamsi-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.2rem;
+  text-align: center;
+}
+
+.ah-shamsi-week {
+  margin-bottom: 0.35rem;
+  color: var(--ah-text-muted);
+  font-size: 0.75rem;
+}
+
+.ah-shamsi-grid button {
+  height: 36px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ah-text);
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.ah-shamsi-grid button:hover:not(:disabled) {
+  background: rgba(0, 113, 227, 0.08);
+}
+
+.ah-shamsi-grid button.is-on {
+  background: var(--ah-blue);
+  color: #fff;
+}
+
+.ah-shamsi-grid button:disabled {
+  color: #c5c5c8;
+  cursor: default;
 }
 
 .ah-book-more {

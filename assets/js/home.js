@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       if (sec.type === "tiles") {
         const tileMeta = [
-          { icon: "bi-geo-alt", theme: "dark" },
+          { icon: "bi-geo-alt-fill", theme: "dark" },
           { icon: "bi-tools", theme: "light" },
           { icon: "bi-headphones", theme: "blue" },
           { icon: "bi-bag-check", theme: "graphite" },

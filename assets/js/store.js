@@ -93,7 +93,70 @@ const AhooraStore = (() => {
             pChanged = true;
           }
         }
+        const priceFix = {
+          "p-iphone15": {
+            price: 108000000,
+            discountPrice: 98500000,
+            variants: { v1: 98500000, v2: 98500000, v3: 115000000 },
+          },
+          "p-airpods": { price: 28500000, discountPrice: null, variants: {} },
+        };
+        productsData.products.forEach((p) => {
+          const fix = priceFix[p.id];
+          if (!fix) return;
+          const stalePhone = p.id === "p-iphone15" && Number(p.price) <= 52000000;
+          const stalePods = p.id === "p-airpods" && Number(p.price) <= 12500000;
+          if (!stalePhone && !stalePods) return;
+          p.price = fix.price;
+          p.discountPrice = fix.discountPrice;
+          (p.variants || []).forEach((variant) => {
+            if (fix.variants[variant.id] != null) variant.price = fix.variants[variant.id];
+          });
+          pChanged = true;
+        });
+        const batteryProduct = productsData.products.find((p) => p.id === "p-battery-iphone");
+        if (batteryProduct) {
+          batteryProduct.specs = batteryProduct.specs || {};
+          if (batteryProduct.specs.warranty !== "۳ ماه") {
+            batteryProduct.specs.warranty = "۳ ماه";
+            pChanged = true;
+          }
+        }
         if (pChanged) set(KEYS.products, productsData);
+      }
+      const servicesData = get(KEYS.services);
+      if (servicesData) {
+        let sChanged = false;
+        if (servicesData.visitFee !== 1500000) {
+          servicesData.visitFee = 1500000;
+          sChanged = true;
+        }
+        (servicesData.services || []).forEach((svc) => {
+          if (svc.type === "onsite" && svc.visitFee !== 1500000) {
+            svc.visitFee = 1500000;
+            sChanged = true;
+          }
+          if (svc.category === "battery" && svc.warrantyMonths !== 3) {
+            svc.warrantyMonths = 3;
+            sChanged = true;
+          }
+          if (svc.category === "battery" && !String(svc.description || "").includes("۳ ماه")) {
+            svc.description =
+              svc.id === "svc-battery-iphone"
+                ? "تعویض باتری انواع آیفون از مدل ۷ تا ۱۸ در محل مشتری. گارانتی باتری ۳ ماه است."
+                : "تعویض باتری سامسونگ، شیائومی و سایر برندها در آدرس شما. گارانتی باتری ۳ ماه است.";
+            sChanged = true;
+          }
+        });
+        if (sChanged) set(KEYS.services, servicesData);
+      }
+      const contentData = get(KEYS.content);
+      if (contentData?.faqs) {
+        const faq = contentData.faqs.find((item) => item.id === "faq2");
+        if (faq && !String(faq.answer || "").includes("۳ ماه")) {
+          faq.answer = "باتری تعویض‌شده ۳ ماه گارانتی دارد. سایر قطعات اصلی هم با گارانتی کتبی ارائه می‌شوند.";
+          set(KEYS.content, contentData);
+        }
       }
       // migrate logo paths + Apple-style hero fields for older localStorage
       const siteData = get(KEYS.site);

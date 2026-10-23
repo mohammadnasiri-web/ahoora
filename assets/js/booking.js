@@ -26,7 +26,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   let mediaDataUrl = null;
 
   const dateInput = document.getElementById("date");
-  dateInput.min = AhooraUtils.todayISO();
+  const shamsi = bindShamsiDate(dateInput, () => {
+    if (state.step === 3) renderSlots();
+  });
 
   function nextOpenDay() {
     const schedule = servicesData.schedule;
@@ -37,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return AhooraUtils.todayISO();
   }
 
-  dateInput.value = nextOpenDay();
+  shamsi.setISO(nextOpenDay());
 
   const brandForModel = (model) => brands.find((brand) => brand.list.includes(model));
 
@@ -137,11 +139,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("pickedDevice").textContent = brand ? `${brand.title} · ${state.model}` : state.model;
   }
 
+  function visitFor(svc) {
+    if (!svc || svc.type !== "onsite") return 0;
+    const fee = svc.visitFee ?? servicesData.visitFee;
+    return Number(fee == null ? 1500000 : fee);
+  }
+
   function updatePrice() {
-    const price = priceFor(currentService(), state.model);
+    const svc = currentService();
+    const part = priceFor(svc, state.model);
+    const visit = visitFor(svc);
+    const total = part + visit;
     const box = document.getElementById("priceBox");
-    box.textContent = price ? AhooraUtils.formatPrice(price) : "—";
-    box.dataset.price = price;
+    const warranty = document.getElementById("warrantyNote");
+    box.dataset.price = total;
+    if (warranty) {
+      warranty.hidden = svc?.category !== "battery";
+      if (svc?.warrantyMonths) warranty.textContent = `گارانتی باتری: ${svc.warrantyMonths} ماه`;
+    }
+    if (!part) {
+      box.textContent = "—";
+      return;
+    }
+    box.innerHTML = visit
+      ? `خدمت ${AhooraUtils.formatPrice(part)} · ایاب و ذهاب ${AhooraUtils.formatPrice(visit)} · جمع ${AhooraUtils.formatPrice(total)}`
+      : AhooraUtils.formatPrice(part);
   }
 
   function toggleAddress() {
@@ -237,7 +259,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  dateInput.onchange = renderSlots;
+  dateInput.addEventListener("change", () => {
+    if (state.step === 3) renderSlots();
+  });
 
   document.getElementById("media").onchange = (event) => {
     const file = event.target.files?.[0];
@@ -363,12 +387,98 @@ document.addEventListener("DOMContentLoaded", async () => {
     state.serviceId = "";
     selectedSlot = null;
     mediaDataUrl = null;
-    dateInput.value = nextOpenDay();
+    shamsi.setISO(nextOpenDay());
     renderBrands();
     renderModels();
     showStep(1);
     AhooraUtils.toast("درخواست ثبت شد · منتظر تأیید مدیریت");
   };
+
+  function bindShamsiDate(input, onChange) {
+    const toggle = document.getElementById("shamsiToggle");
+    const label = document.getElementById("shamsiLabel");
+    const pop = document.getElementById("shamsiPop");
+    const title = document.getElementById("shamsiTitle");
+    const grid = document.getElementById("shamsiGrid");
+    const minISO = AhooraUtils.todayISO();
+    let view = AhooraUtils.toJalali(minISO);
+
+    const isoOf = (jy, jm, jd) => AhooraUtils.fromJalali(jy, jm, jd);
+    const selected = () => input.value;
+
+    function paintLabel() {
+      label.textContent = input.value ? AhooraUtils.formatJalali(input.value) : "انتخاب تاریخ";
+    }
+
+    function shiftMonth(delta) {
+      let jm = view.jm + delta;
+      let jy = view.jy;
+      if (jm < 1) {
+        jm = 12;
+        jy -= 1;
+      }
+      if (jm > 12) {
+        jm = 1;
+        jy += 1;
+      }
+      view = { jy, jm, jd: 1 };
+      render();
+    }
+
+    function render() {
+      title.textContent = `${AhooraUtils.jalaliMonthName(view.jm)} ${AhooraUtils.toFaDigits(view.jy)}`;
+      const count = AhooraUtils.jalaliMonthLength(view.jy, view.jm);
+      const firstIso = isoOf(view.jy, view.jm, 1);
+      const first = new Date(`${firstIso}T12:00:00`);
+      const lead = (first.getDay() + 1) % 7;
+      const cells = [];
+      for (let i = 0; i < lead; i += 1) cells.push("<span></span>");
+      for (let day = 1; day <= count; day += 1) {
+        const iso = isoOf(view.jy, view.jm, day);
+        const closed = !AhooraUtils.isWorkingDay(iso, servicesData.schedule);
+        const past = iso < minISO;
+        const on = iso === selected();
+        cells.push(
+          `<button type="button" data-iso="${iso}" class="${on ? "is-on" : ""}" ${past || closed ? "disabled" : ""}>${AhooraUtils.toFaDigits(day)}</button>`
+        );
+      }
+      grid.innerHTML = cells.join("");
+    }
+
+    function open(show) {
+      pop.hidden = !show;
+      toggle.setAttribute("aria-expanded", show ? "true" : "false");
+      if (show) {
+        const current = AhooraUtils.toJalali(selected() || minISO);
+        view = { jy: current.jy, jm: current.jm, jd: 1 };
+        render();
+      }
+    }
+
+    function setISO(iso) {
+      input.value = iso;
+      paintLabel();
+      if (!pop.hidden) render();
+      input.dispatchEvent(new Event("change"));
+      if (onChange) onChange();
+    }
+
+    toggle.addEventListener("click", () => open(pop.hidden));
+    document.getElementById("shamsiPrev").addEventListener("click", () => shiftMonth(-1));
+    document.getElementById("shamsiNext").addEventListener("click", () => shiftMonth(1));
+    grid.addEventListener("click", (event) => {
+      const btn = event.target.closest("[data-iso]");
+      if (!btn || btn.disabled) return;
+      setISO(btn.dataset.iso);
+      open(false);
+    });
+    document.addEventListener("click", (event) => {
+      if (!document.getElementById("shamsiDate").contains(event.target)) open(false);
+    });
+
+    paintLabel();
+    return { setISO };
+  }
 
   AhooraUtils.injectSchema({
     "@context": "https://schema.org",

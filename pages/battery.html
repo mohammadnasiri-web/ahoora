@@ -21,7 +21,7 @@
       <ul class="ah-bat-facts">
         <li><i class="bi bi-geo-alt"></i>تعویض در آدرس شما</li>
         <li><i class="bi bi-patch-check"></i>باتری سازگار با مدل</li>
-        <li><i class="bi bi-shield-check"></i>گارانتی کتبی</li>
+        <li><i class="bi bi-shield-check"></i>گارانتی ۳ ماهه</li>
       </ul>
     </header>
     <div class="ah-bat-layout">
@@ -66,7 +66,7 @@
       await AhooraLayout.boot({
         seo: {
           title: "تعویض باتری | اهورا تل",
-          description: "تعویض باتری گوشی در محل، با قیمت بر اساس مدل و گارانتی کتبی",
+          description: "تعویض باتری گوشی در محل، با قیمت بر اساس مدل و گارانتی ۳ ماهه",
         },
       });
 
@@ -122,17 +122,18 @@
         }
         const price = priceOf(svc, model);
         const exact = exactPrice(svc, model);
+        const visit = Number(svc.visitFee ?? data.visitFee ?? 1500000);
         const href = `booking.html?service=${encodeURIComponent(svc.id)}&group=${encodeURIComponent(brand.group)}&model=${encodeURIComponent(model)}`;
         quote.innerHTML = `
           <div class="ah-bat-mark" aria-hidden="true"><i class="bi bi-battery-charging"></i></div>
           <p class="ah-bat-model">باتری ${model}</p>
           <p class="ah-bat-price">${exact ? "" : "از "}${AhooraUtils.formatPrice(price)}</p>
-          <p class="ah-bat-note">${exact ? "قیمت همین مدل" : "قیمت پایه این برند"} · تعویض در آدرس شما، با تست سلامت بعد از کار.</p>
+          <p class="ah-bat-note">${exact ? "قیمت همین مدل" : "قیمت پایه این برند"} · ایاب و ذهاب ${AhooraUtils.formatPrice(visit)} · گارانتی ${svc.warrantyMonths || 3} ماهه</p>
           <ul class="ah-bat-meta">
             <li><small>نوع سرویس</small><strong>در محل</strong></li>
             <li><small>زمان تقریبی</small><strong>حدود ${svc.durationMinutes} دقیقه</strong></li>
-            <li><small>ظرفیت امروز</small><strong>${svc.dailyCapacity} نوبت</strong></li>
-            <li><small>بعد از تعویض</small><strong>گارانتی کتبی</strong></li>
+            <li><small>ایاب و ذهاب</small><strong>${AhooraUtils.formatPrice(visit)}</strong></li>
+            <li><small>بعد از تعویض</small><strong>گارانتی ${svc.warrantyMonths || 3} ماهه</strong></li>
           </ul>
           <a class="ah-bat-cta" href="${href}">رزرو تعویض باتری</a>`;
 

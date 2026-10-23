@@ -46,8 +46,23 @@
         <p class="ah-book-picked" id="pickedJob"></p>
         <div class="ah-book-fields">
           <div>
-            <label for="date">تاریخ</label>
-            <input class="form-control" type="date" id="date" name="date" required>
+            <label for="shamsiToggle">تاریخ</label>
+            <div class="ah-shamsi" id="shamsiDate">
+              <button type="button" class="ah-shamsi-btn" id="shamsiToggle" aria-haspopup="dialog" aria-expanded="false">
+                <span id="shamsiLabel">انتخاب تاریخ</span>
+                <i class="bi bi-calendar3" aria-hidden="true"></i>
+              </button>
+              <input type="hidden" id="date" name="date" required>
+              <div class="ah-shamsi-pop" id="shamsiPop" hidden role="dialog" aria-label="تقویم شمسی">
+                <div class="ah-shamsi-head">
+                  <button type="button" id="shamsiPrev" aria-label="ماه قبل"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+                  <strong id="shamsiTitle"></strong>
+                  <button type="button" id="shamsiNext" aria-label="ماه بعد"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+                </div>
+                <div class="ah-shamsi-week" aria-hidden="true"><span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span></div>
+                <div class="ah-shamsi-grid" id="shamsiGrid"></div>
+              </div>
+            </div>
           </div>
           <div>
             <label>ساعت</label>
@@ -86,6 +101,7 @@
           </div>
           <p class="ah-book-note" id="workshopNote" hidden>این خدمت در کارگاه انجام می‌شود و نیازی به آدرس نیست.</p>
           <div class="ah-book-price" id="priceBox">—</div>
+          <p class="ah-book-note" id="warrantyNote" hidden>گارانتی باتری: ۳ ماه</p>
           <details class="ah-book-more">
             <summary>توضیح، عکس یا کد تخفیف، اگر لازم است</summary>
             <label for="bookNotes">توضیح</label>

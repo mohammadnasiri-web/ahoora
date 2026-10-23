@@ -88,8 +88,8 @@
       "brand": "Apple",
       "model": "iPhone 15",
       "categoryId": "phones",
-      "price": 52000000,
-      "discountPrice": 50500000,
+      "price": 108000000,
+      "discountPrice": 98500000,
       "stock": 8,
       "active": true,
       "featured": true,
@@ -109,21 +109,21 @@
           "id": "v1",
           "color": "مشکی",
           "storage": "128GB",
-          "price": 50500000,
+          "price": 98500000,
           "stock": 3
         },
         {
           "id": "v2",
           "color": "آبی",
           "storage": "128GB",
-          "price": 50500000,
+          "price": 98500000,
           "stock": 2
         },
         {
           "id": "v3",
           "color": "مشکی",
           "storage": "256GB",
-          "price": 56500000,
+          "price": 115000000,
           "stock": 3
         }
       ],
@@ -141,7 +141,7 @@
       "brand": "Apple",
       "model": "AirPods Pro",
       "categoryId": "airpods",
-      "price": 12500000,
+      "price": 28500000,
       "discountPrice": null,
       "stock": 15,
       "active": true,
@@ -289,7 +289,8 @@
       ],
       "description": "باتری جایگزین با ظرفیت استاندارد برای آیفون ۱۳.",
       "specs": {
-        "capacity": "۳۲۴۰ mAh"
+        "capacity": "۳۲۴۰ mAh",
+        "warranty": "۳ ماه"
       },
       "variants": [],
       "seo": {

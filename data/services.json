@@ -24,7 +24,9 @@
       "basePrice": 1850000,
       "durationMinutes": 45,
       "dailyCapacity": 12,
-      "description": "تعویض باتری انواع آیفون از مدل ۷ تا ۱۸ در محل مشتری با قطعات گارانتی‌دار.",
+      "description": "تعویض باتری انواع آیفون از مدل ۷ تا ۱۸ در محل مشتری. گارانتی باتری ۳ ماه است.",
+      "visitFee": 1500000,
+      "warrantyMonths": 3,
       "priceByModel": {
         "iPhone 7": 1200000,
         "iPhone 8": 1250000,
@@ -55,7 +57,9 @@
       "basePrice": 950000,
       "durationMinutes": 50,
       "dailyCapacity": 8,
-      "description": "تعویض باتری سامسونگ، شیائومی و سایر برندها در آدرس شما.",
+      "description": "تعویض باتری سامسونگ، شیائومی و سایر برندها در آدرس شما. گارانتی باتری ۳ ماه است.",
+      "visitFee": 1500000,
+      "warrantyMonths": 3,
       "priceByModel": {},
       "requiresAddress": true,
       "requiresMedia": false,
@@ -260,6 +264,7 @@
       "seo": { "title": "نصب نرم‌افزار گوشی", "description": "به‌روزرسانی و تنظیمات" }
     }
   ],
+  "visitFee": 1500000,
   "schedule": {
     "workingDays": [0, 1, 2, 3, 4, 6],
     "holidays": ["2026-10-15"],
