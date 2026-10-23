@@ -2883,16 +2883,34 @@ body.ah-auth-mode #accountRoot {
   font-weight: 600;
 }
 
+.ah-bill-check {
+  border: 0;
+  background: var(--ah-blue);
+  color: #fff;
+  border-radius: 10px;
+  min-height: 36px;
+  padding: 0 0.75rem;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
 .ah-bill-hint {
   margin: -0.2rem 0 0;
   min-height: 0;
   color: #c93434;
   font-size: 0.75rem;
-  text-align: left;
+  text-align: right;
 }
 
 .ah-bill-hint:empty {
   display: none;
+}
+
+.ah-bill-hint.is-ok {
+  color: #00a049;
 }
 
 .ah-bill-total {

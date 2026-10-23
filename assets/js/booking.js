@@ -145,6 +145,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     return Number(fee == null ? 1500000 : fee);
   }
 
+  let couponChecked = false;
+
   function quoteDiscount(amount, code) {
     const couponCode = String(code || "").trim();
     if (!couponCode) return { discount: 0, couponCode: "", invalid: false };
@@ -167,7 +169,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const total = part + visit;
     const box = document.getElementById("priceBox");
     const warranty = document.getElementById("warrantyNote");
-    const quote = quoteDiscount(total, document.getElementById("coupon")?.value);
+    const typed = document.getElementById("coupon")?.value || "";
+    const quote = couponChecked ? quoteDiscount(total, typed) : { discount: 0, couponCode: "", invalid: false };
     const payable = Math.max(0, total - quote.discount);
     box.dataset.price = total;
     if (warranty) {
@@ -181,7 +184,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     const hint = document.getElementById("billCouponHint");
     off.hidden = !quote.discount;
     off.textContent = quote.discount ? AhooraUtils.formatPrice(quote.discount) : "";
-    hint.textContent = quote.invalid ? "کد نامعتبر است" : "";
+    if (couponChecked && String(typed).trim() && quote.discount) {
+      hint.textContent = "کد تخفیف درست است";
+      hint.classList.add("is-ok");
+    } else if (couponChecked && String(typed).trim()) {
+      hint.textContent = "کد تخفیف نادرست است";
+      hint.classList.remove("is-ok");
+    } else {
+      hint.textContent = "";
+      hint.classList.remove("is-ok");
+    }
     document.getElementById("billPay").textContent = part ? AhooraUtils.formatPrice(payable) : "—";
   }
 
@@ -282,7 +294,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (state.step === 3) renderSlots();
   });
 
-  document.getElementById("coupon").addEventListener("input", updatePrice);
+  document.getElementById("coupon").addEventListener("input", () => {
+    couponChecked = false;
+    updatePrice();
+  });
+
+  document.getElementById("couponCheck").addEventListener("click", () => {
+    const code = document.getElementById("coupon").value.trim();
+    if (!code) {
+      couponChecked = false;
+      updatePrice();
+      AhooraUtils.toast("کد تخفیف را بنویسید", "error");
+      return;
+    }
+    couponChecked = true;
+    updatePrice();
+    const total = Number(document.getElementById("priceBox").dataset.price || 0);
+    const quote = quoteDiscount(total, code);
+    if (quote.invalid || !quote.discount) AhooraUtils.toast("کد تخفیف نادرست است", "error");
+    else AhooraUtils.toast("کد تخفیف درست است");
+  });
 
   document.getElementById("media").onchange = (event) => {
     const file = event.target.files?.[0];
@@ -397,6 +428,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>`;
     result.scrollIntoView({ behavior: "smooth", block: "start" });
     event.target.reset();
+    couponChecked = false;
     state.brandId = "";
     state.model = "";
     state.serviceId = "";
