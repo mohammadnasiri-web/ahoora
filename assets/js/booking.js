@@ -145,6 +145,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     return Number(fee == null ? 1500000 : fee);
   }
 
+  function quoteDiscount(amount, code) {
+    const couponCode = String(code || "").trim();
+    if (!couponCode) return { discount: 0, couponCode: "", invalid: false };
+    const coupons = AhooraStore.content.get().coupons || [];
+    const coupon = coupons.find((item) => item.active && item.code.toUpperCase() === couponCode.toUpperCase());
+    if (!coupon || (coupon.appliesTo !== "all" && coupon.appliesTo !== "services")) {
+      return { discount: 0, couponCode, invalid: true };
+    }
+    const discount = Math.min(
+      coupon.type === "percent" ? Math.round((amount * coupon.value) / 100) : Number(coupon.value) || 0,
+      amount
+    );
+    return { discount, couponCode: coupon.code, invalid: false };
+  }
+
   function updatePrice() {
     const svc = currentService();
     const part = priceFor(svc, state.model);
@@ -152,18 +167,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     const total = part + visit;
     const box = document.getElementById("priceBox");
     const warranty = document.getElementById("warrantyNote");
+    const quote = quoteDiscount(total, document.getElementById("coupon")?.value);
+    const payable = Math.max(0, total - quote.discount);
     box.dataset.price = total;
     if (warranty) {
       warranty.hidden = svc?.category !== "battery";
-      if (svc?.warrantyMonths) warranty.textContent = `گارانتی باتری: ${svc.warrantyMonths} ماه`;
+      if (svc?.warrantyMonths) warranty.textContent = `گارانتی باتری: ${AhooraUtils.toFaDigits(svc.warrantyMonths)} ماه`;
     }
-    if (!part) {
-      box.textContent = "—";
-      return;
-    }
-    box.innerHTML = visit
-      ? `خدمت ${AhooraUtils.formatPrice(part)} · ایاب و ذهاب ${AhooraUtils.formatPrice(visit)} · جمع ${AhooraUtils.formatPrice(total)}`
-      : AhooraUtils.formatPrice(part);
+    document.getElementById("billGoods").textContent = part ? AhooraUtils.formatPrice(part) : "—";
+    document.getElementById("billVisitRow").hidden = !visit;
+    document.getElementById("billVisit").textContent = visit ? AhooraUtils.formatPrice(visit) : "";
+    const off = document.getElementById("billOff");
+    const hint = document.getElementById("billCouponHint");
+    off.hidden = !quote.discount;
+    off.textContent = quote.discount ? AhooraUtils.formatPrice(quote.discount) : "";
+    hint.textContent = quote.invalid ? "کد نامعتبر است" : "";
+    document.getElementById("billPay").textContent = part ? AhooraUtils.formatPrice(payable) : "—";
   }
 
   function toggleAddress() {
@@ -193,7 +212,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     wrap.innerHTML = (schedule.slots || [])
       .map((slot) => {
         const ok = AhooraStore.capacity.canBook(svc.id, date, slot);
-        return `<button type="button" class="ah-slot ${ok ? "" : "disabled"}" data-slot="${slot}" ${ok ? "" : "disabled"}>${slot}</button>`;
+        return `<button type="button" class="ah-slot ${ok ? "" : "disabled"}" data-slot="${slot}" ${ok ? "" : "disabled"}>${AhooraUtils.toFaDigits(slot)}</button>`;
       })
       .join("");
     wrap.querySelectorAll(".ah-slot:not(.disabled)").forEach((btn) => {
@@ -263,6 +282,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (state.step === 3) renderSlots();
   });
 
+  document.getElementById("coupon").addEventListener("input", updatePrice);
+
   document.getElementById("media").onchange = (event) => {
     const file = event.target.files?.[0];
     if (!file) {
@@ -317,16 +338,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     let amount = Number(document.getElementById("priceBox").dataset.price || svc.basePrice);
-    const couponCode = String(fd.get("coupon") || "").trim();
-    let discount = 0;
-    if (couponCode) {
-      const coupons = AhooraStore.content.get().coupons || [];
-      const coupon = coupons.find((item) => item.active && item.code.toUpperCase() === couponCode.toUpperCase());
-      if (coupon && (coupon.appliesTo === "all" || coupon.appliesTo === "services")) {
-        discount = coupon.type === "percent" ? Math.round((amount * coupon.value) / 100) : coupon.value;
-        amount = Math.max(0, amount - discount);
-      }
-    }
+    const quote = quoteDiscount(amount, fd.get("coupon"));
+    const couponCode = quote.invalid ? "" : quote.couponCode;
+    const discount = quote.discount;
+    amount = Math.max(0, amount - discount);
 
     const reserved = AhooraStore.capacity.reserve(svc.id, date, slot);
     if (!reserved) return AhooraUtils.toast("ظرفیت همزمان پر شد؛ زمان دیگری انتخاب کنید", "error");

@@ -100,16 +100,35 @@
             </div>
           </div>
           <p class="ah-book-note" id="workshopNote" hidden>این خدمت در کارگاه انجام می‌شود و نیازی به آدرس نیست.</p>
-          <div class="ah-book-price" id="priceBox">—</div>
+          <div class="ah-bill" id="priceBox">
+            <div class="ah-bill-row">
+              <span>قیمت کالا</span>
+              <strong id="billGoods">—</strong>
+            </div>
+            <div class="ah-bill-row" id="billVisitRow">
+              <span>هزینه ایاب و ذهاب و اجرت</span>
+              <strong id="billVisit">—</strong>
+            </div>
+            <div class="ah-bill-row">
+              <label for="coupon">کد تخفیف</label>
+              <div class="ah-bill-code">
+                <strong id="billOff" hidden></strong>
+                <input class="form-control" name="coupon" id="coupon" placeholder="کد" autocomplete="off">
+              </div>
+            </div>
+            <p class="ah-bill-hint" id="billCouponHint"></p>
+            <div class="ah-bill-row ah-bill-total">
+              <span>مبلغ قابل پرداخت</span>
+              <strong id="billPay">—</strong>
+            </div>
+          </div>
           <p class="ah-book-note" id="warrantyNote" hidden>گارانتی باتری: ۳ ماه</p>
           <details class="ah-book-more">
-            <summary>توضیح، عکس یا کد تخفیف، اگر لازم است</summary>
+            <summary>توضیح یا عکس، اگر لازم است</summary>
             <label for="bookNotes">توضیح</label>
             <textarea class="form-control" id="bookNotes" name="notes" rows="2"></textarea>
             <label for="media">عکس یا ویدئو</label>
             <input class="form-control" type="file" id="media" accept="image/*,video/*">
-            <label for="coupon">کد تخفیف</label>
-            <input class="form-control" name="coupon" id="coupon">
           </details>
         </div>
       </section>

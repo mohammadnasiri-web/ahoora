@@ -2613,6 +2613,7 @@ body.ah-auth-mode #accountRoot {
 }
 
 .ah-slot {
+  direction: ltr;
   border: 1px solid var(--ah-border);
   background: #fff;
   border-radius: 12px;
@@ -2829,9 +2830,82 @@ body.ah-auth-mode #accountRoot {
   font-size: 0.78rem;
 }
 
-.ah-book-price {
+.ah-bill {
+  margin-top: 0.85rem;
+  border-top: 1px solid var(--ah-border);
+}
+
+.ah-bill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: nowrap;
+  padding: 0.72rem 0;
+  border-bottom: 1px solid #ededf0;
+  font-size: 0.84rem;
+  color: #3c3c43;
+}
+
+.ah-bill-row > span,
+.ah-bill-row > label {
+  display: inline;
+  margin: 0;
+  font-size: inherit;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.ah-bill-row strong {
   font-weight: 600;
-  font-size: 0.95rem;
+  white-space: nowrap;
+  color: var(--ah-text);
+}
+
+.ah-bill-code {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.ah-bill-code .form-control {
+  width: 7.2rem;
+  min-height: 36px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+.ah-bill-code #billOff {
+  color: #00a049;
+  font-weight: 600;
+}
+
+.ah-bill-hint {
+  margin: -0.2rem 0 0;
+  min-height: 0;
+  color: #c93434;
+  font-size: 0.75rem;
+  text-align: left;
+}
+
+.ah-bill-hint:empty {
+  display: none;
+}
+
+.ah-bill-total {
+  border-bottom: 0;
+  padding-bottom: 0.2rem;
+  color: var(--ah-text);
+  font-weight: 700;
+}
+
+.ah-bill-total span,
+.ah-bill-total strong {
+  font-weight: 700;
+  color: var(--ah-text);
 }
 
 .ah-shamsi {
