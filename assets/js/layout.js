@@ -298,7 +298,7 @@ const AhooraLayout = (() => {
         <div class="ah-footer-inner">
           <div class="ah-footer-top">
             <a class="ah-footer-logo" href="${resolveUrl("index.html")}">
-              <img src="${resolveUrl(s.logo || "assets/img/logo-ahura-tell.png")}" alt="${s.name || ""}" width="240" height="86" loading="lazy" decoding="async">
+              <img src="${resolveUrl("assets/img/logo-ahura-footer.png")}" alt="${s.name || ""}" width="652" height="202" loading="lazy" decoding="async">
             </a>
             <button type="button" class="ah-footer-topbtn" id="ahFooterTopBtn" aria-label="بازگشت به بالا">
               <i class="bi bi-chevron-up" aria-hidden="true"></i>
@@ -365,7 +365,8 @@ const AhooraLayout = (() => {
     const syncFooterColsForViewport = () => {
       const desktop = window.matchMedia("(min-width: 992px)").matches;
       host.querySelectorAll(".ah-footer-col").forEach((col) => {
-        setFooterColOpen(col, desktop);
+        const keepOpen = desktop || col.classList.contains("ah-footer-contact-acc");
+        setFooterColOpen(col, keepOpen);
       });
     };
 

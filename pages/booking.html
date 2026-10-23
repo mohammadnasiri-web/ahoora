@@ -15,77 +15,99 @@
   <div id="ah-header"></div>
   <header class="ah-page-hero">
     <div class="container-ah">
-      <h1>رزرو آنلاین</h1>
-      <p>انتخاب خدمت، زمان و پرداخت — ظرفیت روزانه مستقل برای هر خدمت</p>
+      <h1>ثبت درخواست</h1>
+      <p>اول مدل گوشی، بعد نوع کار، و در آخر اطلاعات شما.</p>
     </div>
   </header>
-  <main class="container-ah py-4">
-    <form class="ah-form-card" id="bookingForm" style="max-width:720px;margin:auto">
-      <div class="row g-3">
-        <div class="col-12">
-          <label>نوع خدمت</label>
-          <select class="form-select" id="serviceId" name="serviceId" required></select>
+  <main class="ah-book">
+    <form class="ah-book-card" id="bookingForm">
+      <ol class="ah-book-progress" id="bookProgress">
+        <li><button type="button" data-goto="1">گوشی</button></li>
+        <li><button type="button" data-goto="2">خدمات</button></li>
+        <li><button type="button" data-goto="3">اطلاعات</button></li>
+      </ol>
+
+      <section data-step="1">
+        <h2 class="ah-book-lead">برند گوشی</h2>
+        <div class="ah-book-chips" id="brandRow"></div>
+        <div id="modelBlock" hidden>
+          <h2 class="ah-book-lead">مدل</h2>
+          <div class="ah-book-chips" id="modelRow"></div>
         </div>
-        <div class="col-md-6">
-          <label>برند / گروه مدل</label>
-          <select class="form-select" id="modelGroup">
-            <option value="iphone">آیفون</option>
-            <option value="other">سایر برندها</option>
-          </select>
-        </div>
-        <div class="col-md-6">
-          <label>مدل گوشی *</label>
-          <select class="form-select" id="deviceModel" name="deviceModel" required></select>
-        </div>
-        <div class="col-md-6">
-          <label>تاریخ *</label>
-          <input class="form-control" type="date" id="date" name="date" required>
-        </div>
-        <div class="col-md-6">
-          <label>قیمت سرویس</label>
-          <div class="form-control bg-white" id="priceBox">—</div>
-        </div>
-        <div class="col-12">
-          <label>ساعت قابل رزرو</label>
-          <div class="ah-slots" id="slots"></div>
-          <input type="hidden" name="slot" id="slot" required>
-          <div class="small text-secondary mt-1" id="capInfo"></div>
-        </div>
-        <div class="col-md-6">
-          <label>نام و نام خانوادگی *</label>
-          <input class="form-control" name="name" required>
-        </div>
-        <div class="col-md-6">
-          <label>شماره تماس *</label>
-          <input class="form-control" name="phone" required placeholder="09xxxxxxxxx" dir="ltr">
-        </div>
-        <div id="addressFields" class="col-12" hidden>
-          <div class="row g-3">
-            <div class="col-12"><label>نشانی کامل *</label><input class="form-control" name="street" id="street" placeholder="خیابان، کوچه، ..."></div>
-            <div class="col-md-4"><label>پلاک *</label><input class="form-control" name="plaque" id="plaque"></div>
-            <div class="col-md-4"><label>واحد / طبقه</label><input class="form-control" name="unit" id="unit" placeholder="طبقه ۲، واحد ۴"></div>
-            <div class="col-md-4"><label>کد پستی</label><input class="form-control" name="postal" dir="ltr"></div>
+      </section>
+
+      <section data-step="2" hidden>
+        <p class="ah-book-picked" id="pickedDevice"></p>
+        <h2 class="ah-book-lead">چه کاری لازم است؟</h2>
+        <div class="ah-book-services" id="serviceRow"></div>
+      </section>
+
+      <section data-step="3" hidden>
+        <p class="ah-book-picked" id="pickedJob"></p>
+        <div class="ah-book-fields">
+          <div>
+            <label for="date">تاریخ</label>
+            <input class="form-control" type="date" id="date" name="date" required>
           </div>
+          <div>
+            <label>ساعت</label>
+            <div class="ah-slots" id="slots"></div>
+            <input type="hidden" name="slot" id="slot">
+            <div class="ah-book-note" id="capInfo"></div>
+          </div>
+          <div class="ah-book-split">
+            <div>
+              <label for="bookName">نام و نام خانوادگی</label>
+              <input class="form-control" id="bookName" name="name" required autocomplete="name">
+            </div>
+            <div>
+              <label for="bookPhone">شماره تماس</label>
+              <input class="form-control" id="bookPhone" name="phone" required inputmode="tel" placeholder="09xxxxxxxxx" dir="ltr" autocomplete="tel">
+            </div>
+          </div>
+          <div id="addressFields" hidden>
+            <p class="ah-book-note">این کار در آدرس شما انجام می‌شود.</p>
+            <label for="street">نشانی</label>
+            <input class="form-control" name="street" id="street" placeholder="خیابان، کوچه" autocomplete="street-address">
+            <div class="ah-book-split ah-book-split--3">
+              <div>
+                <label for="plaque">پلاک</label>
+                <input class="form-control" name="plaque" id="plaque">
+              </div>
+              <div>
+                <label for="unit">واحد</label>
+                <input class="form-control" name="unit" id="unit" placeholder="طبقه ۲">
+              </div>
+              <div>
+                <label for="postal">کد پستی</label>
+                <input class="form-control" name="postal" id="postal" dir="ltr" inputmode="numeric">
+              </div>
+            </div>
+          </div>
+          <p class="ah-book-note" id="workshopNote" hidden>این خدمت در کارگاه انجام می‌شود و نیازی به آدرس نیست.</p>
+          <div class="ah-book-price" id="priceBox">—</div>
+          <details class="ah-book-more">
+            <summary>توضیح، عکس یا کد تخفیف، اگر لازم است</summary>
+            <label for="bookNotes">توضیح</label>
+            <textarea class="form-control" id="bookNotes" name="notes" rows="2"></textarea>
+            <label for="media">عکس یا ویدئو</label>
+            <input class="form-control" type="file" id="media" accept="image/*,video/*">
+            <label for="coupon">کد تخفیف</label>
+            <input class="form-control" name="coupon" id="coupon">
+          </details>
         </div>
-        <div class="col-12">
-          <label>توضیحات تکمیلی</label>
-          <textarea class="form-control" name="notes" rows="2"></textarea>
-        </div>
-        <div class="col-12">
-          <label>آپلود عکس یا ویدئو (اختیاری)</label>
-          <input class="form-control" type="file" id="media" accept="image/*,video/*">
-          <div class="small text-secondary">فایل به‌صورت محلی در مرورگر نگه‌داری می‌شود (پیش‌نمایش فرانت).</div>
-        </div>
-        <div class="col-md-6">
-          <label>کد تخفیف</label>
-          <input class="form-control" name="coupon" id="coupon">
-        </div>
-        <div class="col-12">
-          <button class="ah-btn ah-btn-primary w-100" type="submit">ثبت درخواست برای تأیید</button>
-        </div>
+      </section>
+
+      <input type="hidden" name="serviceId" id="serviceId">
+      <input type="hidden" name="deviceModel" id="deviceModel">
+
+      <div class="ah-book-nav">
+        <button class="ah-btn ah-btn-ghost" type="button" id="bookBack" hidden>مرحله قبل</button>
+        <button class="ah-btn ah-btn-primary" type="button" id="bookNext">ادامه</button>
+        <button class="ah-btn ah-btn-primary" type="submit" id="bookSubmit" hidden>ثبت درخواست</button>
       </div>
     </form>
-    <div id="bookingResult" class="mt-4" style="max-width:720px;margin:auto"></div>
+    <div id="bookingResult"></div>
   </main>
   <div id="ah-footer"></div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

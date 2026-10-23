@@ -234,8 +234,7 @@ img {
   image-rendering: auto;
 }
 
-.ah-logo-drawer img,
-.ah-footer-logo img {
+.ah-logo-drawer img {
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
 }
 
@@ -1739,11 +1738,11 @@ body.menu-open .ah-bottom-nav {
   align-items: center;
   text-align: center;
   overflow: hidden;
-  background: var(--ah-elevated);
+  background: rgba(255, 255, 255, 0.5);
   color: var(--ah-text);
   border: 1px solid var(--ah-border);
   transition: transform 0.4s var(--ah-ease), border-color 0.3s ease, box-shadow 0.35s ease;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+  box-shadow: none;
 }
 
 .ah-tile:hover {
@@ -1824,7 +1823,7 @@ body.menu-open .ah-bottom-nav {
 .ah-tile--light,
 .ah-tile--blue,
 .ah-tile--graphite {
-  background: var(--ah-elevated);
+  background: rgba(255, 255, 255, 0.5);
   color: var(--ah-text);
 }
 
@@ -2641,18 +2640,262 @@ body.ah-auth-mode #accountRoot {
   text-decoration: line-through;
 }
 
+/* Booking wizard: device, then service, then contact */
+.ah-book {
+  width: min(720px, calc(100% - 1.5rem));
+  margin: 0 auto 2.5rem;
+}
+
+.ah-book-card {
+  background: #fff;
+  border: 1px solid var(--ah-border);
+  border-radius: 24px;
+  padding: 1.15rem 1rem 1rem;
+}
+
+.ah-book-progress {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.45rem;
+  list-style: none;
+  margin: 0 0 1.15rem;
+  padding: 0;
+}
+
+.ah-book-progress button {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ah-text-muted);
+  cursor: pointer;
+}
+
+.ah-book-progress button::before {
+  content: "";
+  display: block;
+  height: 4px;
+  border-radius: 99px;
+  background: #e4e4e8;
+  margin-bottom: 0.4rem;
+}
+
+.ah-book-progress .is-on button,
+.ah-book-progress .is-done button {
+  color: var(--ah-text);
+  font-weight: 600;
+}
+
+.ah-book-progress .is-on button::before,
+.ah-book-progress .is-done button::before {
+  background: var(--ah-blue);
+}
+
+.ah-book-lead {
+  margin: 0 0 0.7rem;
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.ah-book-lead + .ah-book-lead,
+#modelBlock .ah-book-lead {
+  margin-top: 1.15rem;
+}
+
+.ah-book-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.ah-book-chip,
+.ah-book-service {
+  border: 1px solid #e6e6ea;
+  background: var(--ah-page-bg);
+  color: var(--ah-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.ah-book-chip {
+  min-height: 40px;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.ah-book-chip.is-on,
+.ah-book-service.is-on {
+  background: var(--ah-blue);
+  border-color: var(--ah-blue);
+  color: #fff;
+}
+
+.ah-book-services {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ah-book-service {
+  width: 100%;
+  text-align: start;
+  border-radius: 16px;
+  padding: 0.8rem 0.9rem;
+}
+
+.ah-book-service strong,
+.ah-book-service small,
+.ah-book-service b {
+  display: block;
+}
+
+.ah-book-service strong {
+  font-size: 0.95rem;
+}
+
+.ah-book-service small {
+  margin-top: 0.15rem;
+  color: var(--ah-text-muted);
+  font-size: 0.78rem;
+}
+
+.ah-book-service b {
+  margin-top: 0.35rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.ah-book-service.is-on small,
+.ah-book-service.is-on b {
+  color: #fff;
+}
+
+.ah-book-picked {
+  margin: 0 0 0.85rem;
+  color: var(--ah-text-muted);
+  font-size: 0.84rem;
+}
+
+.ah-book-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.ah-book-card label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  display: block;
+}
+
+.ah-book-card .form-control {
+  border-radius: 12px;
+  border: 1px solid var(--ah-border);
+  padding: 0.75rem 0.9rem;
+  font-family: inherit;
+  min-height: 48px;
+  font-size: 16px;
+  background: #fff;
+  width: 100%;
+}
+
+.ah-book-card .form-control:focus {
+  border-color: var(--ah-blue);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+  outline: none;
+}
+
+.ah-book-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.ah-book-split--3 {
+  grid-template-columns: 1fr 1fr 0.8fr;
+  margin-top: 0.65rem;
+}
+
+.ah-book-note {
+  margin: 0.35rem 0 0;
+  color: var(--ah-text-muted);
+  font-size: 0.78rem;
+}
+
+.ah-book-price {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.ah-book-more {
+  border-top: 1px solid var(--ah-border);
+  padding-top: 0.75rem;
+}
+
+.ah-book-more summary {
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.ah-book-more label {
+  margin-top: 0.65rem;
+}
+
+.ah-book-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.15rem;
+}
+
+@media (max-width: 991px) {
+  .ah-book-nav {
+    position: sticky;
+    bottom: calc(var(--ah-bottom-h) + var(--ah-safe-b) + 0.35rem);
+    background: #fff;
+    padding-top: 0.7rem;
+    z-index: 5;
+  }
+}
+
+.ah-book-nav .ah-btn {
+  flex: 1;
+}
+
+#bookingResult:empty {
+  display: none;
+}
+
+#bookingResult {
+  margin-top: 1rem;
+}
+
+@media (max-width: 575px) {
+  .ah-book-split,
+  .ah-book-split--3 {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---- Footer (Technolife structure, Apple light surface) ---- */
 .ah-footer {
-  margin: 3.5rem 1rem 1rem;
+  margin: 3.5rem 0 0;
   padding: 0;
   border: 0;
-  border-radius: 30px;
+  border-radius: 0;
   overflow: hidden;
-  background: var(--ah-elevated);
+  background: var(--ah-page-bg);
   color: var(--ah-text);
   font-size: 0.875rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
-  border: 1px solid var(--ah-border);
+  box-shadow: none;
 }
 
 .ah-footer-inner {
@@ -2676,8 +2919,8 @@ body.ah-auth-mode #accountRoot {
 }
 
 .ah-footer-logo img {
-  height: 44px;
-  max-width: 200px;
+  height: 56px;
+  max-width: 230px;
 }
 
 .ah-footer-topbtn {
@@ -2967,9 +3210,11 @@ body.ah-auth-mode #accountRoot {
 /* Desktop: columns always expanded, chevron hidden */
 @media (min-width: 992px) {
   .ah-footer {
-    margin: 4rem 1.25rem 1.5rem;
-    background: #f4f7fb;
-    border-color: rgba(0, 0, 0, 0.04);
+    margin: 4rem 0 0;
+    background: var(--ah-page-bg);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .ah-footer-inner {
@@ -2981,8 +3226,8 @@ body.ah-auth-mode #accountRoot {
   }
 
   .ah-footer-logo img {
-    height: 48px;
-    max-width: 210px;
+    height: 64px;
+    max-width: 250px;
   }
 
   .ah-footer-topbtn {
@@ -3027,11 +3272,11 @@ body.ah-auth-mode #accountRoot {
 /* Mobile: Technolife accordion — closed by default */
 @media (max-width: 991px) {
   .ah-footer {
-    margin: 2rem 1rem 1rem;
-    border-radius: 30px;
+    margin: 2rem 0 0;
+    border-radius: 0;
     background: var(--ah-page-bg);
     box-shadow: none;
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    border: 0;
   }
 
   .ah-footer-inner {
@@ -3039,7 +3284,8 @@ body.ah-auth-mode #accountRoot {
   }
 
   .ah-footer-top {
-    padding-bottom: 1.25rem;
+    align-items: center;
+    padding-bottom: 1.15rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   }
 
@@ -3052,20 +3298,31 @@ body.ah-auth-mode #accountRoot {
   }
 
   .ah-footer-logo img {
-    height: 36px;
-    max-width: 160px;
+    height: 48px;
+    max-width: 156px;
     filter: none;
   }
 
   .ah-footer-topbtn {
+    align-items: center;
     min-height: 36px;
     min-width: 0;
-    padding: 0.4rem 0.9rem;
+    padding: 0.4rem 0.85rem;
     border-radius: 8px;
     background: #fff;
     border: 1px solid var(--ah-control-border);
     font-size: 0.8rem;
-    gap: 0.35rem;
+    gap: 0.3rem;
+    line-height: 1;
+  }
+
+  .ah-footer-topbtn i {
+    display: inline-grid;
+    place-items: center;
+    width: 16px;
+    height: 16px;
+    font-size: 0.85rem;
+    line-height: 1;
   }
 
   .ah-footer-grid {
@@ -3088,8 +3345,13 @@ body.ah-auth-mode #accountRoot {
   }
 
   .ah-footer-col-toggle i {
+    display: inline-grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
     color: var(--ah-text-muted);
-    font-size: 0.85rem;
+    font-size: 0.78rem;
+    line-height: 1;
   }
 
   .ah-footer-col.is-open > .ah-footer-col-toggle {
@@ -3116,18 +3378,39 @@ body.ah-auth-mode #accountRoot {
     color: var(--ah-text-muted);
   }
 
+  .ah-footer-meta {
+    text-align: right;
+  }
+
+  .ah-footer-meta a {
+    display: inline;
+    padding: 0;
+    text-align: right;
+  }
+
   .ah-footer-contact {
     border-top: 0;
   }
 
-  /* Technolife: «ارتباط با ما» بدون شورون */
   .ah-footer-contact-acc > .ah-footer-col-toggle {
-    border-bottom: 0;
-    padding: 1.05rem 0 0.35rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 1.05rem 0;
+    pointer-events: none;
   }
 
   .ah-footer-contact-acc > .ah-footer-col-toggle i {
     display: none;
+  }
+
+  .ah-footer-contact-acc > .ah-footer-col-panel,
+  .ah-footer-contact-acc.is-open > .ah-footer-col-panel {
+    grid-template-rows: 1fr;
+  }
+
+  .ah-footer-contact-acc > .ah-footer-col-panel > .ah-footer-contact-grid {
+    opacity: 1;
+    visibility: visible;
+    padding: 0.85rem 0 0.35rem;
   }
 
   .ah-footer-contact-heading {
@@ -3145,7 +3428,23 @@ body.ah-auth-mode #accountRoot {
   }
 
   .ah-footer-social {
-    gap: 0.5rem;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .ah-footer-social-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .ah-footer-social-btn i {
+    display: block;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
   }
 
   .ah-footer-highlights {
@@ -3707,7 +4006,7 @@ body.ah-auth-mode #accountRoot {
 
   .ah-tile:hover {
     transform: none;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+    box-shadow: none;
   }
 
   .ah-tile:active {

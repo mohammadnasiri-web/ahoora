@@ -1,60 +1,154 @@
 document.addEventListener("DOMContentLoaded", async () => {
   await AhooraLayout.boot({
     seo: {
-      title: "رزرو نوبت | اهورا تل",
-      description: "رزرو آنلاین تعویض باتری و خدمات تعمیرات",
+      title: "ثبت درخواست | اهورا تل",
+      description: "ثبت مرحله‌ای درخواست تعویض باتری و خدمات تعمیرات",
     },
   });
 
   const servicesData = AhooraStore.services.all();
   const services = AhooraStore.services.list();
-  const serviceSel = document.getElementById("serviceId");
-  const preselect = AhooraUtils.qs("service");
+  const models = servicesData.deviceModels || { iphone: [], other: [] };
+  const brands = [
+    { id: "iphone", group: "iphone", title: "آیفون", list: models.iphone || [] },
+    { id: "samsung", group: "other", title: "سامسونگ", list: (models.other || []).filter((m) => m.startsWith("Samsung")) },
+    { id: "xiaomi", group: "other", title: "شیائومی", list: (models.other || []).filter((m) => m.startsWith("Xiaomi")) },
+    {
+      id: "other",
+      group: "other",
+      title: "سایر",
+      list: (models.other || []).filter((m) => !m.startsWith("Samsung") && !m.startsWith("Xiaomi")),
+    },
+  ].filter((brand) => brand.list.length);
 
-  serviceSel.innerHTML = services
-    .map(
-      (s) =>
-        `<option value="${s.id}" ${preselect === s.id ? "selected" : ""}>${s.title} (${s.type === "onsite" ? "در محل" : "غیرحضوری"})</option>`
-    )
-    .join("");
-
-  const dateInput = document.getElementById("date");
-  dateInput.min = AhooraUtils.todayISO();
-  dateInput.value = AhooraUtils.todayISO();
-
+  const state = { step: 1, brandId: "", model: "", serviceId: "" };
   let selectedSlot = null;
   let mediaDataUrl = null;
 
-  function currentService() {
-    return AhooraStore.services.byId(serviceSel.value);
+  const dateInput = document.getElementById("date");
+  dateInput.min = AhooraUtils.todayISO();
+
+  function nextOpenDay() {
+    const schedule = servicesData.schedule;
+    for (let i = 0; i < 14; i += 1) {
+      const iso = AhooraUtils.addDaysISO(i);
+      if (AhooraUtils.isWorkingDay(iso, schedule)) return iso;
+    }
+    return AhooraUtils.todayISO();
   }
 
-  function fillModels() {
-    const group = document.getElementById("modelGroup").value;
-    const models = servicesData.deviceModels?.[group] || [];
-    document.getElementById("deviceModel").innerHTML = models.map((m) => `<option value="${m}">${m}</option>`).join("");
-    updatePrice();
+  dateInput.value = nextOpenDay();
+
+  const brandForModel = (model) => brands.find((brand) => brand.list.includes(model));
+
+  const currentBrand = () => brands.find((brand) => brand.id === state.brandId);
+  const currentService = () => services.find((svc) => svc.id === state.serviceId);
+
+  function priceFor(svc, model) {
+    if (!svc) return 0;
+    if (svc.priceByModel?.[model]) return svc.priceByModel[model];
+    const key = Object.keys(svc.priceByModel || {}).find((item) => model && model.startsWith(item));
+    return key ? svc.priceByModel[key] : svc.basePrice || 0;
+  }
+
+  function servicesForBrand() {
+    const batteryId = state.brandId === "iphone" ? "svc-battery-iphone" : "svc-battery-other";
+    return services
+      .filter((svc) => svc.id !== "svc-battery-iphone" && svc.id !== "svc-battery-other" || svc.id === batteryId)
+      .slice()
+      .sort((a, b) => Number(b.id === batteryId) - Number(a.id === batteryId));
+  }
+
+  function syncHidden() {
+    document.getElementById("deviceModel").value = state.model;
+    document.getElementById("serviceId").value = state.serviceId;
+  }
+
+  function paintChoice(root, attr, current) {
+    root.querySelectorAll("button").forEach((btn) => {
+      btn.classList.toggle("is-on", btn.dataset[attr] === current);
+    });
+  }
+
+  function renderBrands() {
+    const row = document.getElementById("brandRow");
+    row.innerHTML = brands
+      .map((brand) => `<button type="button" class="ah-book-chip" data-brand="${brand.id}">${brand.title}</button>`)
+      .join("");
+    paintChoice(row, "brand", state.brandId);
+    row.querySelectorAll("button").forEach((btn) => {
+      btn.onclick = () => {
+        if (state.brandId !== btn.dataset.brand) {
+          state.model = "";
+          state.serviceId = "";
+        }
+        state.brandId = btn.dataset.brand;
+        renderBrands();
+        renderModels();
+      };
+    });
+  }
+
+  function renderModels() {
+    const block = document.getElementById("modelBlock");
+    const brand = currentBrand();
+    block.hidden = !brand;
+    if (!brand) return;
+    const row = document.getElementById("modelRow");
+    row.innerHTML = brand.list
+      .map((model) => `<button type="button" class="ah-book-chip" data-model="${model}">${model}</button>`)
+      .join("");
+    paintChoice(row, "model", state.model);
+    row.querySelectorAll("button").forEach((btn) => {
+      btn.onclick = () => {
+        state.model = btn.dataset.model;
+        syncHidden();
+        renderModels();
+      };
+    });
+  }
+
+  function renderServices() {
+    const row = document.getElementById("serviceRow");
+    const list = servicesForBrand();
+    if (state.serviceId && !list.some((svc) => svc.id === state.serviceId)) state.serviceId = "";
+    row.innerHTML = list
+      .map((svc) => {
+        const price = AhooraUtils.formatPrice(priceFor(svc, state.model));
+        const where = svc.type === "onsite" ? "در محل" : "کارگاه";
+        return `<button type="button" class="ah-book-service" data-service="${svc.id}">
+          <strong>${svc.title}</strong>
+          <small>${where}</small>
+          <b>${price}</b>
+        </button>`;
+      })
+      .join("");
+    paintChoice(row, "service", state.serviceId);
+    row.querySelectorAll("button").forEach((btn) => {
+      btn.onclick = () => {
+        state.serviceId = btn.dataset.service;
+        syncHidden();
+        renderServices();
+        toggleAddress();
+        updatePrice();
+      };
+    });
+    const brand = currentBrand();
+    document.getElementById("pickedDevice").textContent = brand ? `${brand.title} · ${state.model}` : state.model;
   }
 
   function updatePrice() {
-    const svc = currentService();
-    const model = document.getElementById("deviceModel").value;
-    let price = svc?.basePrice || 0;
-    if (svc?.priceByModel?.[model]) price = svc.priceByModel[model];
-    // fuzzy match for variants like iPhone 13 Pro -> iPhone 13
-    if (!svc?.priceByModel?.[model] && svc?.priceByModel) {
-      const key = Object.keys(svc.priceByModel).find((k) => model.startsWith(k));
-      if (key) price = svc.priceByModel[key];
-    }
-    document.getElementById("priceBox").textContent = AhooraUtils.formatPrice(price);
-    document.getElementById("priceBox").dataset.price = price;
+    const price = priceFor(currentService(), state.model);
+    const box = document.getElementById("priceBox");
+    box.textContent = price ? AhooraUtils.formatPrice(price) : "—";
+    box.dataset.price = price;
   }
 
   function toggleAddress() {
     const svc = currentService();
-    const box = document.getElementById("addressFields");
     const need = !!(svc?.requiresAddress || svc?.type === "onsite");
-    box.hidden = !need;
+    document.getElementById("addressFields").hidden = !need;
+    document.getElementById("workshopNote").hidden = need || !svc;
     document.getElementById("street").required = need;
     document.getElementById("plaque").required = need;
   }
@@ -66,27 +160,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     const wrap = document.getElementById("slots");
     selectedSlot = null;
     document.getElementById("slot").value = "";
-
     if (!svc) return;
     if (!AhooraUtils.isWorkingDay(date, schedule)) {
       wrap.innerHTML = `<p class="text-danger small">این روز تعطیل یا خارج از ساعات کاری است.</p>`;
       document.getElementById("capInfo").textContent = "";
       return;
     }
-
     const dayUsed = AhooraStore.capacity.getUsed(svc.id, date);
-    document.getElementById("capInfo").textContent = `ظرفیت روزانه این خدمت: ${dayUsed} / ${svc.dailyCapacity}`;
-
+    document.getElementById("capInfo").textContent = `ظرفیت این روز: ${dayUsed} از ${svc.dailyCapacity}`;
     wrap.innerHTML = (schedule.slots || [])
       .map((slot) => {
         const ok = AhooraStore.capacity.canBook(svc.id, date, slot);
         return `<button type="button" class="ah-slot ${ok ? "" : "disabled"}" data-slot="${slot}" ${ok ? "" : "disabled"}>${slot}</button>`;
       })
       .join("");
-
     wrap.querySelectorAll(".ah-slot:not(.disabled)").forEach((btn) => {
       btn.onclick = () => {
-        wrap.querySelectorAll(".ah-slot").forEach((b) => b.classList.remove("active"));
+        wrap.querySelectorAll(".ah-slot").forEach((item) => item.classList.remove("active"));
         btn.classList.add("active");
         selectedSlot = btn.dataset.slot;
         document.getElementById("slot").value = selectedSlot;
@@ -94,24 +184,70 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  document.getElementById("modelGroup").onchange = fillModels;
-  document.getElementById("deviceModel").onchange = updatePrice;
-  serviceSel.onchange = () => {
-    toggleAddress();
-    updatePrice();
-    renderSlots();
+  function showStep(next) {
+    state.step = next;
+    document.querySelectorAll("[data-step]").forEach((section) => {
+      section.hidden = Number(section.dataset.step) !== next;
+    });
+    document.getElementById("bookBack").hidden = next === 1;
+    document.getElementById("bookNext").hidden = next === 3;
+    document.getElementById("bookSubmit").hidden = next !== 3;
+    document.querySelectorAll("#bookProgress li").forEach((item, index) => {
+      item.classList.toggle("is-on", index + 1 === next);
+      item.classList.toggle("is-done", index + 1 < next);
+    });
+    if (next === 2) renderServices();
+    if (next === 3) {
+      const svc = currentService();
+      const brand = currentBrand();
+      document.getElementById("pickedJob").textContent = [brand?.title, state.model, svc?.title].filter(Boolean).join(" · ");
+      toggleAddress();
+      updatePrice();
+      renderSlots();
+    }
+    syncHidden();
+  }
+
+  document.getElementById("bookProgress").onclick = (event) => {
+    const btn = event.target.closest("[data-goto]");
+    if (!btn) return;
+    const target = Number(btn.dataset.goto);
+    if (target < state.step) showStep(target);
   };
+
+  document.getElementById("bookBack").onclick = () => {
+    if (state.step > 1) showStep(state.step - 1);
+  };
+
+  document.getElementById("bookNext").onclick = () => {
+    if (state.step === 1) {
+      if (!state.brandId || !state.model) {
+        AhooraUtils.toast("اول برند و مدل گوشی را انتخاب کنید", "error");
+        return;
+      }
+      showStep(2);
+      return;
+    }
+    if (state.step === 2) {
+      if (!state.serviceId) {
+        AhooraUtils.toast("نوع خدمات را انتخاب کنید", "error");
+        return;
+      }
+      showStep(3);
+    }
+  };
+
   dateInput.onchange = renderSlots;
 
-  document.getElementById("media").onchange = (e) => {
-    const file = e.target.files?.[0];
+  document.getElementById("media").onchange = (event) => {
+    const file = event.target.files?.[0];
     if (!file) {
       mediaDataUrl = null;
       return;
     }
     if (file.size > 3 * 1024 * 1024) {
-      AhooraUtils.toast("حداکثر حجم فایل ۳ مگابایت (نسخه دمو)", "error");
-      e.target.value = "";
+      AhooraUtils.toast("حداکثر حجم فایل ۳ مگابایت است", "error");
+      event.target.value = "";
       return;
     }
     const reader = new FileReader();
@@ -121,31 +257,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     reader.readAsDataURL(file);
   };
 
-  fillModels();
-  const preGroup = AhooraUtils.qs("group");
-  if (preGroup === "iphone" || preGroup === "other") {
-    document.getElementById("modelGroup").value = preGroup;
-    fillModels();
-  }
   const preModel = AhooraUtils.qs("model");
-  if (preModel) {
-    const sel = document.getElementById("deviceModel");
-    if ([...sel.options].some((option) => option.value === preModel)) sel.value = preModel;
-  }
-  toggleAddress();
-  updatePrice();
-  renderSlots();
+  const matchedBrand = preModel ? brandForModel(preModel) : null;
+  const preGroup = AhooraUtils.qs("group");
+  if (matchedBrand) state.brandId = matchedBrand.id;
+  else if (preGroup === "iphone") state.brandId = "iphone";
+  if (matchedBrand) state.model = preModel;
+  const preService = AhooraUtils.qs("service");
+  if (preService && services.some((svc) => svc.id === preService)) state.serviceId = preService;
 
-  document.getElementById("bookingForm").onsubmit = async (e) => {
-    e.preventDefault();
+  renderBrands();
+  renderModels();
+  syncHidden();
+  showStep(state.model ? 2 : 1);
+
+  document.getElementById("bookingForm").onsubmit = async (event) => {
+    event.preventDefault();
+    if (state.step !== 3) return;
     const svc = currentService();
-    const fd = new FormData(e.target);
-    const phone = String(fd.get("phone")).trim();
+    const fd = new FormData(event.target);
+    const phone = String(fd.get("phone") || "").trim();
     const date = fd.get("date");
     const slot = fd.get("slot");
+    const needAddress = !!(svc?.requiresAddress || svc?.type === "onsite");
 
+    if (!svc || !state.model) return AhooraUtils.toast("گوشی و نوع خدمات را کامل کنید", "error");
     if (!AhooraUtils.validatePhone(phone)) return AhooraUtils.toast("شماره موبایل معتبر نیست", "error");
+    if (!String(fd.get("name") || "").trim()) return AhooraUtils.toast("نام را بنویسید", "error");
     if (!slot) return AhooraUtils.toast("ساعت را انتخاب کنید", "error");
+    if (needAddress && (!String(fd.get("street") || "").trim() || !String(fd.get("plaque") || "").trim())) {
+      return AhooraUtils.toast("نشانی و پلاک را بنویسید", "error");
+    }
     if (!AhooraStore.capacity.canBook(svc.id, date, slot)) {
       return AhooraUtils.toast("این بازه تکمیل ظرفیت است", "error");
     }
@@ -155,14 +297,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     let discount = 0;
     if (couponCode) {
       const coupons = AhooraStore.content.get().coupons || [];
-      const c = coupons.find((x) => x.active && x.code.toUpperCase() === couponCode.toUpperCase());
-      if (c && (c.appliesTo === "all" || c.appliesTo === "services")) {
-        discount = c.type === "percent" ? Math.round((amount * c.value) / 100) : c.value;
+      const coupon = coupons.find((item) => item.active && item.code.toUpperCase() === couponCode.toUpperCase());
+      if (coupon && (coupon.appliesTo === "all" || coupon.appliesTo === "services")) {
+        discount = coupon.type === "percent" ? Math.round((amount * coupon.value) / 100) : coupon.value;
         amount = Math.max(0, amount - discount);
       }
     }
 
-    // Atomic-ish reserve (single-threaded JS + localStorage)
     const reserved = AhooraStore.capacity.reserve(svc.id, date, slot);
     if (!reserved) return AhooraUtils.toast("ظرفیت همزمان پر شد؛ زمان دیگری انتخاب کنید", "error");
 
@@ -172,20 +313,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       serviceId: svc.id,
       serviceTitle: svc.title,
       serviceType: svc.type,
-      deviceModel: fd.get("deviceModel"),
+      deviceModel: state.model,
       date,
       slot,
       name: fd.get("name"),
       phone,
-      address:
-        svc.type === "onsite"
-          ? {
-              street: fd.get("street"),
-              plaque: fd.get("plaque"),
-              unit: fd.get("unit"),
-              postal: fd.get("postal"),
-            }
-          : null,
+      address: needAddress
+        ? {
+            street: fd.get("street"),
+            plaque: fd.get("plaque"),
+            unit: fd.get("unit"),
+            postal: fd.get("postal"),
+          }
+        : null,
       notes: fd.get("notes"),
       media: mediaDataUrl,
       amount,
@@ -198,8 +338,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     AhooraStore.bookings.add(booking);
     AhooraSMS.notifyOrderCreated({ phone, code: booking.trackingCode });
-
-    // Notify same-browser admin tab (if open)
     try {
       localStorage.setItem("ah_admin_ping", String(Date.now()));
     } catch {
@@ -207,24 +345,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const result = document.getElementById("bookingResult");
-    if (result) {
-      result.innerHTML = `
-        <div class="ah-alert ah-alert-success">
-          <strong>درخواست شما ثبت شد.</strong><br>
-          کد پیگیری: <strong>${booking.trackingCode}</strong><br>
-          وضعیت: در انتظار تأیید مدیریت سایت<br>
-          پس از تأیید، پیامک می‌گیرید و می‌توانید پرداخت کنید.
-        </div>
-        <div class="d-flex gap-2 flex-wrap mt-3">
-          <a class="ah-btn ah-btn-primary" href="account.html">پیگیری در حساب کاربری</a>
-          <a class="ah-btn ah-btn-dark" href="services.html">بازگشت به خدمات</a>
-        </div>`;
-      result.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    e.target.reset();
+    result.innerHTML = `
+      <div class="ah-alert ah-alert-success">
+        <strong>درخواست شما ثبت شد.</strong><br>
+        کد پیگیری: <strong>${booking.trackingCode}</strong><br>
+        وضعیت: در انتظار تأیید مدیریت سایت<br>
+        پس از تأیید، پیامک می‌گیرید و می‌توانید پرداخت کنید.
+      </div>
+      <div class="d-flex gap-2 flex-wrap mt-3">
+        <a class="ah-btn ah-btn-primary" href="account.html">پیگیری در حساب کاربری</a>
+        <a class="ah-btn ah-btn-dark" href="services.html">بازگشت به خدمات</a>
+      </div>`;
+    result.scrollIntoView({ behavior: "smooth", block: "start" });
+    event.target.reset();
+    state.brandId = "";
+    state.model = "";
+    state.serviceId = "";
     selectedSlot = null;
-    document.getElementById("slot").value = "";
-    renderSlots();
+    mediaDataUrl = null;
+    dateInput.value = nextOpenDay();
+    renderBrands();
+    renderModels();
+    showStep(1);
     AhooraUtils.toast("درخواست ثبت شد · منتظر تأیید مدیریت");
   };
 
