@@ -190,6 +190,13 @@ const AhooraStore = (() => {
           });
           changed = true;
         }
+        // phones category now opens the "mobile & accessories" landing page
+        [...(siteData.menu || []).flatMap((item) => item.children || []), ...(siteData.footer?.columns || []).flatMap((col) => col.links || [])]
+          .filter((link) => link.url === "pages/shop.html?cat=phones")
+          .forEach((link) => {
+            link.url = "pages/mobile.html";
+            changed = true;
+          });
         if (Array.isArray(siteData.menu)) {
           const servicesItem = siteData.menu.find((item) => item.id === "services");
           if (servicesItem) {
@@ -244,6 +251,17 @@ const AhooraStore = (() => {
           }
         }
         const heroes = siteData.homepage?.sections || [];
+        // add newer homepage sections (promo banners, deals row) for older localStorage
+        if (siteData.homepage) {
+          const seedSections = window.AHOORA_SEED?.site?.homepage?.sections || [];
+          ["promo-banners", "ahoora-time"].forEach((id) => {
+            if (heroes.some((sec) => sec.id === id)) return;
+            const sec = seedSections.find((s) => s.id === id);
+            if (!sec) return;
+            heroes.push(JSON.parse(JSON.stringify(sec)));
+            changed = true;
+          });
+        }
         heroes.forEach((sec) => {
           if (sec.type === "testimonials" && sec.active) {
             sec.active = false;
@@ -288,7 +306,7 @@ const AhooraStore = (() => {
                 title: "دسترسی سریع",
                 links: [
                   { title: "فروشگاه", url: "pages/shop.html" },
-                  { title: "گوشی موبایل", url: "pages/shop.html?cat=phones" },
+                  { title: "گوشی موبایل", url: "pages/mobile.html" },
                   { title: "لوازم جانبی", url: "pages/shop.html?cat=accessories" },
                   { title: "قطعات تعمیراتی", url: "pages/shop.html?cat=parts" },
                   { title: "رزرو نوبت", url: "pages/booking.html" },

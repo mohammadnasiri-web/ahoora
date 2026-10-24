@@ -38,7 +38,7 @@
         {
           "id": "phones",
           "title": "گوشی موبایل",
-          "url": "pages/shop.html?cat=phones"
+          "url": "pages/mobile.html"
         },
         {
           "id": "accessories",
@@ -111,7 +111,7 @@
           },
           {
             "title": "گوشی موبایل",
-            "url": "pages/shop.html?cat=phones"
+            "url": "pages/mobile.html"
           },
           {
             "title": "لوازم جانبی",
@@ -368,6 +368,56 @@
         "active": true,
         "title": "سوالات متداول",
         "limit": 4
+      },
+      {
+        "id": "promo-banners",
+        "type": "banners",
+        "order": 3.5,
+        "active": true,
+        "items": [
+          {
+            "eyebrow": "AirPods Pro",
+            "title": "صدای خاص خودت",
+            "text": "ایرپاد و هندزفری اصل با گارانتی",
+            "cta": "خرید",
+            "url": "pages/product.html?slug=airpods-pro",
+            "productImage": "assets/img/products/airpods-pro.png",
+            "bg": "linear-gradient(120deg, #0b1f44 0%, #0a4fa8 100%)",
+            "color": "#ffffff",
+            "image": ""
+          },
+          {
+            "eyebrow": "iPhone 15",
+            "title": "وقتی خریدش ارزش داره",
+            "text": "آیفون ۱۵ با تخفیف ویژه و ارسال سریع",
+            "cta": "خرید",
+            "url": "pages/product.html?slug=iphone-15",
+            "productImage": "assets/img/products/iphone-15.png",
+            "bg": "linear-gradient(120deg, #ff2d87 0%, #ff7ab8 100%)",
+            "color": "#ffffff",
+            "image": ""
+          },
+          {
+            "eyebrow": "سرویس در محل",
+            "title": "تعویض فوری باتری",
+            "text": "در آدرس شما، با گارانتی ۳ ماهه",
+            "cta": "رزرو",
+            "url": "pages/battery.html",
+            "productImage": "assets/img/products/battery.png",
+            "bg": "linear-gradient(120deg, #ffd60a 0%, #ffb000 100%)",
+            "color": "#1d1d1f",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "id": "ahoora-time",
+        "type": "deals",
+        "order": 3.6,
+        "active": true,
+        "title": "اهورا تایم",
+        "badge": "اهورا تایم",
+        "limit": 10
       }
     ]
   },

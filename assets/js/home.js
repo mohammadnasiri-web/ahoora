@@ -32,6 +32,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .join("")}
             </div>
           </div>
+          <div class="ah-dk-arrows">
+            <button type="button" class="ah-dk-arrow" id="ahDkPrev" aria-label="اسلاید قبلی"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+            <button type="button" class="ah-dk-arrow" id="ahDkNext" aria-label="اسلاید بعدی"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+          </div>
           <div class="ah-dk-dots" id="ahDkDots">
             ${slides
               .map(
@@ -109,6 +113,84 @@ document.addEventListener("DOMContentLoaded", async () => {
             </a>`;
             })
             .join("")}
+        </section>`;
+      }
+      if (sec.type === "banners") {
+        const items = (sec.items || []).slice(0, 3);
+        if (!items.length) return "";
+        return `<section class="ah-promos" aria-label="پیشنهادهای ویژه">
+          <div class="ah-promos-grid">
+            ${items
+              .map((b) => {
+                const href = AhooraLayout.resolveUrl(b.url);
+                if (b.image) {
+                  return `<a class="ah-promo-card ah-promo-card--image" href="${href}">
+                    <img src="${AhooraLayout.resolveUrl(b.image)}" alt="${b.title}" width="577" height="267" loading="lazy" decoding="async">
+                  </a>`;
+                }
+                return `<a class="ah-promo-card" href="${href}" style="--promo-bg:${b.bg};--promo-fg:${b.color || "#fff"}">
+                  <div class="ah-promo-text">
+                    ${b.eyebrow ? `<span class="ah-promo-eyebrow">${b.eyebrow}</span>` : ""}
+                    <h3>${b.title}</h3>
+                    ${b.text ? `<p>${b.text}</p>` : ""}
+                    ${b.cta ? `<span class="ah-promo-btn">${b.cta}</span>` : ""}
+                  </div>
+                  ${
+                    b.productImage
+                      ? `<img class="ah-promo-media" src="${AhooraLayout.resolveUrl(b.productImage)}" alt="" width="220" height="220" loading="lazy" decoding="async">`
+                      : ""
+                  }
+                </a>`;
+              })
+              .join("")}
+          </div>
+        </section>`;
+      }
+      if (sec.type === "deals") {
+        const all = AhooraStore.products.list({}).filter((p) => p.stock > 0);
+        const offOf = (p) => (p.discountPrice && p.price ? Math.round(((p.price - p.discountPrice) / p.price) * 100) : 0);
+        // discounted items first (biggest discount leading), then bestsellers to fill the row
+        const items = all
+          .slice()
+          .sort((a, b) => offOf(b) - offOf(a) || Number(!!b.bestseller) - Number(!!a.bestseller))
+          .slice(0, sec.limit || 10);
+        if (!items.length) return "";
+        const nf = new Intl.NumberFormat("fa-IR");
+        return `<section class="ah-deals" aria-label="${sec.title}">
+          <div class="ah-deals-box">
+            <div class="ah-deals-head">
+              <h2><i class="bi bi-fire" aria-hidden="true"></i> ${sec.title}</h2>
+              <a href="${AhooraLayout.resolveUrl("pages/shop.html")}">نمایش همه <i class="bi bi-chevron-left" aria-hidden="true"></i></a>
+            </div>
+            <div class="ah-deals-body">
+              <button type="button" class="ah-row-arrow is-prev" data-row-prev aria-label="محصولات قبلی" hidden><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+              <div class="ah-deals-track" data-row-track>
+                ${items
+                  .map((p) => {
+                    const off = offOf(p);
+                    const price = p.discountPrice || p.price;
+                    return `<a class="ah-deal-card" href="${AhooraLayout.resolveUrl(`pages/product.html?slug=${encodeURIComponent(p.slug)}`)}">
+                      <span class="ah-deal-badge">${sec.badge || sec.title}</span>
+                      <span class="ah-deal-media"><img src="${AhooraLayout.resolveUrl(p.images?.[0] || "assets/img/products/iphone-15.png")}" alt="${p.title}" width="200" height="200" loading="lazy" decoding="async"></span>
+                      <span class="ah-deal-title">${p.title}</span>
+                      <span class="ah-deal-price">
+                        ${off ? `<span class="ah-deal-off">٪ ${AhooraUtils.toFaDigits(off)}</span>` : "<span></span>"}
+                        <span class="ah-deal-amount">
+                          <span><strong>${nf.format(price)}</strong> <small>تومان</small></span>
+                          ${off ? `<del>${nf.format(p.price)}</del>` : ""}
+                        </span>
+                      </span>
+                      <span class="ah-deal-timer">
+                        <span class="ah-deal-timer-label"><i class="bi bi-stopwatch" aria-hidden="true"></i> زمان باقی مانده</span>
+                        <span class="ah-deal-countdown" data-deal-ends="${p.dealEndsAt || ""}" dir="ltr">--:--:--</span>
+                      </span>
+                    </a>`;
+                  })
+                  .join("")}
+              </div>
+              <button type="button" class="ah-row-arrow is-next" data-row-next aria-label="محصولات بعدی"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+            </div>
+          </div>
         </section>`;
       }
       if (sec.type === "benefits") {
@@ -233,7 +315,81 @@ document.addEventListener("DOMContentLoaded", async () => {
       </section>`
     : "";
 
-  root.innerHTML = html + productsHtml;
+  // Latest blog posts carousel (desktop only, Technolife-style)
+  const posts = typeof AhooraBlog !== "undefined" ? AhooraBlog.list().slice(0, 8) : [];
+  const blogHref = (slug) => AhooraLayout.resolveUrl("pages/blog.html") + (slug ? `?slug=${encodeURIComponent(slug)}` : "");
+  const blogHtml = posts.length
+    ? `<section class="ah-blogrow" aria-label="آخرین مطالب وبلاگ">
+        <div class="ah-blogrow-box">
+          <div class="ah-blogrow-head">
+            <h2>از وبلاگ اهورا تل</h2>
+            <a href="${blogHref()}">نمایش بیشتر در بلاگ <i class="bi bi-chevron-left" aria-hidden="true"></i></a>
+          </div>
+          <div class="ah-blogrow-body">
+            <button type="button" class="ah-blogrow-arrow is-prev" data-row-prev aria-label="مطالب قبلی" hidden><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+            <div class="ah-blogrow-track" data-row-track>
+              ${posts
+                .map(
+                  (post) => `<a class="ah-blogrow-card" href="${blogHref(post.slug)}">
+                    <span class="ah-blogrow-media"><img src="${AhooraLayout.resolveUrl(post.image)}" alt="" width="375" height="210" loading="lazy" decoding="async"></span>
+                    <span class="ah-blogrow-title">${post.title}</span>
+                  </a>`
+                )
+                .join("")}
+            </div>
+            <button type="button" class="ah-blogrow-arrow is-next" data-row-next aria-label="مطالب بعدی"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </section>`
+    : "";
+
+  root.innerHTML = html + productsHtml + blogHtml;
+
+  // Deal countdowns: a product's own dealEndsAt if set, otherwise the daily deal ends at midnight
+  const countdowns = [...document.querySelectorAll("[data-deal-ends]")];
+  if (countdowns.length) {
+    const pad = (n) => String(n).padStart(2, "0");
+    const endOf = (el) => {
+      const own = Date.parse(el.dataset.dealEnds);
+      if (own > Date.now()) return own;
+      const midnight = new Date();
+      midnight.setHours(24, 0, 0, 0);
+      return midnight.getTime();
+    };
+    const tick = () => {
+      countdowns.forEach((el) => {
+        const left = Math.max(0, Math.floor((endOf(el) - Date.now()) / 1000));
+        const text = `${pad(Math.floor(left / 3600))}:${pad(Math.floor((left % 3600) / 60))}:${pad(left % 60)}`;
+        el.textContent = AhooraUtils.toFaDigits(text);
+      });
+    };
+    tick();
+    window.setInterval(tick, 1000);
+  }
+
+  // Horizontal card rows (deals, blog): arrows scroll one card at a time
+  document.querySelectorAll("[data-row-track]").forEach((track) => {
+    const body = track.parentElement;
+    const prev = body.querySelector("[data-row-prev]");
+    const next = body.querySelector("[data-row-next]");
+    const step = () => {
+      const card = track.firstElementChild;
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      return card ? card.offsetWidth + gap : track.clientWidth;
+    };
+    // RTL: scrollLeft runs from 0 (start, right edge) to negative values
+    const syncArrows = () => {
+      const pos = Math.abs(track.scrollLeft);
+      const max = track.scrollWidth - track.clientWidth;
+      prev.hidden = pos < 4;
+      next.hidden = pos > max - 4;
+    };
+    prev.addEventListener("click", () => track.scrollBy({ left: step(), behavior: "smooth" }));
+    next.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
+    track.addEventListener("scroll", syncArrows, { passive: true });
+    window.addEventListener("resize", syncArrows);
+    syncArrows();
+  });
 
   const dkViewport = document.getElementById("ahDkViewport");
   const dkTrack = document.getElementById("ahDkTrack");
@@ -260,15 +416,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       paint(animate);
     };
 
+    let resumeTimer;
+    const jump = (next) => {
+      paused = true;
+      goTo(next);
+      window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(() => {
+        paused = false;
+      }, 5000);
+    };
+
     dots.forEach((dot) => {
-      dot.addEventListener("click", () => {
-        paused = true;
-        goTo(Number(dot.dataset.index));
-        window.setTimeout(() => {
-          paused = false;
-        }, 5000);
-      });
+      dot.addEventListener("click", () => jump(Number(dot.dataset.index)));
     });
+    document.getElementById("ahDkPrev")?.addEventListener("click", () => jump(index - 1));
+    document.getElementById("ahDkNext")?.addEventListener("click", () => jump(index + 1));
 
     dkViewport.addEventListener("pointerdown", (event) => {
       if (event.pointerType === "mouse" && event.button !== 0) return;
