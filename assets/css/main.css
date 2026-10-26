@@ -5829,6 +5829,10 @@ body.ah-auth-mode #accountRoot {
     box-sizing: border-box;
   }
 
+  #home-root .ah-tiles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   #home-root .ah-deals-box,
   #home-root .ah-blogrow-box {
     width: 100%;
