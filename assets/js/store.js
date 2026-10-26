@@ -263,7 +263,7 @@ const AhooraStore = (() => {
           });
         }
         heroes.forEach((sec) => {
-          if (sec.type === "testimonials" && sec.active) {
+          if ((sec.type === "testimonials" || sec.id === "promo-banners") && sec.active) {
             sec.active = false;
             changed = true;
           }

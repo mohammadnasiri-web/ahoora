@@ -30,6 +30,7 @@
   --ah-text: #1d1d1f;
   --ah-text-muted: #6e6e73;
   --ah-footer-logo-bg: transparent;
+  --ah-footer-bg: #ececef;
   --ah-header-bg: rgba(245, 245, 247, 0.82);
   --ah-search-bg: #ffffff;
   --ah-control-border: #d2d2d7;
@@ -3813,9 +3814,10 @@ body.ah-auth-mode #accountRoot {
   margin: 3.5rem 0 0;
   padding: 0;
   border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 0;
   overflow: hidden;
-  background: var(--ah-page-bg);
+  background: var(--ah-footer-bg);
   color: var(--ah-text);
   font-size: 0.875rem;
   box-shadow: none;
@@ -3854,7 +3856,7 @@ body.ah-auth-mode #accountRoot {
   min-height: 36px;
   min-width: 148px;
   border: 1px solid var(--ah-control-border);
-  background: var(--ah-page-bg);
+  background: transparent;
   color: var(--ah-text);
   border-radius: 10px;
   padding: 0.45rem 1.15rem;
@@ -4024,7 +4026,7 @@ body.ah-auth-mode #accountRoot {
   display: grid;
   place-items: center;
   border-radius: 12px;
-  background: var(--ah-page-bg);
+  background: transparent;
   border: 1px solid var(--ah-border);
   color: var(--ah-text);
   font-size: 1.1rem;
@@ -4050,7 +4052,7 @@ body.ah-auth-mode #accountRoot {
   gap: 0.75rem;
   padding: 0.9rem 1rem;
   border-radius: 16px;
-  background: var(--ah-page-bg);
+  background: transparent;
   border: 1px solid var(--ah-border);
   min-width: 0;
   transition: border-color 0.2s var(--ah-ease);
@@ -4134,8 +4136,9 @@ body.ah-auth-mode #accountRoot {
 @media (min-width: 992px) {
   .ah-footer {
     margin: 4rem 0 0;
-    background: var(--ah-page-bg);
+    background: var(--ah-footer-bg);
     border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 0;
     box-shadow: none;
   }
@@ -4197,9 +4200,10 @@ body.ah-auth-mode #accountRoot {
   .ah-footer {
     margin: 2rem 0 0;
     border-radius: 0;
-    background: var(--ah-page-bg);
+    background: var(--ah-footer-bg);
     box-shadow: none;
     border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
   }
 
   .ah-footer-inner {

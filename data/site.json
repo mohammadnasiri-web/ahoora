@@ -373,7 +373,7 @@
         "id": "promo-banners",
         "type": "banners",
         "order": 3.5,
-        "active": true,
+        "active": false,
         "items": [
           {
             "eyebrow": "AirPods Pro",
