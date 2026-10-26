@@ -5816,29 +5816,29 @@ body.ah-auth-mode #accountRoot {
   }
 }
 
-/* Home page: every section runs edge to edge like the hero slider (desktop) */
+/* Home page (desktop): hero slider is edge to edge, every other section sits in a
+   Technolife-style content column — up to 1600px wide with a 32px gutter each side */
 @media (min-width: 992px) {
   #home-root .ah-quick,
   #home-root .ah-tiles,
   #home-root .container-ah,
-  #home-root .ah-promos-grid {
-    width: 100%;
+  #home-root .ah-promos-grid,
+  #home-root .ah-deals-box,
+  #home-root .ah-blogrow-box {
+    width: min(1600px, calc(100% - 64px));
     max-width: none;
-    margin-inline: 0;
-    padding-inline: 16px;
+    margin-inline: auto;
     box-sizing: border-box;
+  }
+
+  #home-root .ah-quick,
+  #home-root .ah-tiles,
+  #home-root .container-ah,
+  #home-root .ah-promos-grid {
+    padding-inline: 0;
   }
 
   #home-root .ah-tiles {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  #home-root .ah-deals-box,
-  #home-root .ah-blogrow-box {
-    width: 100%;
-    max-width: none;
-    margin-inline: 0;
-    border-radius: 0;
-    border-inline: 0;
   }
 }
