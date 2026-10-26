@@ -1714,7 +1714,8 @@ body.menu-open .ah-bottom-nav {
   .ah-blogrow-card {
     display: flex;
     flex-direction: column;
-    border-radius: 0 0 12px 12px;
+    border: 1px solid #dfe3ea;
+    border-radius: 12px;
     overflow: hidden;
     background: #333;
     color: #fff;
@@ -1726,7 +1727,7 @@ body.menu-open .ah-bottom-nav {
     display: block;
     aspect-ratio: 375 / 210;
     overflow: hidden;
-    background: linear-gradient(135deg, #e9edf3 0%, #c9d3e1 100%);
+    background: #fff;
   }
 
   .ah-blogrow-media img {
@@ -2218,7 +2219,8 @@ body.menu-open .ah-bottom-nav {
 }
 
 .ah-blog-page {
-  width: min(820px, calc(100% - 2rem));
+  /* same width as the header row */
+  width: min(1200px, calc(100% - 1.5rem));
   padding: 1.5rem 0 3rem;
 }
 
@@ -5126,6 +5128,15 @@ body.ah-auth-mode #accountRoot {
   padding-block: 1rem 3rem;
 }
 
+/* full width on desktop, like the home page sections */
+@media (min-width: 992px) {
+  .ah-cat-page.container-ah {
+    width: 100%;
+    padding-inline: 16px;
+    box-sizing: border-box;
+  }
+}
+
 .ah-cat-crumb {
   display: flex;
   flex-wrap: wrap;
@@ -5446,7 +5457,7 @@ body.ah-auth-mode #accountRoot {
 /* product cards */
 .ah-cat-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.75rem;
 }
 
@@ -5600,7 +5611,7 @@ body.ah-auth-mode #accountRoot {
 
 @media (max-width: 1199px) {
   .ah-cat-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -5800,5 +5811,28 @@ body.ah-auth-mode #accountRoot {
   .ah-cat-sub img {
     width: 32px;
     height: 32px;
+  }
+}
+
+/* Home page: every section runs edge to edge like the hero slider (desktop) */
+@media (min-width: 992px) {
+  #home-root .ah-quick,
+  #home-root .ah-tiles,
+  #home-root .container-ah,
+  #home-root .ah-promos-grid {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-inline: 16px;
+    box-sizing: border-box;
+  }
+
+  #home-root .ah-deals-box,
+  #home-root .ah-blogrow-box {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    border-radius: 0;
+    border-inline: 0;
   }
 }

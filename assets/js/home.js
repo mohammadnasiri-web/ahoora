@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           .sort((a, b) => a.order - b.order)
           .slice(0, sec.limit || 5);
         return `<section class="ah-section">
-          <div class="container-ah" style="max-width:760px">
+          <div class="container-ah">
             <h2 class="ah-section-title">${sec.title}</h2>
             <div class="accordion ah-accordion" id="homeFaq">
               ${faqs
