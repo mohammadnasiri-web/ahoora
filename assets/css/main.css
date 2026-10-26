@@ -4145,8 +4145,10 @@ body.ah-auth-mode #accountRoot {
     box-shadow: none;
   }
 
+  /* full width, same side gutter as the home page sections */
   .ah-footer-inner {
-    padding: 3.5rem 2rem 2rem;
+    max-width: none;
+    padding: 3.5rem 16px 2rem;
   }
 
   .ah-footer-top {
