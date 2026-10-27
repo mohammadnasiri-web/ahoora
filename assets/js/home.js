@@ -5,45 +5,198 @@ document.addEventListener("DOMContentLoaded", async () => {
   const root = document.getElementById("home-root");
   const sections = (site.homepage?.sections || []).filter((s) => s.active).sort((a, b) => a.order - b.order);
 
+  // Blue campaign slide: headline + pill on the start side, product label in the middle,
+  // product cut-outs with "burst" lines on the end side, white hand-drawn doodles behind
+  const skySlideHtml = (slide) => {
+    const cloud = (x, y, s) =>
+      `<path transform="translate(${x} ${y}) scale(${s})" d="M4 44h104c12 0 16-16 5-22 2-15-15-24-28-15-7-17-33-19-41-2-15-6-30 6-24 19-13 1-19 20-16 20z"/>`;
+    const tree = (x, y, s) =>
+      `<path transform="translate(${x} ${y}) scale(${s})" d="M0 0l-12 22h8l-12 20h9l-13 22h40l-13-22h9l-12-20h8zM0 64v14"/>`;
+    return `<a class="ah-dk-slide ah-sky" href="${AhooraLayout.resolveUrl(slide.url)}">
+      <svg class="ah-sky-doodles" viewBox="0 0 2000 450" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <filter id="ahChalk" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4"/>
+            <feDisplacementMap in="SourceGraphic" scale="3.2"/>
+          </filter>
+        </defs>
+        <g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#ahChalk)">
+          <path d="M96 112c-44-24-12-66 92-72 76-4 104 22 70 46"/>
+          <path d="M78 98c-6 30 30 42 66 30"/><path d="M128 116l16 12-18 8"/>
+          ${cloud(50, 196, 1)}
+          ${cloud(965, 222, 1.05)}
+          ${cloud(1440, 222, 0.95)}
+          <circle cx="1224" cy="210" r="22"/>
+          <path d="M1224 170v-14M1224 264v-14M1184 210h-14M1278 210h-14M1196 182l-10-10M1262 248l-10-10M1252 182l10-10M1186 248l10-10"/>
+          <path d="M1010 418l140-88 52 16 124-92 96 78 40-14 140 60"/>
+          <path d="M1326 254l-22 46 28-10 14 30 12-36 24 18"/>
+          <path d="M1180 396l138-96"/><path d="M1352 316l26 46"/>
+          <path d="M1168 412c180-14 330 4 480 36"/>
+          ${tree(1372, 372, 0.85)}
+          ${tree(1422, 362, 1)}
+          ${tree(1462, 350, 1.15)}
+        </g>
+        <text x="174" y="88" text-anchor="middle" fill="#fff" font-family="Vazirmatn, sans-serif" font-weight="800" font-size="36" letter-spacing="3">AHURA</text>
+      </svg>
+      <span class="ah-sky-inner">
+        <span class="ah-sky-text">
+          <strong class="ah-sky-title">${slide.title}</strong>
+          <span class="ah-sky-cta">${slide.cta}</span>
+        </span>
+        <span class="ah-sky-label" dir="ltr" aria-hidden="true">
+          <i class="ti ti-device-mobile"></i>
+          <span><b>${slide.label}</b><small>${slide.sublabel}</small></span>
+        </span>
+        <span class="ah-sky-media" aria-hidden="true">
+          <svg class="ah-sky-burst" viewBox="0 0 220 160" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round">
+            <path d="M70 52L52 20M104 40l2-36M138 50l22-30M160 80l34-10M40 82L8 70"/>
+          </svg>
+          ${slide.images
+            .map((src) => `<img src="${AhooraLayout.resolveUrl(src)}" alt="" width="360" height="360" decoding="async" draggable="false">`)
+            .join("")}
+        </span>
+      </span>
+    </a>`;
+  };
+
+  // Orange festival slide: big number + two lines on the start side, a row of podiums on the end side
+  const podiumSlideHtml = (slide) => {
+    // left-to-right on screen; item/box heights are % of the banner height
+    const pods = [
+      { image: "assets/img/products/powerbank.png", item: 30, box: 40, width: 17, tilt: -14 },
+      { image: "assets/img/products/iphone-15.png", item: 44, box: 22, width: 12, tilt: -6 },
+      { gift: true, item: 34, box: 32, width: 20 },
+      { image: "assets/img/products/airpods-pro.png", item: 26, box: 46, width: 15, tilt: 4 },
+      { image: "assets/img/products/charger-20w.png", item: 24, box: 20, width: 14, tilt: 8 },
+    ];
+    const sparkles = [
+      [12, 18], [28, 8], [46, 14], [63, 6], [80, 20], [36, 34], [70, 32],
+    ];
+    return `<a class="ah-dk-slide ah-pod-slide" href="${AhooraLayout.resolveUrl(slide.url)}">
+      <span class="ah-pod-glow" aria-hidden="true"></span>
+      <span class="ah-pod-inner">
+        <span class="ah-pod-text">
+          <span class="ah-pod-number">${slide.number}</span>
+          <span class="ah-pod-lines">
+            <strong>${slide.title}</strong>
+            <span>${slide.text}</span>
+          </span>
+        </span>
+        <span class="ah-pod-stage" aria-hidden="true">
+          ${sparkles
+            .map(([x, y], i) => `<span class="ah-pod-spark" style="left:${x}%;top:${y}%;animation-delay:${i * 0.45}s"></span>`)
+            .join("")}
+          ${pods
+            .map(
+              (p, i) => `<span class="ah-pod" style="--item:${p.item}%;--box:${p.box}%;--w:${p.width}%;--tilt:${p.tilt || 0}deg;--delay:${i * 0.35}s">
+                <span class="ah-pod-item">${
+                  p.gift
+                    ? `<span class="ah-gift"><span class="ah-gift-bow"></span><span class="ah-gift-lid"></span><span class="ah-gift-body"></span></span>`
+                    : `<img src="${AhooraLayout.resolveUrl(p.image)}" alt="" width="200" height="200" loading="lazy" decoding="async" draggable="false">`
+                }</span>
+                <span class="ah-pod-box"></span>
+              </span>`
+            )
+            .join("")}
+        </span>
+      </span>
+    </a>`;
+  };
+
+  // Three campaign banners (Technolife-style ad row), drawn in HTML/CSS around the product cut-outs
+  const adRowHtml = () => {
+    const ads = [
+      {
+        theme: "sky",
+        brand: "AirPods Pro",
+        title: "صدای خاص خودت",
+        text: "ایرپاد اصل با گارانتی",
+        cta: "خرید",
+        url: "pages/product.html?slug=airpods-pro",
+        image: "assets/img/products/airpods-pro.png",
+        deco: `<svg viewBox="0 0 200 120" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 34c0-8 7-13 14-11 3-7 14-8 18 0 7-1 11 5 9 11H18z"/>
+          <circle cx="150" cy="30" r="9"/><path d="M150 12v-6M150 54v-6M132 30h-6M174 30h-6M138 18l-4-4M166 46l-4-4M162 18l4-4M134 46l4-4"/>
+          <path d="M110 112l26-38 14 18 10-12 26 32"/>
+        </svg>`,
+      },
+      {
+        theme: "wave",
+        brand: "شارژر ۲۰ وات",
+        title: "شارژ سریع، خیال راحت",
+        text: "آداپتور USB-C اصل",
+        cta: "خرید",
+        url: "pages/product.html?slug=charger-20w",
+        image: "assets/img/products/charger-20w.png",
+        deco: `<svg viewBox="0 0 400 120" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" preserveAspectRatio="none">
+          <path d="M0 60c20-50 40-50 60 0s40 50 60 0 40-50 60 0 40 50 60 0 40-50 60 0 40 50 60 0 40-50 40-30"/>
+        </svg>`,
+      },
+      {
+        theme: "amber",
+        brand: "اهورا تل",
+        title: "باتری نو، گوشی سرحال",
+        text: "تعویض باتری در محل شما",
+        cta: "رزرو نوبت",
+        url: "pages/booking.html",
+        image: "assets/img/products/battery.png",
+        deco: "",
+      },
+    ];
+    return `<section class="ah-adrow" aria-label="پیشنهادهای ویژه">
+      <div class="ah-adrow-grid">
+        ${ads
+          .map(
+            (ad) => `<a class="ah-ad ah-ad--${ad.theme}" href="${AhooraLayout.resolveUrl(ad.url)}">
+              ${ad.deco ? `<span class="ah-ad-deco" aria-hidden="true">${ad.deco}</span>` : ""}
+              <span class="ah-ad-text">
+                <span class="ah-ad-brand">${ad.brand}</span>
+                <strong class="ah-ad-title">${ad.title}</strong>
+                <span class="ah-ad-desc">${ad.text}</span>
+                <span class="ah-ad-cta">${ad.cta}</span>
+              </span>
+              <img class="ah-ad-media" src="${AhooraLayout.resolveUrl(ad.image)}" alt="" width="240" height="240" loading="lazy" decoding="async">
+            </a>`
+          )
+          .join("")}
+      </div>
+    </section>`;
+  };
+
   const html = sections
     .map((sec) => {
       if (sec.type === "hero" && sec.layout === "banner") {
         // Banners are drawn in HTML/CSS (sharp at any width) around the product cut-outs
         const slides = [
           {
-            theme: "battery",
-            eyebrow: "خدمات در محل",
-            title: sec.title || "تعویض فوری باتری",
-            text: "تعویض حضوری باتری در منزل یا محل کار شما",
+            // blue campaign banner with white chalk doodles
+            layout: "sky",
+            title: "گوشیت هنوز جون داره...",
             cta: "رزرو نوبت",
+            label: "AHURA Battery",
+            sublabel: "Onsite Service",
             url: "pages/booking.html",
             images: ["assets/img/products/iphone-15.png", "assets/img/products/battery.png"],
           },
           {
-            theme: "accessories",
-            eyebrow: "فروشگاه اهورا تل",
-            title: "لوازم جانبی اصل",
-            text: "گلس، قاب، شارژر، پاوربانک و هندزفری",
-            cta: "مشاهده محصولات",
+            // orange festival banner: products on podiums around a gift box, gently animated
+            layout: "podium",
+            number: "۲۰٪",
+            title: "جشنواره اهورا تل",
+            text: "تخفیف لوازم جانبی اصل",
             url: "pages/shop.html?cat=accessories",
-            images: ["assets/img/products/powerbank.png", "assets/img/products/airpods-pro.png", "assets/img/products/charger-20w.png"],
-          },
-          {
-            theme: "repair",
-            eyebrow: "تعمیرات تخصصی",
-            title: "تعویض ال‌سی‌دی و گلس",
-            text: "تعمیر صفحه‌نمایش، دوربین و نرم‌افزار با گارانتی",
-            cta: "خدمات تعمیر",
-            url: "pages/services.html",
-            images: ["assets/img/products/lcd.png", "assets/img/products/screen-glass.png"],
           },
         ];
         return `<section class="ah-dk" aria-roledescription="carousel" aria-label="اسلایدر">
           <div class="ah-dk-viewport" id="ahDkViewport">
             <div class="ah-dk-track" id="ahDkTrack">
               ${slides
-                .map(
-                  (slide, index) => `<a class="ah-dk-slide ah-dk-banner ah-dk-banner--${slide.theme}" href="${AhooraLayout.resolveUrl(slide.url)}">
+                .map((slide, index) =>
+                  slide.layout === "sky"
+                    ? skySlideHtml(slide)
+                    : slide.layout === "podium"
+                    ? podiumSlideHtml(slide)
+                    : `<a class="ah-dk-slide ah-dk-banner ah-dk-banner--${slide.theme}" href="${AhooraLayout.resolveUrl(slide.url)}">
                     <span class="ah-dk-banner-inner">
                       <span class="ah-dk-banner-text">
                         <span class="ah-dk-banner-eyebrow">${slide.eyebrow}</span>
@@ -154,7 +307,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             </a>`;
             })
             .join("")}
-        </section>`;
+        </section>${adRowHtml()}`;
       }
       if (sec.type === "banners") {
         const items = (sec.items || []).slice(0, 3);

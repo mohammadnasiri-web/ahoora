@@ -6280,3 +6280,838 @@ body.ah-auth-mode #accountRoot {
     padding-inline: 0;
   }
 }
+
+/* ---- Home ad row: three campaign banners (577:267, like Technolife) ---- */
+.ah-adrow {
+  padding: 0.5rem 0 1.25rem;
+}
+
+.ah-adrow-grid {
+  display: flex;
+  gap: 12px;
+  width: calc(100% - 32px);
+  margin-inline: auto;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.ah-adrow-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.ah-ad {
+  position: relative;
+  flex: 0 0 86%;
+  aspect-ratio: 577 / 267;
+  overflow: hidden;
+  border-radius: 18px;
+  scroll-snap-align: start;
+  color: var(--ad-fg, #fff);
+  text-decoration: none;
+  background: var(--ad-bg);
+  transition: transform 0.25s var(--ah-ease), box-shadow 0.25s var(--ah-ease);
+}
+
+.ah-ad:hover {
+  color: var(--ad-fg, #fff);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(16, 24, 40, 0.14);
+}
+
+.ah-ad--sky {
+  --ad-bg: radial-gradient(circle at 25% 45%, #5aa9ff 0%, transparent 55%), linear-gradient(135deg, #0a66e0, #1e8bff);
+}
+
+.ah-ad--wave {
+  --ad-bg: radial-gradient(circle at 25% 50%, #4a4a4a 0%, transparent 60%), linear-gradient(135deg, #1b1b1b, #3a3a3a);
+  --ad-accent: #ffd400;
+}
+
+.ah-ad--amber {
+  --ad-bg: radial-gradient(circle at 22% 40%, rgba(255, 200, 120, 0.75) 0%, transparent 55%),
+    linear-gradient(135deg, #3b2412, #8a5426 60%, #c98a46);
+  --ad-accent: #ffd9a8;
+}
+
+.ah-ad-deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ah-ad-deco svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.ah-ad--sky .ah-ad-deco {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.ah-ad--sky .ah-ad-deco svg {
+  inset-inline-end: 0;
+  width: 55%;
+}
+
+.ah-ad--wave .ah-ad-deco {
+  color: var(--ad-accent);
+}
+
+/* the wave weaves around the product only, never under the headline */
+.ah-ad--wave .ah-ad-deco svg {
+  top: 22%;
+  inset-inline-end: 0;
+  width: 50%;
+  height: 56%;
+  opacity: 0.95;
+}
+
+.ah-ad-text {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  z-index: 2;
+  width: 52%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0 1.1rem;
+}
+
+.ah-ad-brand {
+  padding: 0.15rem 0.6rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f1b2d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  direction: ltr;
+}
+
+.ah-ad--wave .ah-ad-brand,
+.ah-ad--amber .ah-ad-brand {
+  direction: rtl;
+}
+
+.ah-ad-title {
+  margin-top: 0.3rem;
+  font-size: clamp(1rem, 4.4vw, 1.35rem);
+  font-weight: 700;
+  line-height: 1.35;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.ah-ad-desc {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.ah-ad-cta {
+  margin-top: 0.45rem;
+  padding: 0.2rem 0.85rem;
+  border-radius: 99px;
+  background: var(--ad-accent, #fff);
+  color: #1b1b1b;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ah-ad-media {
+  position: absolute;
+  z-index: 1;
+  inset-inline-end: 4%;
+  top: 50%;
+  height: 84%;
+  width: auto;
+  max-width: 46%;
+  object-fit: contain;
+  transform: translateY(-50%) rotate(-8deg);
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.35));
+  transition: transform 0.4s var(--ah-ease);
+}
+
+.ah-ad:hover .ah-ad-media {
+  transform: translateY(-50%) rotate(-3deg) scale(1.05);
+}
+
+@media (min-width: 768px) {
+  .ah-ad {
+    flex-basis: calc((100% - 24px) / 2.2);
+  }
+}
+
+@media (min-width: 992px) {
+  .ah-adrow {
+    padding: 0.75rem 0 1.75rem;
+  }
+
+  .ah-adrow-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 40px);
+    width: var(--ah-wrap);
+    overflow: visible;
+  }
+
+  .ah-ad {
+    border-radius: 22px;
+  }
+
+  .ah-ad-text {
+    padding: 0 clamp(1rem, 1.6vw, 1.75rem);
+    gap: 0.3rem;
+  }
+
+  .ah-ad-brand {
+    font-size: clamp(0.75rem, 0.8vw, 0.95rem);
+  }
+
+  .ah-ad-title {
+    font-size: clamp(1.05rem, 1.55vw, 1.75rem);
+  }
+
+  .ah-ad-desc,
+  .ah-ad-cta {
+    font-size: clamp(0.72rem, 0.75vw, 0.9rem);
+  }
+}
+
+/* ---- Blue campaign slide with white chalk doodles ---- */
+.ah-sky {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 1.68 / 1;
+  max-height: 250px;
+  color: #fff;
+  text-decoration: none;
+  background:
+    radial-gradient(ellipse at 28% 38%, rgba(98, 170, 255, 0.55), transparent 55%),
+    radial-gradient(ellipse at 80% 90%, rgba(10, 60, 160, 0.45), transparent 60%),
+    linear-gradient(180deg, #1e73e3 0%, #1563d2 100%);
+}
+
+.ah-sky:hover {
+  color: #fff;
+}
+
+.ah-sky-doodles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+.ah-sky-inner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* one row locked to the banner height so image %-heights can't stretch it */
+  grid-template-rows: minmax(0, 1fr);
+  padding: 0.9rem 1.1rem 1.4rem;
+}
+
+.ah-sky-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding-top: 8%;
+  z-index: 2;
+}
+
+.ah-sky-title {
+  font-size: clamp(1.05rem, 4.6vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 12px rgba(0, 20, 80, 0.25);
+}
+
+.ah-sky-cta {
+  padding: 0.3rem 1rem;
+  border-radius: 10px;
+  background: #fff;
+  color: #0d1b33;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(0, 30, 90, 0.25);
+}
+
+/* product label ("GLX C66 / HMD Board" style) — desktop only */
+.ah-sky-label {
+  display: none;
+}
+
+.ah-sky-media {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  min-height: 0;
+}
+
+.ah-sky-burst {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 22%;
+  width: 46%;
+  opacity: 0.95;
+}
+
+.ah-sky-media img {
+  position: relative;
+  height: 92%;
+  width: auto;
+  max-width: 58%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 22px rgba(0, 25, 80, 0.45));
+  pointer-events: none;
+}
+
+.ah-sky-media img:first-of-type {
+  transform: rotate(-10deg);
+  margin-inline-end: -10%;
+  z-index: 1;
+}
+
+.ah-sky-media img + img {
+  height: 58%;
+  align-self: flex-end;
+}
+
+@media (min-width: 992px) {
+  .ah-sky {
+    aspect-ratio: auto;
+    max-height: none;
+    height: 400px;
+  }
+
+  .ah-sky-inner {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.8fr) minmax(0, 1.15fr);
+    padding: 0 max(32px, calc((100% - 1600px) / 2));
+  }
+
+  .ah-sky-text {
+    padding-top: 72px;
+    gap: 1.1rem;
+  }
+
+  .ah-sky-title {
+    font-size: clamp(2rem, 2.6vw, 2.9rem);
+  }
+
+  .ah-sky-cta {
+    padding: 0.6rem 1.6rem;
+    border-radius: 14px;
+    font-size: 1.05rem;
+  }
+
+  .ah-sky-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    align-self: start;
+    justify-self: center;
+    margin-top: 70px;
+  }
+
+  .ah-sky-label i {
+    font-size: 4.2rem;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .ah-sky-label span {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .ah-sky-label b {
+    font-size: clamp(1.6rem, 2vw, 2.3rem);
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: -0.01em;
+  }
+
+  .ah-sky-label small {
+    font-size: clamp(1.05rem, 1.3vw, 1.45rem);
+    font-weight: 500;
+  }
+
+  .ah-sky-media img {
+    height: 86%;
+  }
+
+  /* sits above the slider arrows in the bottom corner */
+  .ah-sky-media img + img {
+    height: 46%;
+    margin-bottom: 14%;
+  }
+}
+
+/* small desktops: the banner is shorter relative to its width, keep the battery clear of the arrows */
+@media (min-width: 992px) and (max-width: 1279px) {
+  .ah-sky-media img + img {
+    margin-bottom: 20%;
+  }
+}
+
+/* ---- Orange festival slide: podiums, gift box, gentle motion ---- */
+.ah-pod-slide {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 1.68 / 1;
+  max-height: 250px;
+  color: #fff;
+  text-decoration: none;
+  background:
+    radial-gradient(ellipse at 34% 30%, #ffa064 0%, rgba(255, 160, 100, 0) 45%),
+    linear-gradient(100deg, #e14f10 0%, #f0631f 45%, #f57a3a 100%);
+}
+
+.ah-pod-slide:hover {
+  color: #fff;
+}
+
+/* soft spotlight that slowly breathes behind the podiums */
+.ah-pod-glow {
+  position: absolute;
+  inset-inline-end: 8%;
+  top: -20%;
+  width: 55%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 214, 170, 0.55), rgba(255, 214, 170, 0) 65%);
+  animation: ah-pod-breathe 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.ah-pod-inner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  grid-template-rows: minmax(0, 1fr);
+  padding: 0 1rem;
+}
+
+.ah-pod-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.35rem;
+  z-index: 2;
+}
+
+.ah-pod-number {
+  font-size: clamp(2.4rem, 12vw, 4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-shadow: 0 6px 24px rgba(120, 30, 0, 0.3);
+}
+
+.ah-pod-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: clamp(0.78rem, 3.4vw, 1.05rem);
+  font-weight: 700;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
+.ah-pod-lines strong {
+  font-weight: 800;
+}
+
+.ah-pod-stage {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  direction: ltr;
+}
+
+.ah-pod {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: var(--w);
+  height: 100%;
+  margin-inline: -0.4%;
+}
+
+.ah-pod-item {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: var(--item);
+  animation: ah-pod-float 3.6s ease-in-out var(--delay) infinite;
+}
+
+.ah-pod-item img {
+  height: 100%;
+  width: auto;
+  max-width: 130%;
+  object-fit: contain;
+  transform: rotate(var(--tilt));
+  filter: drop-shadow(0 12px 12px rgba(110, 30, 0, 0.35));
+  pointer-events: none;
+}
+
+.ah-pod-box {
+  position: relative;
+  width: 100%;
+  height: var(--box);
+  margin-top: 6px;
+  background: linear-gradient(180deg, #f66a26 0%, #e2531a 55%, #d2470f 100%);
+  box-shadow: inset -10px 0 18px rgba(120, 30, 0, 0.18), 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* lighter top face, a touch of perspective */
+.ah-pod-box::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 100%;
+  height: 10px;
+  background: linear-gradient(180deg, #ffa064, #ff8746);
+  clip-path: polygon(6% 0, 94% 0, 100% 100%, 0 100%);
+}
+
+/* gift box built from CSS */
+.ah-gift {
+  position: relative;
+  display: block;
+  /* stays roughly square whatever the column width */
+  width: 92%;
+  max-height: 100%;
+  aspect-ratio: 1 / 1.05;
+}
+
+.ah-gift-body {
+  position: absolute;
+  inset-inline: 6%;
+  bottom: 0;
+  height: 64%;
+  border-radius: 4px;
+  background:
+    linear-gradient(90deg, transparent 42%, #fff 42%, #fff 58%, transparent 58%),
+    linear-gradient(180deg, #2c55c9, #1c3b94);
+  box-shadow: 0 14px 18px rgba(90, 25, 0, 0.35);
+}
+
+.ah-gift-lid {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 62%;
+  height: 16%;
+  border-radius: 4px;
+  background:
+    linear-gradient(90deg, transparent 42%, #fff 42%, #fff 58%, transparent 58%),
+    linear-gradient(180deg, #3a64d8, #2549ad);
+  animation: ah-gift-lid-pop 3.6s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+.ah-gift-bow {
+  position: absolute;
+  left: 50%;
+  bottom: 77%;
+  width: 46%;
+  height: 22%;
+  transform: translateX(-50%);
+  animation: ah-gift-bow-pop 3.6s ease-in-out infinite;
+}
+
+.ah-gift-bow::before,
+.ah-gift-bow::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 50%;
+  height: 100%;
+  border: 4px solid #fff;
+  border-radius: 50% 50% 10% 50%;
+}
+
+.ah-gift-bow::before {
+  left: 2%;
+  transform: rotate(-18deg);
+}
+
+.ah-gift-bow::after {
+  right: 2%;
+  transform: rotate(18deg) scaleX(-1);
+}
+
+.ah-pod-spark {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  opacity: 0;
+  animation: ah-pod-twinkle 3.2s ease-in-out infinite;
+}
+
+@keyframes ah-pod-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6%); }
+}
+
+@keyframes ah-gift-bow-pop {
+  0%, 70%, 100% { transform: translateX(-50%) translateY(0) rotate(0); }
+  78% { transform: translateX(-50%) translateY(-14%) rotate(-4deg); }
+  86% { transform: translateX(-50%) translateY(-6%) rotate(3deg); }
+}
+
+@keyframes ah-gift-lid-pop {
+  0%, 70%, 100% { transform: translateY(0) rotate(0); }
+  78% { transform: translateY(-30%) rotate(-4deg); }
+  86% { transform: translateY(-12%) rotate(3deg); }
+}
+
+@keyframes ah-pod-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.4) rotate(0); }
+  50% { opacity: 0.9; transform: scale(1) rotate(45deg); }
+}
+
+@keyframes ah-pod-breathe {
+  0%, 100% { opacity: 0.75; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ah-pod-glow,
+  .ah-pod-item,
+  .ah-gift-lid,
+  .ah-gift-bow,
+  .ah-pod-spark {
+    animation: none;
+  }
+}
+
+@media (min-width: 992px) {
+  .ah-pod-slide {
+    aspect-ratio: auto;
+    max-height: none;
+    height: 400px;
+  }
+
+  .ah-pod-inner {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    padding: 0 max(32px, calc((100% - 1600px) / 2));
+  }
+
+  .ah-pod-text {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 40px;
+  }
+
+  .ah-pod-number {
+    font-size: clamp(6rem, 9vw, 9.5rem);
+  }
+
+  .ah-pod-lines {
+    font-size: clamp(1.5rem, 2.1vw, 2.4rem);
+    gap: 0.4rem;
+  }
+
+  .ah-pod-box::before {
+    height: 18px;
+  }
+
+  .ah-pod-spark {
+    width: 14px;
+    height: 14px;
+  }
+
+  .ah-gift-bow::before,
+  .ah-gift-bow::after {
+    border-width: 6px;
+  }
+}
+
+/* ---- Header brand: navy battery mark with the green bolt + Persian wordmark ---- */
+.ah-brand {
+  gap: 0.6rem;
+  line-height: 1;
+  color: #1c2a6e;
+  text-decoration: none;
+}
+
+.ah-brand:hover {
+  color: #1c2a6e;
+}
+
+.ah-brand-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  /* same navy tile as before, a few shades lighter and with a softer shadow */
+  background: linear-gradient(150deg, #5568c0 0%, #3d50a3 60%, #33458f 100%);
+  box-shadow: 0 4px 12px rgba(51, 69, 143, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s var(--ah-ease), box-shadow 0.3s var(--ah-ease);
+}
+
+/* glossy highlight on the top corner */
+.ah-brand-mark::before {
+  content: "";
+  position: absolute;
+  inset: -40% 30% 45% -40%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0) 70%);
+}
+
+.ah-brand-mark svg {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ah-brand-cell,
+.ah-brand-cap,
+.ah-brand-sign {
+  stroke: #fff;
+  stroke-width: 2.6;
+}
+
+.ah-brand-bolt {
+  fill: #5fe293;
+  stroke: #33458f;
+  stroke-width: 1.6;
+  filter: drop-shadow(0 0 2px rgba(95, 226, 147, 0.35));
+}
+
+.ah-brand:hover .ah-brand-mark {
+  transform: rotate(-6deg) scale(1.04);
+  box-shadow: 0 6px 16px rgba(51, 69, 143, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.ah-brand-name {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
+
+/* "اهورا" heavy, "تل" light — the same contrast as AHURA / TELL in the footer logo */
+.ah-brand-word {
+  font-size: 1.55rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.ah-brand-word b {
+  font-weight: 800;
+}
+
+.ah-brand-word span {
+  font-weight: 400;
+}
+
+.ah-brand-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6b7491;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 991px) {
+  .ah-brand {
+    gap: 0.45rem;
+  }
+
+  .ah-brand-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+  }
+
+  .ah-brand-mark svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .ah-brand-word {
+    font-size: 1.15rem;
+  }
+
+  .ah-brand-tag {
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: 575px) {
+  /* not enough room next to the search box on phones */
+  .ah-brand-tag {
+    display: none;
+  }
+}
+
+/* phones: the 577:267 banner is too short for the text, so make it a bit taller and trim the copy */
+@media (max-width: 767px) {
+  .ah-ad {
+    aspect-ratio: 2 / 1;
+  }
+
+  .ah-ad-text {
+    width: 56%;
+    gap: 0.15rem;
+    padding: 0 0.9rem;
+  }
+
+  .ah-ad-brand {
+    font-size: 0.68rem;
+    padding: 0.1rem 0.5rem;
+  }
+
+  .ah-ad-title {
+    margin-top: 0.2rem;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .ah-ad-desc {
+    display: none;
+  }
+
+  .ah-ad-cta {
+    margin-top: 0.35rem;
+    font-size: 0.7rem;
+  }
+
+  .ah-ad-media {
+    max-width: 42%;
+    height: 74%;
+  }
+}
