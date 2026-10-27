@@ -2,6 +2,9 @@ const AhooraBlog = {
   posts: [
     {
       slug: "battery-onsite",
+      theme: "battery",
+      category: "تعمیر در محل",
+      icon: "ti-map-pin",
       title: "تعویض باتری در محل؛ چه زمانی لازم است؟",
       date: "۲ روز قبل",
       image: "assets/img/products/battery.png",
@@ -14,6 +17,9 @@ const AhooraBlog = {
     },
     {
       slug: "screen-glass",
+      theme: "glass",
+      category: "راهنمای خرید",
+      icon: "ti-shield-check",
       title: "راهنمای انتخاب گلس مناسب گوشی",
       date: "دیروز",
       image: "assets/img/products/screen-glass.png",
@@ -26,6 +32,9 @@ const AhooraBlog = {
     },
     {
       slug: "weak-battery",
+      theme: "amber",
+      category: "باتری",
+      icon: "ti-battery-2",
       title: "نشانه‌های ضعیف شدن باتری گوشی",
       date: "۳ روز قبل",
       image: "assets/img/products/iphone-15.png",
@@ -38,6 +47,9 @@ const AhooraBlog = {
     },
     {
       slug: "original-charger",
+      theme: "green",
+      category: "راهنمای خرید",
+      icon: "ti-plug",
       title: "شارژر اصل را چطور بشناسیم؟",
       date: "۱ هفته قبل",
       image: "assets/img/products/charger-20w.png",
@@ -50,6 +62,9 @@ const AhooraBlog = {
     },
     {
       slug: "earphones",
+      theme: "purple",
+      category: "صوتی",
+      icon: "ti-headphones",
       title: "هندزفری مناسب مکالمه و موسیقی",
       date: "۴ روز قبل",
       image: "assets/img/products/airpods-pro.png",
@@ -62,6 +77,9 @@ const AhooraBlog = {
     },
     {
       slug: "powerbank",
+      theme: "pink",
+      category: "راهنمای خرید",
+      icon: "ti-battery-charging",
       title: "پاوربانک چند میلی‌آمپر کافی است؟",
       date: "۵ روز قبل",
       image: "assets/img/products/powerbank.png",
@@ -74,6 +92,9 @@ const AhooraBlog = {
     },
     {
       slug: "lcd-replace",
+      theme: "navy",
+      category: "تعمیرات",
+      icon: "ti-tools",
       title: "تعویض ال‌سی‌دی؛ نشانه‌های شکستگی",
       date: "۶ روز قبل",
       image: "assets/img/products/lcd.png",
@@ -92,5 +113,14 @@ const AhooraBlog = {
 
   get(slug) {
     return this.posts.find((post) => post.slug === slug) || null;
+  },
+
+  // Designed cover art: themed gradient, category chip, faint icon and the product cut-out
+  cover(post, resolveUrl, { lazy = true } = {}) {
+    return `<span class="ah-blog-art ah-blog-art--${post.theme || "battery"}">
+      <span class="ah-blog-art-chip">${post.category || "وبلاگ"}</span>
+      <i class="ti ${post.icon || "ti-device-mobile"} ah-blog-art-icon" aria-hidden="true"></i>
+      <img src="${resolveUrl(post.image)}" alt="" width="320" height="320" ${lazy ? 'loading="lazy"' : ""} decoding="async">
+    </span>`;
   },
 };

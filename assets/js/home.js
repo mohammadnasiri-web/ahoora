@@ -8,16 +8,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   const html = sections
     .map((sec) => {
       if (sec.type === "hero" && sec.layout === "banner") {
+        // Banners are drawn in HTML/CSS (sharp at any width) around the product cut-outs
         const slides = [
           {
-            image: sec.image || "assets/img/hero-banner.jpg",
+            theme: "battery",
+            eyebrow: "خدمات در محل",
             title: sec.title || "تعویض فوری باتری",
-            url: "pages/services.html",
+            text: "تعویض حضوری باتری در منزل یا محل کار شما",
+            cta: "رزرو نوبت",
+            url: "pages/booking.html",
+            images: ["assets/img/products/iphone-15.png", "assets/img/products/battery.png"],
           },
           {
-            image: "assets/img/hero-banner-2.jpg",
+            theme: "accessories",
+            eyebrow: "فروشگاه اهورا تل",
             title: "لوازم جانبی اصل",
+            text: "گلس، قاب، شارژر، پاوربانک و هندزفری",
+            cta: "مشاهده محصولات",
             url: "pages/shop.html?cat=accessories",
+            images: ["assets/img/products/powerbank.png", "assets/img/products/airpods-pro.png", "assets/img/products/charger-20w.png"],
+          },
+          {
+            theme: "repair",
+            eyebrow: "تعمیرات تخصصی",
+            title: "تعویض ال‌سی‌دی و گلس",
+            text: "تعمیر صفحه‌نمایش، دوربین و نرم‌افزار با گارانتی",
+            cta: "خدمات تعمیر",
+            url: "pages/services.html",
+            images: ["assets/img/products/lcd.png", "assets/img/products/screen-glass.png"],
           },
         ];
         return `<section class="ah-dk" aria-roledescription="carousel" aria-label="اسلایدر">
@@ -25,16 +43,31 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div class="ah-dk-track" id="ahDkTrack">
               ${slides
                 .map(
-                  (slide, index) => `<a class="ah-dk-slide" href="${AhooraLayout.resolveUrl(slide.url)}">
-                    <img src="${AhooraLayout.resolveUrl(slide.image)}" alt="${slide.title}" width="1280" height="720" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" draggable="false">
+                  (slide, index) => `<a class="ah-dk-slide ah-dk-banner ah-dk-banner--${slide.theme}" href="${AhooraLayout.resolveUrl(slide.url)}">
+                    <span class="ah-dk-banner-inner">
+                      <span class="ah-dk-banner-text">
+                        <span class="ah-dk-banner-eyebrow">${slide.eyebrow}</span>
+                        <strong class="ah-dk-banner-title">${slide.title}</strong>
+                        <span class="ah-dk-banner-desc">${slide.text}</span>
+                        <span class="ah-dk-banner-cta">${slide.cta} <i class="ti ti-arrow-left" aria-hidden="true"></i></span>
+                      </span>
+                      <span class="ah-dk-banner-media" aria-hidden="true">
+                        ${slide.images
+                          .map(
+                            (src) =>
+                              `<img src="${AhooraLayout.resolveUrl(src)}" alt="" width="320" height="320" ${index === 0 ? "" : 'loading="lazy"'} decoding="async" draggable="false">`
+                          )
+                          .join("")}
+                      </span>
+                    </span>
                   </a>`
                 )
                 .join("")}
             </div>
           </div>
           <div class="ah-dk-arrows">
-            <button type="button" class="ah-dk-arrow" id="ahDkPrev" aria-label="اسلاید قبلی"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
-            <button type="button" class="ah-dk-arrow" id="ahDkNext" aria-label="اسلاید بعدی"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+            <button type="button" class="ah-dk-arrow" id="ahDkPrev" aria-label="اسلاید قبلی"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+            <button type="button" class="ah-dk-arrow" id="ahDkNext" aria-label="اسلاید بعدی"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
           </div>
           <div class="ah-dk-dots" id="ahDkDots">
             ${slides
@@ -77,18 +110,26 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       if (sec.type === "tiles") {
         const tileMeta = [
-          { icon: "bi-geo-alt-fill", theme: "dark" },
-          { icon: "bi-tools", theme: "light" },
-          { icon: "bi-headphones", theme: "blue" },
-          { icon: "bi-bag-check", theme: "graphite" },
+          { icon: "ti-map-pin-filled", theme: "dark" },
+          { icon: "ti-tools", theme: "light" },
+          { icon: "ti-headphones", theme: "blue" },
+          { icon: "ti-shopping-bag-check", theme: "graphite" },
+        ];
+        // Technolife-style shortcut circles: a product cut-out on a soft tinted disc
+        const quickLinks = [
+          { url: AhooraLayout.resolveUrl("pages/booking.html"), label: "رزرو نوبت", image: "assets/img/products/battery.png", tint: "#e8f1fc" },
+          { url: AhooraLayout.resolveUrl("pages/shop.html"), label: "فروشگاه", image: "assets/img/products/iphone-15.png", tint: "#fdecef" },
+          { url: AhooraLayout.resolveUrl("pages/services.html"), label: "خدمات", image: "assets/img/products/lcd.png", tint: "#eaf6ee" },
+          { url: AhooraLayout.resolveUrl("pages/account.html"), label: "پیگیری", image: "assets/img/products/airpods-pro.png", tint: "#fff4e0" },
+          { url: AhooraLayout.resolveUrl("pages/faq.html"), label: "سوالات", image: "assets/img/products/charger-20w.png", tint: "#efedfb" },
+          { url: `tel:${site.site.phone}`, label: "تماس", image: "assets/img/products/powerbank.png", tint: "#e6f6f8" },
         ];
         return `<div class="ah-quick" aria-label="میانبرها">
-            <a href="${AhooraLayout.resolveUrl("pages/booking.html")}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-calendar-check"></i></span><span class="ah-quick-label">رزرو نوبت</span></a>
-            <a href="${AhooraLayout.resolveUrl("pages/shop.html")}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-bag"></i></span><span class="ah-quick-label">فروشگاه</span></a>
-            <a href="${AhooraLayout.resolveUrl("pages/services.html")}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-tools"></i></span><span class="ah-quick-label">خدمات</span></a>
-            <a href="${AhooraLayout.resolveUrl("pages/account.html")}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-truck"></i></span><span class="ah-quick-label">پیگیری</span></a>
-            <a href="${AhooraLayout.resolveUrl("pages/faq.html")}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-question-circle"></i></span><span class="ah-quick-label">سوالات</span></a>
-            <a href="tel:${site.site.phone}"><span class="ah-quick-icon" aria-hidden="true"><i class="bi bi-telephone"></i></span><span class="ah-quick-label">تماس</span></a>
+            ${quickLinks
+              .map(
+                (q) => `<a href="${q.url}"><span class="ah-quick-icon" style="--quick-tint:${q.tint}" aria-hidden="true"><img src="${AhooraLayout.resolveUrl(q.image)}" alt="" width="96" height="96" loading="lazy" decoding="async"></span><span class="ah-quick-label">${q.label}</span></a>`
+              )
+              .join("")}
           </div>
           <section class="ah-tiles" aria-label="دسترسی سریع">
           ${(sec.items || [])
@@ -104,10 +145,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                       : meta.theme;
               return `<a class="ah-tile ah-tile--${theme}" href="${AhooraLayout.resolveUrl(t.url)}">
               <div class="ah-tile-body">
-                <span class="ah-tile-icon" aria-hidden="true"><i class="bi ${meta.icon}"></i></span>
+                <span class="ah-tile-icon" aria-hidden="true"><i class="ti ${meta.icon}"></i></span>
                 <h3>${t.title}</h3>
                 <p>${t.text}</p>
-                <span class="ah-tile-link">بیشتر بدانید <i class="bi bi-chevron-left" aria-hidden="true"></i></span>
+                <span class="ah-tile-link">بیشتر بدانید <i class="ti ti-chevron-left" aria-hidden="true"></i></span>
               </div>
               <div class="ah-tile-glow" aria-hidden="true"></div>
             </a>`;
@@ -159,11 +200,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         return `<section class="ah-deals" aria-label="${sec.title}">
           <div class="ah-deals-box">
             <div class="ah-deals-head">
-              <h2><i class="bi bi-fire" aria-hidden="true"></i> ${sec.title}</h2>
-              <a href="${AhooraLayout.resolveUrl("pages/shop.html")}">نمایش همه <i class="bi bi-chevron-left" aria-hidden="true"></i></a>
+              <h2><i class="ti ti-flame" aria-hidden="true"></i> ${sec.title}</h2>
+              <a href="${AhooraLayout.resolveUrl("pages/shop.html")}">نمایش همه <i class="ti ti-chevron-left" aria-hidden="true"></i></a>
             </div>
             <div class="ah-deals-body">
-              <button type="button" class="ah-row-arrow is-prev" data-row-prev aria-label="محصولات قبلی" hidden><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+              <button type="button" class="ah-row-arrow is-prev" data-row-prev aria-label="محصولات قبلی" hidden><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
               <div class="ah-deals-track" data-row-track>
                 ${items
                   .map((p) => {
@@ -181,14 +222,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                         </span>
                       </span>
                       <span class="ah-deal-timer">
-                        <span class="ah-deal-timer-label"><i class="bi bi-stopwatch" aria-hidden="true"></i> زمان باقی مانده</span>
+                        <span class="ah-deal-timer-label"><i class="ti ti-stopwatch" aria-hidden="true"></i> زمان باقی مانده</span>
                         <span class="ah-deal-countdown" data-deal-ends="${p.dealEndsAt || ""}" dir="ltr">--:--:--</span>
                       </span>
                     </a>`;
                   })
                   .join("")}
               </div>
-              <button type="button" class="ah-row-arrow is-next" data-row-next aria-label="محصولات بعدی"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+              <button type="button" class="ah-row-arrow is-next" data-row-next aria-label="محصولات بعدی"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
             </div>
           </div>
         </section>`;
@@ -235,10 +276,18 @@ document.addEventListener("DOMContentLoaded", async () => {
           .filter((f) => f.active)
           .sort((a, b) => a.order - b.order)
           .slice(0, sec.limit || 5);
-        return `<section class="ah-section">
-          <div class="container-ah">
-            <h2 class="ah-section-title">${sec.title}</h2>
-            <div class="accordion ah-accordion" id="homeFaq">
+        return `<section class="ah-section ah-home-faq">
+          <div class="container-ah ah-home-faq-grid">
+            <div class="ah-home-faq-intro">
+              <span class="ah-home-faq-eyebrow"><i class="ti ti-help-circle" aria-hidden="true"></i> پاسخ سوالات شما</span>
+              <h2 class="ah-section-title">${sec.title}</h2>
+              <p>پرتکرارترین سوالات درباره تعمیر، تعویض باتری، رزرو و پرداخت. جواب سوالتان را پیدا نکردید؟ با ما تماس بگیرید.</p>
+              <div class="ah-home-faq-actions">
+                <a class="ah-btn ah-btn-primary" href="${AhooraLayout.resolveUrl("pages/faq.html")}">همه سوالات</a>
+                <a class="ah-home-faq-call" href="tel:${site.site.phone}"><i class="ti ti-phone" aria-hidden="true"></i> تماس با پشتیبانی</a>
+              </div>
+            </div>
+            <div class="accordion ah-accordion ah-home-faq-list" id="homeFaq">
               ${faqs
                 .map(
                   (f, i) => `<div class="accordion-item">
@@ -252,7 +301,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 )
                 .join("")}
             </div>
-            <div class="text-center mt-3"><a class="ah-btn ah-btn-ghost" href="pages/faq.html">همه سوالات ›</a></div>
           </div>
         </section>`;
       }
@@ -279,7 +327,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div class="container-ah">
           <div class="ah-featured-head">
             <h2 class="ah-section-title">محصولات ویژه</h2>
-            <a class="ah-featured-more" href="pages/shop.html?featured=1">مشاهده همه <i class="bi bi-chevron-left" aria-hidden="true"></i></a>
+            <a class="ah-featured-more" href="pages/shop.html?featured=1">مشاهده همه <i class="ti ti-chevron-left" aria-hidden="true"></i></a>
           </div>
           <div class="ah-featured-grid">
             ${featured
@@ -304,7 +352,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </div>
                     <div class="ah-card-foot">
                       <span class="ah-stock ${stock.cls}">${stock.text}</span>
-                      <span class="ah-card-cta">خرید <i class="bi bi-arrow-left" aria-hidden="true"></i></span>
+                      <span class="ah-card-cta">خرید <i class="ti ti-arrow-left" aria-hidden="true"></i></span>
                     </div>
                   </div>
                 </a>`;
@@ -323,21 +371,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div class="ah-blogrow-box">
           <div class="ah-blogrow-head">
             <h2>از وبلاگ اهورا تل</h2>
-            <a href="${blogHref()}">نمایش بیشتر در بلاگ <i class="bi bi-chevron-left" aria-hidden="true"></i></a>
+            <a href="${blogHref()}">نمایش بیشتر در بلاگ <i class="ti ti-chevron-left" aria-hidden="true"></i></a>
           </div>
           <div class="ah-blogrow-body">
-            <button type="button" class="ah-blogrow-arrow is-prev" data-row-prev aria-label="مطالب قبلی" hidden><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+            <button type="button" class="ah-blogrow-arrow is-prev" data-row-prev aria-label="مطالب قبلی" hidden><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
             <div class="ah-blogrow-track" data-row-track>
               ${posts
                 .map(
                   (post) => `<a class="ah-blogrow-card" href="${blogHref(post.slug)}">
-                    <span class="ah-blogrow-media"><img src="${AhooraLayout.resolveUrl(post.image)}" alt="" width="375" height="210" loading="lazy" decoding="async"></span>
+                    <span class="ah-blogrow-media">${AhooraBlog.cover(post, AhooraLayout.resolveUrl)}</span>
                     <span class="ah-blogrow-title">${post.title}</span>
                   </a>`
                 )
                 .join("")}
             </div>
-            <button type="button" class="ah-blogrow-arrow is-next" data-row-next aria-label="مطالب بعدی"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+            <button type="button" class="ah-blogrow-arrow is-next" data-row-next aria-label="مطالب بعدی"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
           </div>
         </div>
       </section>`

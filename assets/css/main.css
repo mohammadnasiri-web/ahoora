@@ -1015,7 +1015,7 @@ body.menu-open .ah-bottom-nav {
   display: block;
 }
 
-.ah-dk-slide img {
+.ah-dk-slide > img {
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
@@ -1023,6 +1023,135 @@ body.menu-open .ah-bottom-nav {
   object-position: center;
   display: block;
   pointer-events: none;
+}
+
+/* HTML/CSS banner slides: text on the start side, product cut-outs on the end side */
+.ah-dk-banner {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1.68 / 1;
+  max-height: 250px;
+  width: 100%;
+  text-decoration: none;
+  background: var(--banner-bg);
+}
+
+.ah-dk-banner,
+.ah-dk-banner:hover {
+  color: var(--banner-fg, #fff);
+}
+
+.ah-dk-banner--battery {
+  --banner-bg: radial-gradient(circle at 18% 60%, rgba(120, 190, 255, 0.45), transparent 46%),
+    linear-gradient(120deg, #0a3a8c 0%, #1565d8 55%, #3b8cff 100%);
+  --banner-accent: #ffd34d;
+}
+
+.ah-dk-banner--accessories {
+  --banner-bg: radial-gradient(circle at 20% 55%, rgba(255, 255, 255, 0.85), transparent 45%),
+    linear-gradient(120deg, #ffe9d6 0%, #ffd9bd 55%, #ffc9a3 100%);
+  --banner-accent: #ef394e;
+  --banner-fg: #2a1b12;
+}
+
+.ah-dk-banner--repair {
+  --banner-bg: radial-gradient(circle at 20% 55%, rgba(78, 222, 160, 0.28), transparent 45%),
+    linear-gradient(120deg, #0e1726 0%, #1b2a42 60%, #24395a 100%);
+  --banner-accent: #4ede9f;
+}
+
+.ah-dk-banner-inner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.1rem 1.6rem;
+}
+
+.ah-dk-banner-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.ah-dk-banner-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--banner-accent);
+}
+
+.ah-dk-banner-title {
+  font-size: clamp(1.15rem, 5vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+.ah-dk-banner-desc {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.ah-dk-banner-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 99px;
+  background: #fff;
+  color: #0f1b2d;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.ah-dk-banner--accessories .ah-dk-banner-cta {
+  background: #2a1b12;
+  color: #fff;
+}
+
+.ah-dk-banner-media {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ah-dk-banner-media::before {
+  content: "";
+  position: absolute;
+  width: 78%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.ah-dk-banner-media img {
+  position: relative;
+  width: auto;
+  height: 82%;
+  max-width: 62%;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.28));
+  pointer-events: none;
+}
+
+.ah-dk-banner-media img + img {
+  height: 56%;
+  margin-inline-end: -14%;
+  align-self: flex-end;
+  margin-bottom: 8%;
+}
+
+.ah-dk-banner-media img:first-child {
+  margin-inline-end: -8%;
 }
 
 .ah-dk-dots {
@@ -1064,13 +1193,64 @@ body.menu-open .ah-bottom-nav {
     border-radius: 0;
   }
 
-  .ah-dk-slide img {
+  .ah-dk-slide > img {
     height: 400px;
     aspect-ratio: auto;
     object-fit: cover;
     /* current banners are 16:9; bias the crop up so the headline stays in frame */
     object-position: center 22%;
   }
+
+  .ah-dk-banner {
+    aspect-ratio: auto;
+    max-height: none;
+    height: 400px;
+  }
+
+  /* text lines up with the 1600px content column used by the sections below */
+  .ah-dk-banner-inner {
+    padding: 2.5rem max(32px, calc((100% - 1600px) / 2)) 3.5rem;
+    gap: 2rem;
+  }
+
+  .ah-dk-banner-text {
+    gap: 0.6rem;
+  }
+
+  .ah-dk-banner-eyebrow {
+    font-size: 1rem;
+  }
+
+  .ah-dk-banner-title {
+    font-size: clamp(2.2rem, 3.4vw, 3.4rem);
+  }
+
+  .ah-dk-banner-desc {
+    font-size: 1.15rem;
+  }
+
+  .ah-dk-banner-cta {
+    margin-top: 0.9rem;
+    padding: 0.75rem 1.6rem;
+    font-size: 1rem;
+  }
+
+  .ah-dk-banner-media::before {
+    width: auto;
+    height: 86%;
+  }
+
+  .ah-dk-banner-media img {
+    height: 74%;
+    max-width: 34%;
+  }
+
+  .ah-dk-banner-media img + img {
+    height: 52%;
+  }
+}
+
+@media (min-width: 992px) {
 
   .ah-dk-dots {
     position: absolute;
@@ -1099,7 +1279,8 @@ body.menu-open .ah-bottom-nav {
   .ah-dk-arrows {
     position: absolute;
     bottom: 27px;
-    inset-inline-start: 24px;
+    /* end side, so the arrows never cover the banner text and button */
+    inset-inline-end: 24px;
     display: flex;
   }
 
@@ -1816,7 +1997,7 @@ body.menu-open .ah-bottom-nav {
 }
 
 @media (max-width: 991px) {
-  .ah-dk-slide img {
+  .ah-dk-slide > img {
     aspect-ratio: 1.68 / 1;
     height: auto;
     max-height: 250px;
@@ -2030,16 +2211,26 @@ body.menu-open .ah-bottom-nav {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: transparent;
-  border: 1.5px solid #7eb6e0;
+  background: var(--quick-tint, #eef3f9);
+  border: 0;
+  overflow: hidden;
   flex-shrink: 0;
-  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
+}
+
+.ah-quick-icon img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+  transition: transform 0.3s var(--ah-ease);
 }
 
 .ah-quick a:hover .ah-quick-icon {
-  border-color: #0071e3;
-  background: transparent;
-  box-shadow: none;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.1);
+}
+
+.ah-quick a:hover .ah-quick-icon img {
+  transform: scale(1.08);
 }
 
 .ah-quick-icon i {
@@ -2078,8 +2269,8 @@ body.menu-open .ah-bottom-nav {
   }
 
   .ah-quick-icon {
-    width: 76px;
-    height: 76px;
+    width: 108px;
+    height: 108px;
   }
 
   .ah-quick-icon i {
@@ -4859,8 +5050,8 @@ body.ah-auth-mode #accountRoot {
   }
 
   .ah-quick-icon {
-    width: 58px;
-    height: 58px;
+    width: 64px;
+    height: 64px;
   }
 
   .ah-quick-icon i {
@@ -5825,7 +6016,7 @@ body.ah-auth-mode #accountRoot {
   #home-root .ah-promos-grid,
   #home-root .ah-deals-box,
   #home-root .ah-blogrow-box {
-    width: min(1600px, calc(100% - 64px));
+    width: var(--ah-wrap);
     max-width: none;
     margin-inline: auto;
     box-sizing: border-box;
@@ -5840,5 +6031,252 @@ body.ah-auth-mode #accountRoot {
 
   #home-root .ah-tiles {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Home FAQ: intro + question cards (two columns on desktop) */
+.ah-home-faq-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.ah-home-faq-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.ah-home-faq-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 99px;
+  background: #e8f1fc;
+  color: var(--ah-blue);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.ah-home-faq .ah-section-title {
+  text-align: start;
+  margin: 0;
+}
+
+.ah-home-faq-intro p {
+  margin: 0;
+  color: var(--ah-text-muted);
+  line-height: 1.8;
+}
+
+.ah-home-faq-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.ah-home-faq-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--ah-text);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.ah-home-faq-call:hover {
+  color: var(--ah-blue);
+}
+
+.ah-home-faq-call i {
+  font-size: 1.2rem;
+  color: var(--ah-blue);
+}
+
+.ah-home-faq-list.ah-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-top: 0;
+}
+
+.ah-home-faq-list .accordion-item {
+  background: #fff;
+  border: 1px solid var(--ah-border);
+  border-radius: 16px !important;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ah-home-faq-list .accordion-item:has(.accordion-button:not(.collapsed)) {
+  border-color: #b9d4f5;
+  box-shadow: 0 8px 24px rgba(0, 113, 227, 0.08);
+}
+
+.ah-home-faq-list .accordion-button {
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+}
+
+.ah-home-faq-list .accordion-button::after {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  border-radius: 50%;
+  background-color: #f1f3f6;
+  background-position: center;
+  background-size: 14px;
+  opacity: 1;
+}
+
+.ah-home-faq-list .accordion-button:not(.collapsed)::after {
+  background-color: #e8f1fc;
+}
+
+.ah-home-faq-list .accordion-body {
+  padding: 0 1.25rem 1.2rem;
+}
+
+@media (min-width: 992px) {
+  .ah-home-faq-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .ah-home-faq-intro {
+    position: sticky;
+    top: 180px;
+  }
+
+  .ah-home-faq-list .accordion-button {
+    font-size: 1.05rem;
+    padding: 1.3rem 1.5rem;
+  }
+
+  .ah-home-faq-list .accordion-body {
+    padding: 0 1.5rem 1.4rem;
+  }
+}
+
+/* Blog cover art (home blog row + article cover) */
+.ah-blog-art {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: #fff;
+  background: var(--art-bg);
+}
+
+.ah-blog-art--battery { --art-bg: linear-gradient(135deg, #0b3d91, #2f7cf0); }
+.ah-blog-art--glass { --art-bg: linear-gradient(135deg, #0f766e, #2dd4bf); }
+.ah-blog-art--amber { --art-bg: linear-gradient(135deg, #c2410c, #fb923c); }
+.ah-blog-art--green { --art-bg: linear-gradient(135deg, #166534, #4ade80); }
+.ah-blog-art--purple { --art-bg: linear-gradient(135deg, #5b21b6, #a78bfa); }
+.ah-blog-art--pink { --art-bg: linear-gradient(135deg, #be185d, #f472b6); }
+.ah-blog-art--navy { --art-bg: linear-gradient(135deg, #0e1726, #2b4268); }
+
+/* soft light behind the product */
+.ah-blog-art::before {
+  content: "";
+  position: absolute;
+  inset-inline-end: 8%;
+  top: 50%;
+  width: 62%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0) 70%);
+  transform: translateY(-50%);
+}
+
+.ah-blog-art-chip {
+  position: absolute;
+  top: 0.85rem;
+  inset-inline-start: 0.85rem;
+  z-index: 2;
+  padding: 0.25rem 0.7rem;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.ah-blog-art-icon {
+  position: absolute;
+  bottom: -0.15em;
+  inset-inline-start: 0.1em;
+  font-size: 6.5rem;
+  line-height: 1;
+  opacity: 0.16;
+}
+
+.ah-blog-art img,
+.ah-blogrow-media .ah-blog-art img,
+.ah-blog-cover .ah-blog-art img {
+  position: absolute;
+  inset-inline-end: 10%;
+  top: 50%;
+  width: auto;
+  height: 82%;
+  max-width: 55%;
+  padding: 0;
+  object-fit: contain;
+  transform: translateY(-50%) rotate(-8deg);
+  filter: drop-shadow(0 16px 20px rgba(0, 0, 0, 0.3));
+  transition: transform 0.4s var(--ah-ease);
+}
+
+.ah-blogrow-card:hover .ah-blogrow-media .ah-blog-art img {
+  transform: translateY(-50%) rotate(-4deg) scale(1.06);
+}
+
+.ah-blog-cover .ah-blog-art {
+  height: min(420px, 52vw);
+}
+
+.ah-blog-cover .ah-blog-art-chip {
+  top: 1.25rem;
+  inset-inline-start: 1.25rem;
+  font-size: 0.95rem;
+}
+
+.ah-blog-cover .ah-blog-art-icon {
+  font-size: 14rem;
+}
+
+/* ---- One site-wide content column (desktop) ----
+   Header, page content and footer all share the same Technolife-style column:
+   up to 1600px wide, 32px gutter each side, centred. Narrow forms (booking, auth) keep their own width. */
+:root {
+  --ah-wrap: min(1600px, calc(100% - 64px));
+}
+
+@media (min-width: 992px) {
+  .container-ah,
+  .ah-techno-top-inner,
+  .ah-desk-list,
+  .ah-blog-page,
+  .ah-blog-feed-head,
+  .ah-blog-hot,
+  .ah-blog-feed .ah-suggest,
+  .ah-bat,
+  .ah-cat-page.container-ah {
+    width: var(--ah-wrap);
+    max-width: none;
+    margin-inline: auto;
+    padding-inline: 0;
+  }
+
+  .ah-footer-inner {
+    width: var(--ah-wrap);
+    max-width: none;
+    padding-inline: 0;
   }
 }
