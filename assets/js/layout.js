@@ -117,7 +117,6 @@ const AhooraLayout = (() => {
                       const [first, ...rest] = String(site.site.name || "اهورا تل").split(" ");
                       return `<b>${first}</b>${rest.length ? ` <span>${rest.join(" ")}</span>` : ""}`;
                     })()}</span>
-                    <small class="ah-brand-tag">خدمات و فروش موبایل</small>
                   </span>
                 </a>
               </div>

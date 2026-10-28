@@ -6934,7 +6934,7 @@ body.ah-auth-mode #accountRoot {
   }
 }
 
-/* ---- Header brand: Persian wordmark with a tagline ---- */
+/* ---- Header brand: Persian wordmark ---- */
 .ah-brand {
   gap: 0.6rem;
   line-height: 1;
@@ -6969,13 +6969,6 @@ body.ah-auth-mode #accountRoot {
   font-weight: 400;
 }
 
-.ah-brand-tag {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #6b7491;
-  letter-spacing: 0.01em;
-}
-
 @media (max-width: 991px) {
   .ah-brand {
     gap: 0.45rem;
@@ -6983,17 +6976,6 @@ body.ah-auth-mode #accountRoot {
 
   .ah-brand-word {
     font-size: 1.15rem;
-  }
-
-  .ah-brand-tag {
-    font-size: 0.6rem;
-  }
-}
-
-@media (max-width: 575px) {
-  /* not enough room next to the search box on phones */
-  .ah-brand-tag {
-    display: none;
   }
 }
 
