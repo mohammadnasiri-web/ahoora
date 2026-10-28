@@ -112,15 +112,6 @@ const AhooraLayout = (() => {
                   <span class="ah-burger-lines" aria-hidden="true"></span>
                 </button>
                 <a href="${resolveUrl("index.html")}" class="ah-techno-logo ah-brand" aria-label="${site.site.name}">
-                  <span class="ah-brand-mark" aria-hidden="true">
-                    <!-- battery outline with + / − and the green bolt, same idea as the footer logo -->
-                    <svg viewBox="0 0 48 48">
-                      <rect class="ah-brand-cell" x="13" y="9" width="22" height="32" rx="5"/>
-                      <path class="ah-brand-cap" d="M20 5.5h8"/>
-                      <path class="ah-brand-sign" d="M17 14.5h4M19 12.5v4M27 35.5h4"/>
-                      <path class="ah-brand-bolt" d="M27.5 6 15 26.5h8.5L20.5 42 33 21.5h-8.5z"/>
-                    </svg>
-                  </span>
                   <span class="ah-brand-name" aria-hidden="true">
                     <span class="ah-brand-word">${(() => {
                       const [first, ...rest] = String(site.site.name || "اهورا تل").split(" ");

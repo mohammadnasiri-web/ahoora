@@ -6078,24 +6078,6 @@ body.ah-auth-mode #accountRoot {
   margin-top: 0.5rem;
 }
 
-.ah-home-faq-call {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--ah-text);
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.ah-home-faq-call:hover {
-  color: var(--ah-blue);
-}
-
-.ah-home-faq-call i {
-  font-size: 1.2rem;
-  color: var(--ah-blue);
-}
-
 .ah-home-faq-list.ah-accordion {
   display: flex;
   flex-direction: column;
@@ -6952,7 +6934,7 @@ body.ah-auth-mode #accountRoot {
   }
 }
 
-/* ---- Header brand: navy battery mark with the green bolt + Persian wordmark ---- */
+/* ---- Header brand: Persian wordmark with a tagline ---- */
 .ah-brand {
   gap: 0.6rem;
   line-height: 1;
@@ -6962,58 +6944,6 @@ body.ah-auth-mode #accountRoot {
 
 .ah-brand:hover {
   color: #1c2a6e;
-}
-
-.ah-brand-mark {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-  overflow: hidden;
-  border-radius: 14px;
-  /* same navy tile as before, a few shades lighter and with a softer shadow */
-  background: linear-gradient(150deg, #5568c0 0%, #3d50a3 60%, #33458f 100%);
-  box-shadow: 0 4px 12px rgba(51, 69, 143, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s var(--ah-ease), box-shadow 0.3s var(--ah-ease);
-}
-
-/* glossy highlight on the top corner */
-.ah-brand-mark::before {
-  content: "";
-  position: absolute;
-  inset: -40% 30% 45% -40%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0) 70%);
-}
-
-.ah-brand-mark svg {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.ah-brand-cell,
-.ah-brand-cap,
-.ah-brand-sign {
-  stroke: #fff;
-  stroke-width: 2.6;
-}
-
-.ah-brand-bolt {
-  fill: #5fe293;
-  stroke: #33458f;
-  stroke-width: 1.6;
-  filter: drop-shadow(0 0 2px rgba(95, 226, 147, 0.35));
-}
-
-.ah-brand:hover .ah-brand-mark {
-  transform: rotate(-6deg) scale(1.04);
-  box-shadow: 0 6px 16px rgba(51, 69, 143, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .ah-brand-name {
@@ -7049,17 +6979,6 @@ body.ah-auth-mode #accountRoot {
 @media (max-width: 991px) {
   .ah-brand {
     gap: 0.45rem;
-  }
-
-  .ah-brand-mark {
-    width: 36px;
-    height: 36px;
-    border-radius: 11px;
-  }
-
-  .ah-brand-mark svg {
-    width: 28px;
-    height: 28px;
   }
 
   .ah-brand-word {

@@ -436,9 +436,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               <h2 class="ah-section-title">${sec.title}</h2>
               <p>پرتکرارترین سوالات درباره تعمیر، تعویض باتری، رزرو و پرداخت. جواب سوالتان را پیدا نکردید؟ با ما تماس بگیرید.</p>
               <div class="ah-home-faq-actions">
-                <a class="ah-btn ah-btn-primary" href="${AhooraLayout.resolveUrl("pages/faq.html")}">همه سوالات</a>
-                <a class="ah-home-faq-call" href="tel:${site.site.phone}"><i class="ti ti-phone" aria-hidden="true"></i> تماس با پشتیبانی</a>
-              </div>
+                <a class="ah-btn ah-btn-primary" href="${AhooraLayout.resolveUrl("pages/faq.html")}">همه سوالات</a>              </div>
             </div>
             <div class="accordion ah-accordion ah-home-faq-list" id="homeFaq">
               ${faqs
